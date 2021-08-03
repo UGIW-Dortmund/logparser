@@ -48,6 +48,9 @@ def logParserVR(filename):
         columns = line.split('|')
         del columns[0]
         del columns[0]
+        if len(columns) == 3:
+            del columns[0]
+        columns[1] = columns[1].replace('nachm.', 'PM')
         columns[1] = datetime.datetime.strptime(columns[1], '%d.%m.%Y %I:%M:%S.%f %p')
 
         if 'RightHand' in columns[0]:
@@ -125,10 +128,11 @@ def logParserAR(gestureFilename, speechFilename):
         columns[1] = datetime.datetime.strptime(columns[1], '%d/%m/%Y %I:%M:%S.%f %p')
         
         if columns[0] == 'Clear Space':
-            selectionStartTime = columns[1]
             selectionProgress = 1
         elif columns[0] == 'Gaze has changed':
             if selectionProgress in (1,2):
+                if selectionProgress == 1:
+                    selectionStartTime = columns[1]                    
                 selectionProgress = 2
             else:
                 selectionProgress = 0
@@ -154,26 +158,41 @@ def logParserAR(gestureFilename, speechFilename):
 
 
 if __name__ == "__main__":
-    '''teleportingTimes, rightHandTimes, leftHandTimes = logParserVR('ProbeLogs.ugiw')
     
+    teleportingTimes = []
+    rightHandTimes = []
+    leftHandTimes = []
+    
+    for file in os.listdir('logsVR'):
+        tt, rht, lht = logParserVR('logsVR/' + file)
+        teleportingTimes += tt
+        rightHandTimes += rht
+        leftHandTimes += lht
+        
+    
+    print('VR:')
     printStatistic(statistics(teleportingTimes))
     print()
     printStatistic(statistics(rightHandTimes))
     print()
-    printStatistic(statistics(leftHandTimes))'''
+    printStatistic(statistics(leftHandTimes))
     
     selectionSuccessfulTimes = []
     selectionFailedCount = 0
     speechSuccessfulTimes = []
     speechFailedTimes = []
     
-    for folder in os.listdir('logs/'):
-        sst, sfc, speech, sft = logParserAR('logs/' + folder + '/UGIWGestureLogs.txt', 'logs/' + folder + '/SpeechLogHandler.txt')
+    for folder in os.listdir('logsAR/'):
+        sst, sfc, speech, sft = logParserAR('logsAR/' + folder + '/UGIWGestureLogs.txt', 'logsAR/' + folder + '/SpeechLogHandler.txt')
         selectionSuccessfulTimes += sst
         selectionFailedCount += sfc
         speechSuccessfulTimes += speech
         speechFailedTimes += sft
     
+    
+    print()
+    print()
+    print('AR:')
     printStatistic(statistics(selectionSuccessfulTimes))
     print()
     print(selectionFailedCount)

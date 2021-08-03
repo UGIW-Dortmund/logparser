@@ -1,4 +1,5 @@
 import datetime
+import os
 
 
 def statistics(list):
@@ -161,7 +162,18 @@ if __name__ == "__main__":
     print()
     printStatistic(statistics(leftHandTimes))'''
     
-    selectionSuccessfulTimes, selectionFailedCount, speechSuccessfulTimes, speechFailedTimes = logParserAR('UGIWGestureLogs.txt', 'SpeechLogHandler(2).txt')
+    selectionSuccessfulTimes = []
+    selectionFailedCount = 0
+    speechSuccessfulTimes = []
+    speechFailedTimes = []
+    
+    for folder in os.listdir('logs/'):
+        sst, sfc, speech, sft = logParserAR('logs/' + folder + '/UGIWGestureLogs.txt', 'logs/' + folder + '/SpeechLogHandler.txt')
+        selectionSuccessfulTimes += sst
+        selectionFailedCount += sfc
+        speechSuccessfulTimes += speech
+        speechFailedTimes += sft
+    
     printStatistic(statistics(selectionSuccessfulTimes))
     print()
     print(selectionFailedCount)

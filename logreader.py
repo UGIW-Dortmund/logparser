@@ -1,5 +1,7 @@
 import datetime
 import os
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def statistics(list):
@@ -39,6 +41,7 @@ def logParserVR(filename):
     leftHandProgress = 0
 
     teleportingTimes = []
+    teleportingPositions = []
     rightHandTimes = []
     leftHandTimes = []
 
@@ -95,13 +98,17 @@ def logParserVR(filename):
                     leftHandProgress = 0
                 pass
 
-        if columns[0] == 'Wants to teleport...':
+        elif columns[0] == 'Wants to teleport...':
             startTeleporting = columns[1]
         elif columns[0].startswith('Teleported'):
             stopTeleporting = columns[1]
             teleportingTimes.append(stopTeleporting - startTeleporting)
+            # read the position
+            teleportingPositions.append([float(elem) for elem in columns[0][28:-1].split(', ')])
+        else:
+            print('no case for:', columns[0])
 
-    return teleportingTimes, rightHandTimes, leftHandTimes
+    return teleportingTimes, rightHandTimes, leftHandTimes, teleportingPositions
 
 
 def logParserAR(gestureFilename, speechFilename):
@@ -151,6 +158,8 @@ def logParserAR(gestureFilename, speechFilename):
         elif columns[0] in ['Speech Reset World', 'Speech Drop Sphere']:
             speechSuccessfulTimes.append(columns[1] - speechStartTime)
             speechStartTime = 0
+        else:
+            print('no case for:', columns[0])
             
     # if last speech attempt failed count is wrong. should we care?
             
@@ -162,12 +171,14 @@ if __name__ == "__main__":
     teleportingTimes = []
     rightHandTimes = []
     leftHandTimes = []
+    teleportingPositions = []
     
     for file in os.listdir('logsVR'):
-        tt, rht, lht = logParserVR('logsVR/' + file)
+        tt, rht, lht, tp = logParserVR('logsVR/' + file)
         teleportingTimes += tt
         rightHandTimes += rht
         leftHandTimes += lht
+        teleportingPositions.append(tp)
         
     
     print('VR:')
@@ -176,6 +187,22 @@ if __name__ == "__main__":
     printStatistic(statistics(rightHandTimes))
     print()
     printStatistic(statistics(leftHandTimes))
+    
+    i = 1
+    x_plots = 3
+    y_plots = len(teleportingPositions) / x_plots
+    fig = plt.figure(x_plots/y_plots)
+    # plot teleporting
+    for tp in teleportingPositions:
+        tp = np.array(tp)
+        
+        ax = fig.add_subplot(y_plots, x_plots, i, projection='3d')
+        ax.plot3D(tp[:,0], tp[:,2], tp[:,1])
+        i += 1
+    #plt.show()
+    plt.subplots_adjust(bottom=0.1, right=1.0, top=0.9)
+    plt.savefig('teleportingPositions.svg')
+        
     
     selectionSuccessfulTimes = []
     selectionFailedCount = 0

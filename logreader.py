@@ -44,6 +44,9 @@ def logParserVR(filename):
     teleportingPositions = []
     rightHandTimes = []
     leftHandTimes = []
+    
+    # start position for teleporting
+    teleportingPositions.append([0.0, 1.0, -7.5])
 
     for line in content:
         line = line.replace(' |', '|')
@@ -108,6 +111,8 @@ def logParserVR(filename):
         else:
             print('no case for:', columns[0])
 
+    # add a teleporting position (approximation) because the last one (to the button) is missing
+    teleportingPositions.append([3.0, 1.0, -8.5])
     return teleportingTimes, rightHandTimes, leftHandTimes, teleportingPositions
 
 
@@ -174,6 +179,7 @@ if __name__ == "__main__":
     teleportingPositions = []
     
     for file in os.listdir('logsVR'):
+        print(file)
         tt, rht, lht, tp = logParserVR('logsVR/' + file)
         teleportingTimes += tt
         rightHandTimes += rht
@@ -188,20 +194,39 @@ if __name__ == "__main__":
     print()
     printStatistic(statistics(leftHandTimes))
     
-    i = 1
+    # create boxplots for VR actions
+    figBoxplotsVR, axsVR = plt.subplots(1, 3, sharey=True)
+    # teleportingtimes
+    axsVR[0].boxplot(list(map(lambda x : x.total_seconds(), teleportingTimes)))
+    axsVR[0].title.set_text('Teleport Zeiten')
+    
+    # right hand times
+    axsVR[1].boxplot(list(map(lambda x : x.total_seconds(), rightHandTimes)))
+    axsVR[1].title.set_text('rechte Hand')
+    
+    # left hand times
+    axsVR[2].boxplot(list(map(lambda x : x.total_seconds(), leftHandTimes)))
+    axsVR[2].title.set_text('linke Hand')
+    
+    figBoxplotsVR.savefig('boxplotsVR.svg')
+    
+    
+    i = 0
     x_plots = 3
-    y_plots = len(teleportingPositions) / x_plots
-    fig = plt.figure(x_plots/y_plots)
+    y_plots = int(len(teleportingPositions) / x_plots)
+    figTeleporting, axsTeleporting = plt.subplots(y_plots, x_plots)
     # plot teleporting
     for tp in teleportingPositions:
         tp = np.array(tp)
         
-        ax = fig.add_subplot(y_plots, x_plots, i, projection='3d')
-        ax.plot3D(tp[:,0], tp[:,2], tp[:,1])
+        axsTeleporting[int(i/x_plots)][i%x_plots].plot(tp[:,2], -tp[:,0])
+        axsTeleporting[int(i/x_plots)][i%x_plots].scatter(tp[:,2][0], -tp[:,0][0], marker='o', color='g') # starting position
+        axsTeleporting[int(i/x_plots)][i%x_plots].scatter(tp[:,2][-1], -tp[:,0][-1], marker='o', color='r') # end position
+        axsTeleporting[int(i/x_plots)][i%x_plots].plot([-5.5,-5.5],[2,-2]) # table
+        axsTeleporting[int(i/x_plots)][i%x_plots].axis('equal')
         i += 1
-    #plt.show()
-    plt.subplots_adjust(bottom=0.1, right=1.0, top=0.9)
-    plt.savefig('teleportingPositions.svg')
+    figTeleporting.subplots_adjust(bottom=0.1, right=1.0, top=0.9)
+    figTeleporting.savefig('teleportingPositions.svg')
         
     
     selectionSuccessfulTimes = []
@@ -227,5 +252,17 @@ if __name__ == "__main__":
     printStatistic(statistics(speechSuccessfulTimes))
     print()
     printStatistic(statistics(speechFailedTimes))
+    
+    # create boxplots for AR actions
+    figBoxplotsAR, axsAR = plt.subplots(1, 2)
+    # selection successful
+    axsAR[0].boxplot(list(map(lambda x : x.total_seconds(), selectionSuccessfulTimes)))
+    axsAR[0].title.set_text('Auswahl Erfolgreich')
+    
+    # speech failed
+    axsAR[1].boxplot(list(map(lambda x : x.total_seconds(), speechFailedTimes)))
+    axsAR[1].title.set_text('Sprachbefehl fehlgeschlagen')
+    
+    figBoxplotsAR.savefig('boxplotsAR.svg')
     
     pass

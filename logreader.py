@@ -1,38 +1,9 @@
 import datetime
 import os
 import matplotlib.pyplot as plt
-import numpy as np
 import math
-
-
-def statistics(list):
-    min = list[0]
-    max = list[0]
-    avg = list[0]
-    meanDeviation = np.mean(list)
-    standardDeviation = np.std(list)
-    count = len(list)
-
-    for i in list:
-        if (min > i):
-            min = i
-        if (max < i):
-            max = i
-        avg += i
-
-    avg /= count
-    print(list)
-    return min, max, avg, meanDeviation, standardDeviation, count
-
-
-def printStatistic(statistic, name):
-    print(name + ':')
-    print('\tMin:', statistic[0])
-    print('\tMax:', statistic[1])
-    print('\tAvg:', statistic[2])
-    print('\tMean:', statistic[3])
-    print('\tStandard:', statistic[4])
-    print('\tCount:', statistic[5])
+import numpy as np
+from lib_logparser import statistics, printStatistic
 
 
 def logParserVR(filename):
@@ -227,7 +198,7 @@ if __name__ == "__main__":
     axsVR[2].get_xaxis().set_visible(False)
     axsVR[2].title.set_text('left hand')
     
-    figBoxplotsVR.savefig('boxplotsVR.png')
+    figBoxplotsVR.savefig('images/boxplotsVR.png')
     
     
     i = 0
@@ -252,7 +223,7 @@ if __name__ == "__main__":
     for j in range(i%x_plots, x_plots):
         axsTeleporting[x_plots-1][j].axis('off')
         
-    figTeleporting.savefig('teleportingPositions.png')
+    figTeleporting.savefig('images/teleportingPositions.png')
         
     
     # scatter plot
@@ -271,7 +242,7 @@ if __name__ == "__main__":
             
     axTimeDistance.scatter(dataX, dataY)
     axTimeDistance.set(xlabel = 'distance', ylabel = 'time (s)')
-    figTimeDistance.savefig('scatterTimeDistance.png')
+    figTimeDistance.savefig('images/scatterTimeDistance.png')
 
 
 
@@ -344,7 +315,7 @@ if __name__ == "__main__":
     axsAR[1].get_xaxis().set_visible(False)
     axsAR[1].title.set_text('speech command failed')
     
-    figBoxplotsAR.savefig('boxplotsAR.png')
+    figBoxplotsAR.savefig('images/boxplotsAR.png')
 
 
 
@@ -390,7 +361,7 @@ if __name__ == "__main__":
     axs[4].get_xaxis().set_visible(False)
     axs[4].title.set_text('Speech')
 
-    figBoxPlots.savefig('boxplots.png')
+    figBoxPlots.savefig('images/boxplots.png')
 
     
     pass

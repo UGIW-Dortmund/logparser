@@ -1,0 +1,57 @@
+| ILM |08/12/2022 04:33:28.263 PM | Start Action | 
+| ILM | 08/12/2022 04:33:30.578 PM | Teleport; old Position = (0.2, 1.4, -8.5) | 
+| ILM | 08/12/2022 04:33:32.776 PM | Teleported; new Position = (0.2, 0.0, -8.5) 
+
+| ILM | 08/12/2022 04:33:33.161 PM | Teleport; old Position = (3.9, 1.4, -5.1) | 
+| ILM | 08/12/2022 04:33:35.922 PM | Reached Teleport Anchor 1 | 
+| ILM | 08/12/2022 04:33:35.924 PM | Teleported; new Position = (3.9, 0.0, -5.1) 
+
+| ILM | 08/12/2022 04:33:38.327 PM | Teleport; old Position = (5.3, 1.4, -4.2) | 
+| ILM | 08/12/2022 04:33:38.591 PM | Teleported; new Position = (5.3, 0.0, -4.2) |
+ 
+| ILM | 08/12/2022 04:33:39.078 PM | Teleport; old Position = (3.0, 1.4, -3.7) | 
+| ILM | 08/12/2022 04:33:40.374 PM | Teleported; new Position = (3.0, 0.0, -3.7) 
+
+| ILM | 08/12/2022 04:33:41.083 PM | Teleport; old Position = (3.0, 1.4, -3.7) | 
+| ILM | 08/12/2022 04:33:42.099 PM | Teleported; new Position = (3.0, 0.0, -3.7) 
+
+| ILM | 08/12/2022 04:33:44.035 PM | Teleport; old Position = (-2.5, 1.4, -2.2) | 
+| ILM | 08/12/2022 04:33:45.427 PM | Reached Teleport Anchor 2 | 
+| ILM | 08/12/2022 04:33:45.428 PM | Teleported; new Position = (-2.5, 0.0, -2.2) | 
+
+| ILM | 08/12/2022 04:33:46.081 PM | Teleport; old Position = (-2.2, 1.4, -2.4) | 
+| ILM | 08/12/2022 04:33:46.318 PM | Reached Teleport Anchor 2 | 
+| ILM | 08/12/2022 04:33:46.318 PM | Teleported; new Position = (-2.2, 0.0, -2.4) | 
+
+| ILM | 08/12/2022 04:33:46.778 PM | Teleport; old Position = (-2.4, 1.4, -2.3) | 
+| ILM | 08/12/2022 04:33:47.028 PM | Teleported; new Position = (-2.4, 0.0, -2.3) 
+
+| ILM | 08/12/2022 04:33:48.253 PM | Teleport; old Position = (-1.1, 1.4, -1.4) | 
+| ILM | 08/12/2022 04:33:49.186 PM | Teleported; new Position = (-1.1, 0.0, -1.4) 
+
+| ILM | 08/12/2022 04:33:49.478 PM | Teleport; old Position = (0.0, 1.4, -0.6) | 
+| ILM | 08/12/2022 04:33:50.008 PM | Reached Teleport Anchor 3 | 
+| ILM | 08/12/2022 04:33:50.009 PM | Teleported; new Position = (0.0, 0.0, -0.6) | 
+| ILM | 08/12/2022 04:33:51.414 PM | Teleport; old Position = (1.6, 1.4, 0.8) | 
+| ILM | 08/12/2022 04:33:51.664 PM | Teleported; new Position = (1.6, 0.0, 0.8) | 
+| ILM | 08/12/2022 04:33:51.971 PM | Teleport; old Position = (1.6, 1.4, 2.4) | 
+| ILM | 08/12/2022 04:33:52.179 PM | Teleported; new Position = (1.6, 0.0, 2.4) | 
+| ILM | 08/12/2022 04:33:52.611 PM | Teleport; old Position = (1.6, 1.4, 4.0) | 
+| ILM | 08/12/2022 04:33:53.113 PM | Reached Teleport Anchor 4 | 
+| ILM | 08/12/2022 04:33:53.113 PM | Teleported; new Position = (1.6, 0.0, 4.0) | 
+| ILM | 08/12/2022 04:33:54.059 PM | Teleport; old Position = (1.4, 1.4, 5.4) | 
+| ILM | 08/12/2022 04:33:54.379 PM | Teleported; new Position = (1.4, 0.0, 5.4) | 
+| ILM | 08/12/2022 04:33:55.270 PM | Teleport; old Position = (0.1, 1.4, 6.1) | 
+| ILM | 08/12/2022 04:33:55.730 PM | Teleported; new Position = (0.1, 0.0, 6.1) | 
+| ILM | 08/12/2022 04:33:55.910 PM | Teleport; old Position = (-1.3, 1.4, 6.9) | 
+| ILM | 08/12/2022 04:33:56.161 PM | Teleported; new Position = (-1.3, 0.0, 6.9) | 
+| ILM | 08/12/2022 04:33:56.537 PM | Teleport; old Position = (-3.3, 1.4, 7.5) | 
+| ILM | 08/12/2022 04:33:57.484 PM | Reached Teleport Anchor 5 | 
+| ILM | 08/12/2022 04:33:57.500 PM | Teleported; new Position = (-3.3, 0.0, 7.5) | 
+| ILM | 08/12/2022 04:34:00.018 PM | Teleport; old Position = (-4.3, 1.4, 7.6) | 
+| ILM | 08/12/2022 04:34:00.658 PM | Teleported; new Position = (-4.3, 0.0, 7.6) | 
+| ILM | 08/12/2022 04:34:01.007 PM | Teleport; old Position = (-4.3, 1.4, 7.6) | 
+| ILM | 08/12/2022 04:34:01.368 PM | Teleported; new Position = (-4.3, 0.0, 7.6) | 
+| ILM | 08/12/2022 04:34:02.274 PM | Teleport; old Position = (-4.3, 1.4, 7.6) | 
+| ILM | 08/12/2022 04:34:02.510 PM | Teleported; new Position = (-4.3, 0.0, 7.6) | 
+| ILM |08/12/2022 04:34:04.419 PM | General_msg | Saved on device! | 

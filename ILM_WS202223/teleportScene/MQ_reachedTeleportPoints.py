@@ -17,65 +17,7 @@ def get_database():
     return client['ilm']
 
 
-def runAnalyzeGeneric(probands, sceneName):
 
-    allData = []
-
-    for prob in probands:
-        probandId = prob
-
-        x = col.find({'scene': sceneName,
-                      'action': 'Start Scene',
-                      'prob': probandId})
-        x_list = list(x)
-        if len(x_list) > 0:
-
-            for data in x_list:
-                startAction = data.get('time')
-                startDate = data.get('date')
-
-            y = col.find({'scene': sceneName,
-                          'action': 'End Scene',
-                          'prob': probandId,
-                          })
-
-            y_list = list(y)
-
-            if len(y_list) > 0:
-                for data in y_list:
-                    # print('End Scene')
-                    # print(data)
-                    endAction = data.get('time')
-                    endDate = data.get('date')
-            elif len(y_list) == 0:
-                y = col.find({'scene': sceneName,
-                              'actionvalue': 'Saved on device!',
-                              'prob': probandId})
-                y_list = list(y)
-                for data in y_list:
-                    # print('Elif')
-                    # print(data)
-                    endAction = data.get('time')
-                    endDate = data.get('date')
-
-            endAction = pd.to_datetime(endDate + ' ' + endAction)
-            startAction = pd.to_datetime(startDate + ' ' + startAction)
-
-            delta = endAction - startAction
-            allData.append(delta.seconds)
-
-            print("For Proband: " + probandId)
-            print(delta.seconds)
-
-            x = None
-            y = None
-            y_list = None
-            x_list = None
-
-            endAction = None
-            startAction = None
-
-    return allData
 
 def runAnalyze(probands, sceneName, device):
 

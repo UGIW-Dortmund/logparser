@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     usedHand = 'Right'
     plainSceneName = 'ILM_Grabbing_'
-    sceneName = 'ILM_Grabbing_' + usedHand
+    sceneName = 'ILM_Teleport_Scene_Right-Hand'
 
     for prob in probands:
         probandId = prob
@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
 
     usedHand = 'Left'
-    sceneName = plainSceneName + usedHand
+    sceneName = 'ILM_Teleport_Scene_Left-Hand'
 
     for prob in probands:
         probandId = prob
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     allTimes = [sceneTimeTeleportRight, sceneTimeTeleportLeft]
 
     fig = plt.figure(figsize=(10, 7))
-    plt.title('Bearbeitungszeit Grabbing Szene')
+    plt.title('Bearbeitungszeit Teleport Szene')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     plt.boxplot(allTimes)
     plt.xticks([1, 2], ['Rechte Hand', 'Linke Hand'])

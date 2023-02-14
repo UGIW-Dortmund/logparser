@@ -34,13 +34,13 @@ if __name__ == "__main__":
 
     usedHand = 'Right'
     plainSceneName = 'ILM_Grabbing_'
-    sceneName = 'ILM_Grabbing_' + usedHand
+    sceneName = 'ILM_Grabbing_Right'
 
     for prob in probands:
         probandId = prob
 
         x = col.find({'scene': sceneName,
-                      'action': 'Start Action',
+                      'action': 'Start Scene',
                       'prob': probandId})
         x_list = list(x)
         if len(x_list) > 0:
@@ -62,7 +62,7 @@ if __name__ == "__main__":
                     endAction = data.get('time')
             elif len(y_list) == 0:
                 y = col.find({'scene': sceneName,
-                              'actionvalue': 'Saved on device!',
+                              'action': 'Skip Scene',
                               'prob': probandId})
                 y_list = list(y)
                 for data in y_list:
@@ -90,12 +90,15 @@ if __name__ == "__main__":
 
     usedHand = 'Left'
     sceneName = plainSceneName + usedHand
+    sceneName = 'ILM_Grabbing_Left'
+
+    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A10', 'A12', 'A13', 'A14']
 
     for prob in probands:
         probandId = prob
 
         x = col.find({'scene': sceneName,
-                      'action': 'Start Action',
+                      'action': 'Start Scene',
                       'prob': probandId})
         x_list = list(x)
         if len(x_list) > 0:
@@ -112,7 +115,16 @@ if __name__ == "__main__":
 
             if len(y_list) > 0:
                 for data in y_list:
-                    # print('End Scene')
+                    print('End Scene')
+                    print(data)
+                    endAction = data.get('time')
+            elif len(y_list) == 0:
+                y = col.find({'scene': sceneName,
+                              'action': 'Skip Scene',
+                              'prob': probandId})
+                y_list = list(y)
+                for data in y_list:
+                    # print('Elif')
                     # print(data)
                     endAction = data.get('time')
             elif len(y_list) == 0:
@@ -125,8 +137,8 @@ if __name__ == "__main__":
                     # print(data)
                     endAction = data.get('time')
 
-            endAction = pd.to_datetime(endAction)
-            startAction = pd.to_datetime(startAction)
+            endAction = pd.to_datetime(endAction, errors = 'coerce')
+            startAction = pd.to_datetime(startAction, errors = 'coerce')
 
             delta = endAction - startAction
             sceneTimeTeleportLeft.append(delta.seconds)

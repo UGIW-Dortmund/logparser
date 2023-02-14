@@ -21,17 +21,20 @@ def get_database():
 if __name__ == "__main__":
     # Get the database
     dbname = get_database()
+    sceneName = 'ILM_Teleport_Scene_Right-Hand'
     col = dbname["uwp"]
 
     #probands = col.distinct('prob')
-    probands = ['A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A12', ]
+    probands = ['A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A12', 'A13', 'A14']
     print(probands)
 
 
     for prob in probands:
         probandId = prob
         print("For Proband: " + probandId)
-        x = col.find({'scene': 'ILM_Teleport_Scene_Right-Hand', 'action': 'Start Scene', 'prob': probandId})
+        x = col.find({'scene': sceneName,
+                      'action': 'Start Action',
+                      'prob': probandId})
 
         x_list = list(x)
 
@@ -41,18 +44,21 @@ if __name__ == "__main__":
 
             for data in x_list:
                 #print("Start Scene")
-                print(data)
+                # print(data)
                 startAction = data.get('time')
-                print(startAction)
+                # print(startAction)
 
-            y = col.find({'scene': 'ILM_Teleport_Scene_Right-Hand', 'action': 'End Scene', 'prob': probandId})
+            y = col.find({'scene': sceneName,
+                          'action': 'End Scene',
+                          'prob': probandId,
+                          })
 
             y_list = list(y)
 
             if len(y_list) > 0:
                 for data in y_list:
                     #print('End Scene')
-                    #print(data)
+                    print(data)
                     endAction = data.get('time')
             elif len(y_list) == 0:
                 y = col.find({'scene': 'ILM_Teleport_Scene_Right-Hand', 'actionvalue': 'Saved on device!', 'prob': probandId})

@@ -22,6 +22,7 @@ def get_database():
 def runAnalyze(probands, sceneName):
 
     allData = []
+    positions = []
 
     for prob in probands:
         probandId = prob
@@ -32,7 +33,7 @@ def runAnalyze(probands, sceneName):
         x_list = list(x)
         if len(x_list) > 0:
 
-            print("For Proband: " + probandId)
+            # print("For Proband: " + probandId)
             for data in x_list:
                 startAction = data.get('time')
                 startDate = data.get('date')
@@ -49,27 +50,25 @@ def runAnalyze(probands, sceneName):
                     # print('End Scene')
                     # print(data)
                     teleportPosition = data.get('actionvalue')
-                    print(teleportPosition)
-                    endAction = data.get('time')
-                    endDate = data.get('date')
+                    teleportPosition = teleportPosition.replace('(', '')
+                    teleportPosition = teleportPosition.replace(')', '')
 
+                    vPosition = teleportPosition.split(',')
 
-            endAction = pd.to_datetime(endDate + ' ' + endAction)
-            startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    # print(str(vPosition))
 
-            delta = endAction - startAction
-            allData.append(delta.seconds)
-
+                    positions.append(vPosition)
 
 
 
+            allData.append([probandId, positions])
             x = None
             y = None
             y_list = None
             x_list = None
+            positions = []
 
-            endAction = None
-            startAction = None
+
 
     return allData
 
@@ -82,8 +81,10 @@ if __name__ == "__main__":
 
     #probands = col.distinct('prob')
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
-    print(probands)
+    # print(probands)
 
 
     teleportPositions = runAnalyze(probands, 'ILM_Teleport_Scene_Right-Hand')
+
+    print(teleportPositions[0])
 

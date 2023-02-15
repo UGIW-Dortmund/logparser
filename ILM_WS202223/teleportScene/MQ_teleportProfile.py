@@ -81,10 +81,41 @@ if __name__ == "__main__":
 
     #probands = col.distinct('prob')
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
-    # print(probands)
+    # probands = ['A01', 'A02']
 
+    teleportPositions = runAnalyze(probands, 'ILM_Teleport_Scene_Left-Hand')
 
-    teleportPositions = runAnalyze(probands, 'ILM_Teleport_Scene_Right-Hand')
+    # ILM_Teleport_Scene_Left-Hand
+    # ILM_Submit-Near_Right_Scene
 
-    print(teleportPositions[0])
+    # print(teleportPositions[0][1][0])
+
+    xy_values = []
+    x_values = []
+    y_values = []
+    # 1. Probanden
+    for a in teleportPositions:
+        # print(a[1])
+        # 2. Verschiedene Teleport Positionen je nach Proband
+        for b in a[1]:
+            # print(b[1][0])
+            x_values.append(float(b[0]))
+            y_values.append(float(b[2]))
+
+            xy_values.append([float(b[0]), float(b[2])])
+
+        # plt.scatter(x_values, y_values, label=a[0])
+        print(x_values)
+        x_values = []
+        y_values = []
+
+    num_bins = 7
+
+    #plt.legend()
+    plt.title('Teleport Positionen')
+    #plt.xlabel("X-Koordinaten")
+    #plt.ylabel("Z-Koordinaten")
+
+    plt.hist(xy_values, num_bins)
+    plt.show()
 

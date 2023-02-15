@@ -7,6 +7,10 @@ import pandas as pd
 from pymongo import MongoClient
 
 
+
+###
+### For figuring out the operating times for teleporting
+###
 def get_database():
     # Provide the mongodb atlas url to connect python to mongodb using pymongo
     CONNECTION_STRING = "mongodb://fredix:memphis55@kurz-containar.de:27017"
@@ -19,58 +23,61 @@ def get_database():
 
 
 
-def runAnalyze(probands, sceneName, device):
+def runAnalyze(probands, sceneName, device, anchor):
 
     allData = []
 
     for prob in probands:
         probandId = prob
 
-        x = col.find({'scene': sceneName,
-                      'dev': device,
-                      'action': 'Start Scene',
-                      'prob': probandId})
+        x = col.find({  'scene': sceneName,
+                        'dev': device,
+                        'action': 'Teleport Anchor Reached',
+                        'actionvalue': anchor,
+                        'prob': probandId})
+
         x_list = list(x)
+
+
         if len(x_list) > 0:
 
-            for data in x_list:
-                startAction = data.get('time')
-                startDate = data.get('date')
+            print('X-List' + str(x_list))
+
+            next_anchor = int(anchor) + 1
+
+            print('Next anchor ' + str(next_anchor))
+
+            startAction = x_list[0].get('time')
+            startDate = x_list[0].get('date')
+
 
             y = col.find({'scene': sceneName,
                           'dev': device,
-                          'action': 'End Scene',
+                          'action': 'Teleport Anchor Reached',
+                          'actionvalue': str(next_anchor),
                           'prob': probandId,
                           })
 
             y_list = list(y)
 
+            print('Y-List' + str(y_list))
+
             if len(y_list) > 0:
-                for data in y_list:
-                    # print('End Scene')
-                    # print(data)
-                    endAction = data.get('time')
-                    endDate = data.get('date')
-            elif len(y_list) == 0:
-                y = col.find({'scene': sceneName,
-                              'dev': device,
-                              'actionvalue': 'Saved on device!',
-                              'prob': probandId})
-                y_list = list(y)
-                for data in y_list:
-                    # print('Elif')
-                    # print(data)
-                    endAction = data.get('time')
-                    endDate = data.get('date')
+
+                endAction = y_list[0].get('time')
+                endDate = y_list[0].get('date')
 
             endAction = pd.to_datetime(endDate + ' ' + endAction)
             startAction = pd.to_datetime(startDate + ' ' + startAction)
 
             delta = endAction - startAction
-            allData.append(delta.seconds)
+            allData.append(float(delta.seconds + delta.microseconds))
 
-            print("For Proband: " + probandId)
-            print(delta.seconds)
+
+
+
+            print("For T-Stop: " + str(anchor))
+            print(str(float(delta.seconds +  "." + delta.microseconds)))
 
             x = None
             y = None
@@ -95,17 +102,21 @@ if __name__ == "__main__":
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
     print(probands)
 
-    sceneTeleportRight = runAnalyzeGeneric(probands, 'ILM_Teleport_Scene_Right-Hand')
-    sceneTeleportLeft = runAnalyzeGeneric(probands, 'ILM_Teleport_Scene_Left-Hand')
-    sceneTeleportRightMQ2 = runAnalyze(probands, 'ILM_Teleport_Scene_Right-Hand', 'MQ2')
-    sceneTeleportLeftMQ2 = runAnalyze(probands, 'ILM_Teleport_Scene_Left-Hand', 'MQ2')
-    sceneTeleportRightMQP = runAnalyze(probands, 'ILM_Teleport_Scene_Right-Hand', 'MQP')
-    sceneTeleportLeftMQP = runAnalyze(probands, 'ILM_Teleport_Scene_Left-Hand', 'MQP')
+    sceneName = 'ILM_Teleport_Scene_Right-Hand'
+    query_string = {'$regex': 'MQ*'}
+    deviceName = query_string
 
 
-    allTimes = [sceneTeleportRight, sceneTeleportLeft,
-                sceneTeleportRightMQ2, sceneTeleportLeftMQ2,
-                sceneTeleportRightMQP, sceneTeleportLeftMQP]
+    sceneTeleportRightMQ2_1 = runAnalyze(probands, sceneName, deviceName, '1')
+    sceneTeleportLeftMQ2_2 = runAnalyze(probands, sceneName, deviceName, '2')
+    sceneTeleportRightMQ2_3 = runAnalyze(probands, sceneName, deviceName, '3')
+    sceneTeleportLeftMQ2_4 = runAnalyze(probands, sceneName, deviceName, '4')
+
+    print(sceneTeleportRightMQ2_1)
+
+
+    allTimes = [sceneTeleportRightMQ2_1, sceneTeleportLeftMQ2_2,
+                sceneTeleportRightMQ2_3, sceneTeleportLeftMQ2_4]
 
     fig, ax1 = plt.subplots(figsize=(10, 6))
 
@@ -121,7 +132,7 @@ if __name__ == "__main__":
         ylabel='Sekunden',
     )
 
-    num_boxes = len(sceneTeleportLeft)
+    num_boxes = len(sceneTeleportRightMQ2_1)
     # medians = np.empty(num_boxes)
 
     # Due to the Y-axis scale being different across samples, it can be
@@ -132,6 +143,7 @@ if __name__ == "__main__":
     #upper_labels = [str(round(s, 2)) for s in medians]
     weights = ['bold', 'semibold']
     i = 0
+    '''
     for at in allTimes:
         # k = tick % 2
         i = i + 1
@@ -140,12 +152,12 @@ if __name__ == "__main__":
                  horizontalalignment='center',
                  size='small')
 
-
+    '''
     # fig = plt.figure(figsize=(10, 7))
-    plt.title('Bearbeitungszeit Teleport Szene')
+    plt.title('Bearbeitungszeit Teleport Szene mit der rechten Hand')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     plt.boxplot(allTimes)
     plt.ylabel('Sekunden')
-    plt.xticks([1, 2, 3, 4, 5, 6], ['Rechte Hand', 'Linke Hand', 'MQ2 Rechte Hand', 'MQ2 Linke Hand', 'MQP Rechte Hand', 'MQP Linke Hand'])
+    plt.xticks([1, 2, 3, 4], [f'T-Stop 1 zu 2 \n n = {len(allTimes[0])}' , f'T-Stop 2 zu 3 \n n = {len(allTimes[1])}', f'T-Stop 3 zu 4 \n n = {len(allTimes[2])}', f'T-Stop 4 zu 5 \n n = {len(allTimes[3])}'])
     # plt.xticks([1, 2, 3, 4], [str(len(sceneTeleportRightMQ2)), str(len(sceneTeleportLeftMQ2)), 'MQP Rechte Hand', 'MQP Linke Hand'])
     plt.show()

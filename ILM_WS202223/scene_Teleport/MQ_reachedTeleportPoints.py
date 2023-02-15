@@ -71,13 +71,17 @@ def runAnalyze(probands, sceneName, device, anchor):
             startAction = pd.to_datetime(startDate + ' ' + startAction)
 
             delta = endAction - startAction
-            allData.append(float(delta.seconds + delta.microseconds))
+            # float(delta.seconds + '.' + delta.)
+            allData.append(delta.total_seconds())
 
 
 
 
-            print("For T-Stop: " + str(anchor))
-            print(str(float(delta.seconds +  "." + delta.microseconds)))
+            # print("For T-Stop: " + str(anchor))
+            # print('Delta ' + str(delta))
+            # print('Sekunden ' + str(delta.seconds))
+            # print('Milliseconds ' + str(delta.microseconds))
+            # print('Total seconds ' + str(delta.total_seconds()))
 
             x = None
             y = None
@@ -102,7 +106,7 @@ if __name__ == "__main__":
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
     print(probands)
 
-    sceneName = 'ILM_Teleport_Scene_Right-Hand'
+    sceneName = 'ILM_Teleport_Scene_Left-Hand'
     query_string = {'$regex': 'MQ*'}
     deviceName = query_string
 
@@ -154,7 +158,7 @@ if __name__ == "__main__":
 
     '''
     # fig = plt.figure(figsize=(10, 7))
-    plt.title('Bearbeitungszeit Teleport Szene mit der rechten Hand')
+    plt.title('Bearbeitungszeit Teleport Szene mit der linken Hand')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     plt.boxplot(allTimes)
     plt.ylabel('Sekunden')

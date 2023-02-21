@@ -81,6 +81,9 @@ if __name__ == "__main__":
 
     #probands = col.distinct('prob')
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
+    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18']
+
+
     # probands = ['A01', 'A02']
 
     teleportPositions = runAnalyze(probands, 'ILM_Teleport_Scene_Left-Hand')

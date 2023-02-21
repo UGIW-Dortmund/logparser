@@ -3,6 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import statistics
 
 from pymongo import MongoClient
 
@@ -32,7 +33,8 @@ def runAnalyzeFirstButton(probands, sceneName, device):
 
         x = col.find({  'scene': sceneName,
                         'dev': device,
-                        'action': 'Start Scene',
+                        'action': 'Submit Button',
+                        'actionvalue': '3',
                         'prob': probandId
                         })
 
@@ -41,7 +43,7 @@ def runAnalyzeFirstButton(probands, sceneName, device):
 
         if len(x_list) > 0:
 
-            print('X-List' + str(x_list))
+            #print('X-List' + str(x_list))
 
             startAction = x_list[0].get('time')
             startDate = x_list[0].get('date')
@@ -49,14 +51,14 @@ def runAnalyzeFirstButton(probands, sceneName, device):
 
             y = col.find({'scene': sceneName,
                           'dev': device,
-                          'action': 'Submit Button',
+                          'action': 'Submit Toggle',
                           'actionvalue': '1',
                           'prob': probandId,
                           })
 
             y_list = list(y)
 
-            print('Y-List' + str(y_list))
+            #print('Y-List' + str(y_list))
 
             if len(y_list) > 0:
 
@@ -69,6 +71,9 @@ def runAnalyzeFirstButton(probands, sceneName, device):
             delta = endAction - startAction
             # float(delta.seconds + '.' + delta.)
             allData.append(delta.total_seconds())
+
+            print('Proband ' + str(probandId))
+            print('Toggle 1 ' + str(delta.total_seconds()))
 
             x = None
             y = None
@@ -90,7 +95,7 @@ def runAnalyzeButton(probands, sceneName, device, button):
 
         x = col.find({  'scene': sceneName,
                         'dev': device,
-                        'action': 'Submit Button',
+                        'action': 'Submit Toggle',
                         'actionvalue': button,
                         'prob': probandId
                         })
@@ -100,7 +105,7 @@ def runAnalyzeButton(probands, sceneName, device, button):
 
         if len(x_list) > 0:
 
-            print('X-List' + str(x_list))
+           # print('X-List' + str(x_list))
 
             startAction = x_list[0].get('time')
             startDate = x_list[0].get('date')
@@ -110,14 +115,14 @@ def runAnalyzeButton(probands, sceneName, device, button):
 
             y = col.find({'scene': sceneName,
                           'dev': device,
-                          'action': 'Submit Button',
+                          'action': 'Submit Toggle',
                           'actionvalue': str(next_button),
                           'prob': probandId,
                           })
 
             y_list = list(y)
 
-            print('Y-List' + str(y_list))
+            # print('Y-List' + str(y_list))
 
             if len(y_list) > 0:
 
@@ -130,6 +135,9 @@ def runAnalyzeButton(probands, sceneName, device, button):
             delta = endAction - startAction
             # float(delta.seconds + '.' + delta.)
             allData.append(delta.total_seconds())
+
+            print('Proband ' + str(probandId))
+            print('Toggle ' + button + ' - ' + str(delta.total_seconds()))
 
             x = None
             y = None
@@ -152,12 +160,13 @@ if __name__ == "__main__":
 
 
     #probands = col.distinct('prob')
-    # probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
-    # probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A18']
-    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16','A19', 'A20', 'A21', 'A22', 'A23',  'A25', 'A26', 'A27']
+    #probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
+    #probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27']
+    #probands = col.distinct('prob')
     print(probands)
 
-    sceneName = 'ILM_Submit-Far_Right_Scene'
+    sceneName = 'ILM_Submit-Near_Right_Scene'
     query_string = {'$regex': 'MQ*'}
     deviceName = query_string
 
@@ -167,12 +176,12 @@ if __name__ == "__main__":
     sceneSubmitNearButton_3 = runAnalyzeButton(probands, sceneName, deviceName, '2')
 
 
-    print(sceneSubmitNearButton)
+    # print(sceneSubmitNearButton)
 
 
     allTimes = [sceneSubmitNearButton, sceneSubmitNearButton_2, sceneSubmitNearButton_3]
 
-    fig, ax1 = plt.subplots(figsize=(10, 6))
+    fig, ax1 = plt.subplots(figsize=(12, 12))
 
 
 
@@ -185,12 +194,13 @@ if __name__ == "__main__":
     # (just use two decimal places of precision)
 
     # fig = plt.figure(figsize=(10, 7))
-    plt.title('Bearbeitungszeit der Buttons mit der linken Hand')
+    plt.title('Bearbeitungszeit der Toggles mit der rechten Hand')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     plt.boxplot(allTimes)
     plt.ylabel('Sekunden')
 
-    plt.xticks([1, 2, 3], [f'Button 1 \n n = {len(allTimes[0])}',  f'Button 2 \n n = {len(allTimes[1])}', f'Button 3 \n n = {len(allTimes[2])}'])
-    # plt.xticks([1, 2, 3, 4], [f'T-Stop 1 zu 2 \n n = {len(allTimes[0])}' , f'T-Stop 2 zu 3 \n n = {len(allTimes[1])}', f'T-Stop 3 zu 4 \n n = {len(allTimes[2])}', f'T-Stop 4 zu 5 \n n = {len(allTimes[3])}'])
+    plt.xticks([1, 2, 3], [f'Toggle 1 \n \n n = {len(allTimes[0])} \n Median = {round(statistics.median(allTimes[0]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[0]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[0], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[0], 75), 3)} s',
+                           f'Toggle 2 \n \n n = {len(allTimes[1])} \n Median = {round(statistics.median(allTimes[1]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[1]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[1], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[1], 75), 3)} s',
+                           f'Toggle 3 \n \n n = {len(allTimes[2])} \n Median = {round(statistics.median(allTimes[2]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[2]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[2], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[2], 75), 3)} s'])
 
     plt.show()

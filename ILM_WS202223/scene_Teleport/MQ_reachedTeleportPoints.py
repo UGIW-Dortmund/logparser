@@ -3,6 +3,8 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import statistics
+
 
 from pymongo import MongoClient
 
@@ -103,7 +105,9 @@ if __name__ == "__main__":
 
 
     #probands = col.distinct('prob')
-    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27']
+   # probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22']
+    probands = col.distinct('prob')
     print(probands)
 
     sceneName = 'ILM_Teleport_Scene_Left-Hand'
@@ -122,7 +126,7 @@ if __name__ == "__main__":
     allTimes = [sceneTeleportRightMQ2_1, sceneTeleportLeftMQ2_2,
                 sceneTeleportRightMQ2_3, sceneTeleportLeftMQ2_4]
 
-    fig, ax1 = plt.subplots(figsize=(10, 6))
+    fig, ax1 = plt.subplots(figsize=(10, 15))
 
     # Add a horizontal grid to the plot, but make it very light in color
     # so we can use it for reading data values but not be distracting
@@ -164,4 +168,11 @@ if __name__ == "__main__":
     plt.ylabel('Sekunden')
     plt.xticks([1, 2, 3, 4], [f'T-Stop 1 zu 2 \n n = {len(allTimes[0])}' , f'T-Stop 2 zu 3 \n n = {len(allTimes[1])}', f'T-Stop 3 zu 4 \n n = {len(allTimes[2])}', f'T-Stop 4 zu 5 \n n = {len(allTimes[3])}'])
     # plt.xticks([1, 2, 3, 4], [str(len(sceneTeleportRightMQ2)), str(len(sceneTeleportLeftMQ2)), 'MQP Rechte Hand', 'MQP Linke Hand'])
+
+    plt.xticks([1, 2, 3, 4], [
+        f'T-Stopp 1 zu 2 \n \n n = {len(allTimes[0])} \n Median = {round(statistics.median(allTimes[0]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[0]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[0], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[0], 75), 3)} s',
+        f'T-Stopp 2 zu 3 \n \n n = {len(allTimes[1])} \n Median = {round(statistics.median(allTimes[1]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[1]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[1], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[1], 75), 3)} s',
+        f'T-Stopp 3 zu 4 \n \n n = {len(allTimes[2])} \n Median = {round(statistics.median(allTimes[2]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[2]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[2], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[2], 75), 3)} s',
+        f'T-Stopp 4 zu 5 \n \n n = {len(allTimes[3])} \n Median = {round(statistics.median(allTimes[3]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[3]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[3], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[3], 75), 3)} s'])
+
     plt.show()

@@ -3,6 +3,8 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import statistics
+from statistics import mean
 
 from pymongo import MongoClient
 
@@ -143,6 +145,15 @@ def runAnalyzeButton(probands, sceneName, device, button):
 
 
 # This is added so that many files can reuse the function get_database()
+def boxplotCap(valArray):
+    return f'\n n = {len(valArray)} \n' \
+           f'Median = {round(statistics.median(valArray), 3)} s \n ' \
+           f'Mittelwert = {round(statistics.mean(valArray), 3)} s \n ' \
+           f'Standardabweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
+           f'Mittlere Abweichung = {round(mean(valArray), 3)} s \n ' \
+           f'1. Quartil = {round(np.percentile(valArray, 25), 3)} s \n' \
+           f'3. Quartil = {round(np.percentile(valArray, 75), 3)} s ';
+
 if __name__ == "__main__":
     # Get the database
     dbname = get_database()
@@ -172,7 +183,7 @@ if __name__ == "__main__":
 
     allTimes = [sceneSubmitNearButton, sceneSubmitNearButton_2, sceneSubmitNearButton_3]
 
-    fig, ax1 = plt.subplots(figsize=(10, 6))
+    fig, ax1 = plt.subplots(figsize=(10, 8))
 
 
 
@@ -190,7 +201,11 @@ if __name__ == "__main__":
     plt.boxplot(allTimes)
     plt.ylabel('Sekunden')
 
-    plt.xticks([1, 2, 3], [f'Button 1 \n n = {len(allTimes[0])}',  f'Button 2 \n n = {len(allTimes[1])}', f'Button 3 \n n = {len(allTimes[2])}'])
+    plt.xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
+                           "Button 2" + boxplotCap(allTimes[1]),
+                           "Button 3" + boxplotCap(allTimes[2])])
     # plt.xticks([1, 2, 3, 4], [f'T-Stop 1 zu 2 \n n = {len(allTimes[0])}' , f'T-Stop 2 zu 3 \n n = {len(allTimes[1])}', f'T-Stop 3 zu 4 \n n = {len(allTimes[2])}', f'T-Stop 4 zu 5 \n n = {len(allTimes[3])}'])
 
     plt.show()
+
+

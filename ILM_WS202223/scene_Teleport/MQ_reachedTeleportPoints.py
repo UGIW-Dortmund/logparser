@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import statistics
+from statistics import mean
 
 
 from pymongo import MongoClient
@@ -95,6 +96,15 @@ def runAnalyze(probands, sceneName, device, anchor):
 
     return allData
 
+def boxplotCap(valArray):
+    return f'\n n = {len(valArray)} \n' \
+           f'Median = {round(statistics.median(valArray), 3)} s \n ' \
+           f'Mittelwert = {round(statistics.mean(valArray), 3)} s \n ' \
+           f'Standardabweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
+           f'Mittlere Abweichung = {round(mean(valArray), 3)} s \n ' \
+           f'1. Quartil = {round(np.percentile(valArray, 25), 3)} s \n' \
+           f'3. Quartil = {round(np.percentile(valArray, 75), 3)} s ';
+
 # This is added so that many files can reuse the function get_database()
 if __name__ == "__main__":
     # Get the database
@@ -170,9 +180,9 @@ if __name__ == "__main__":
     # plt.xticks([1, 2, 3, 4], [str(len(sceneTeleportRightMQ2)), str(len(sceneTeleportLeftMQ2)), 'MQP Rechte Hand', 'MQP Linke Hand'])
 
     plt.xticks([1, 2, 3, 4], [
-        f'T-Stopp 1 zu 2 \n \n n = {len(allTimes[0])} \n Median = {round(statistics.median(allTimes[0]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[0]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[0], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[0], 75), 3)} s',
-        f'T-Stopp 2 zu 3 \n \n n = {len(allTimes[1])} \n Median = {round(statistics.median(allTimes[1]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[1]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[1], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[1], 75), 3)} s',
-        f'T-Stopp 3 zu 4 \n \n n = {len(allTimes[2])} \n Median = {round(statistics.median(allTimes[2]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[2]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[2], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[2], 75), 3)} s',
-        f'T-Stopp 4 zu 5 \n \n n = {len(allTimes[3])} \n Median = {round(statistics.median(allTimes[3]), 3)} s \n Mittelwert = {round(statistics.mean(allTimes[3]), 3)} s \n 1. Quartil = {round(np.percentile(allTimes[3], 25), 3)} s \n 3. Quartil = {round(np.percentile(allTimes[3], 75), 3)} s'])
+        "T-Stopp 1 zu 2 \n " + boxplotCap(allTimes[0]),
+        "T-Stopp 2 zu 3 \n " + boxplotCap(allTimes[1]),
+        "T-Stopp 3 zu 4 \n " + boxplotCap(allTimes[2]),
+        "T-Stopp 4 zu 5 \n " + boxplotCap(allTimes[3])])
 
     plt.show()

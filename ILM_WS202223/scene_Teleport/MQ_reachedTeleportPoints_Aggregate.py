@@ -109,12 +109,13 @@ def boxplotCap(valArray):
     return f'\n n = {len(valArray)} \n' \
            f'Median = {round(statistics.median(valArray), 3)} s \n ' \
            f'Mittelwert = {round(statistics.mean(valArray), 3)} s \n ' \
-           f'Varianz = {round(statistics.variance(valArray), 3)} \n ' \
            f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
            f'M. Abweichung = {round(mean(valArray), 3)} s \n ' \
            f'1. Quartil = {round(np.percentile(valArray, 25), 3)} s \n' \
            f'3. Quartil = {round(np.percentile(valArray, 75), 3)} s ';
 
+
+# f'Varianz = {round(statistics.variance(valArray), 3)} \n ' \
 # This is added so that many files can reuse the function get_database()
 if __name__ == "__main__":
     # Get the database
@@ -135,18 +136,52 @@ if __name__ == "__main__":
     deviceName = query_string
 
     devices = ['MQ2', 'MQP']
-    # devices = ['MQ2']
+    devices = ['MQP']
 
-    sceneTeleportRightMQ2_1 = runAnalyze(probands, sceneName, devices, '1')
-    sceneTeleportLeftMQ2_2 = runAnalyze(probands, sceneName, devices, '2')
-    sceneTeleportRightMQ2_3 = runAnalyze(probands, sceneName, devices, '3')
-    sceneTeleportLeftMQ2_4 = runAnalyze(probands, sceneName, devices, '4')
+    # sceneTeleportRightMQ_1 = runAnalyze(probands, sceneName, devices, '1')
+    sceneTeleportRightMQ_2 = runAnalyze(probands, sceneName, devices, '2')
+    sceneTeleportRightMQ_3 = runAnalyze(probands, sceneName, devices, '3')
+    sceneTeleportRightMQ_4 = runAnalyze(probands, sceneName, devices, '4')
 
-    print(sceneTeleportRightMQ2_1)
+    allDataRightHand = []
+
+    for elem in sceneTeleportRightMQ_2:
+        allDataRightHand.append(elem)
+    for elem in sceneTeleportRightMQ_3:
+            allDataRightHand.append(elem)
+    for elem in sceneTeleportRightMQ_4:
+        allDataRightHand.append(elem)
 
 
-    allTimes = [sceneTeleportRightMQ2_1, sceneTeleportLeftMQ2_2,
-                sceneTeleportRightMQ2_3, sceneTeleportLeftMQ2_4]
+    sceneName = 'ILM_Teleport_Scene_Left-Hand'
+
+
+    sceneTeleportLeftMQ_1 = runAnalyze(probands, sceneName, devices, '1')
+    sceneTeleportLeftMQ_2 = runAnalyze(probands, sceneName, devices, '2')
+    sceneTeleportLeftMQ_3 = runAnalyze(probands, sceneName, devices, '3')
+    sceneTeleportLeftMQ_4 = runAnalyze(probands, sceneName, devices, '4')
+
+    allDataLeftHand = []
+
+    for elem in sceneTeleportLeftMQ_1:
+        allDataLeftHand.append(elem)
+    for elem in sceneTeleportLeftMQ_2:
+        allDataLeftHand.append(elem)
+    for elem in sceneTeleportLeftMQ_3:
+        allDataLeftHand.append(elem)
+    for elem in sceneTeleportLeftMQ_4:
+        allDataLeftHand.append(elem)
+
+
+    allDataHand = []
+
+    for elem in allDataLeftHand:
+        allDataHand.append(elem)
+
+    for elem in allDataRightHand:
+        allDataHand.append(elem)
+
+    allTimes = [allDataRightHand, allDataLeftHand, allDataHand]
 
     fig, ax1 = plt.subplots(figsize=(10, 15))
 
@@ -162,39 +197,23 @@ if __name__ == "__main__":
         ylabel='Sekunden',
     )
 
-    num_boxes = len(sceneTeleportRightMQ2_1)
-    # medians = np.empty(num_boxes)
 
     # Due to the Y-axis scale being different across samples, it can be
     # hard to compare differences in medians across the samples. Add upper
     # X-axis tick labels with the sample medians to aid in comparison
     # (just use two decimal places of precision)
-    pos = np.arange(num_boxes)
-    #upper_labels = [str(round(s, 2)) for s in medians]
-    weights = ['bold', 'semibold']
-    i = 0
-    '''
-    for at in allTimes:
-        # k = tick % 2
-        i = i + 1
-        ax1.text(pos[i], .97, 'n = ' + str(len(at)),
-                 transform=ax1.get_xaxis_transform(),
-                 horizontalalignment='center',
-                 size='small')
 
-    '''
     # fig = plt.figure(figsize=(10, 7))
-    plt.title('Bearbeitungszeit der Teleport Szene mit der rechten Hand')
+    plt.title('Bearbeitungszeit der Teleport Szene mit beiden Händen und der Meta Quest Pro')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     plt.boxplot(allTimes)
     plt.ylabel('Sekunden')
-    plt.xticks([1, 2, 3, 4], [f'T-Stop 1 zu 2 \n n = {len(allTimes[0])}' , f'T-Stop 2 zu 3 \n n = {len(allTimes[1])}', f'T-Stop 3 zu 4 \n n = {len(allTimes[2])}', f'T-Stop 4 zu 5 \n n = {len(allTimes[3])}'])
+    #  plt.xticks([1, 2, 3, 4], [f'T-Stop 1 zu 2 \n n = {len(allTimes[0])}' , f'T-Stop 2 zu 3 \n n = {len(allTimes[1])}', f'T-Stop 3 zu 4 \n n = {len(allTimes[2])}', f'T-Stop 4 zu 5 \n n = {len(allTimes[3])}'])
     # plt.xticks([1, 2, 3, 4], [str(len(sceneTeleportRightMQ2)), str(len(sceneTeleportLeftMQ2)), 'MQP Rechte Hand', 'MQP Linke Hand'])
 
-    plt.xticks([1, 2, 3, 4], [
-        "T-Stopp 1 zu 2 \n " + boxplotCap(allTimes[0]),
-        "T-Stopp 2 zu 3 \n " + boxplotCap(allTimes[1]),
-        "T-Stopp 3 zu 4 \n " + boxplotCap(allTimes[2]),
-        "T-Stopp 4 zu 5 \n " + boxplotCap(allTimes[3])])
+    plt.xticks([1, 2, 3], [
+        "Rechte Hand \n " + boxplotCap(allTimes[0]),
+        "Linke Hand \n " + boxplotCap(allTimes[1]),
+        "Beide Hände \n " + boxplotCap(allTimes[2])])
 
     plt.show()

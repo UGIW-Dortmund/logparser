@@ -109,11 +109,8 @@ def boxplotCap(valArray):
     return f'\n n = {len(valArray)} \n' \
            f'Median = {round(statistics.median(valArray), 3)} s \n ' \
            f'Mittelwert = {round(statistics.mean(valArray), 3)} s \n ' \
-           f'Varianz = {round(statistics.variance(valArray), 3)} \n ' \
            f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
-           f'M. Abweichung = {round(mean(valArray), 3)} s \n ' \
-           f'1. Quartil = {round(np.percentile(valArray, 25), 3)} s \n' \
-           f'3. Quartil = {round(np.percentile(valArray, 75), 3)} s ';
+           f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
 
 # This is added so that many files can reuse the function get_database()
 if __name__ == "__main__":
@@ -125,12 +122,12 @@ if __name__ == "__main__":
 
 
     #probands = col.distinct('prob')
-    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
    # probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22']
     # probands = col.distinct('prob')
     print(probands)
 
-    sceneName = 'ILM_Teleport_Scene_Right-Hand'
+    sceneName = 'ILM_Teleport_Scene_Left-Hand'
     query_string = {'$regex': 'MQ*'}
     deviceName = query_string
 
@@ -184,7 +181,7 @@ if __name__ == "__main__":
 
     '''
     # fig = plt.figure(figsize=(10, 7))
-    plt.title('Bearbeitungszeit der Teleport Szene mit der rechten Hand')
+    plt.title('Bearbeitungszeit der Teleport Szene mit der linken Hand')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     plt.boxplot(allTimes)
     plt.ylabel('Sekunden')

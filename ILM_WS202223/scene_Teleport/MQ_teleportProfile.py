@@ -81,29 +81,29 @@ if __name__ == "__main__":
     col = dbname["uwp"]
 
     #probands = col.distinct('prob')
-    # probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
+    # probands = ['A28']
     #probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18']
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15',
-                'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27']
+               'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
     # probands = ['A01', 'A02']
 
-    teleportPositions = runAnalyze(probands, 'ILM_Teleport_Scene_Left-Hand')
+    teleportPositionsRight = runAnalyze(probands, 'ILM_Teleport_Scene_Right-Hand')
+    teleportPositionsLeft = runAnalyze(probands, 'ILM_Teleport_Scene_Left-Hand')
 
-    # ILM_Teleport_Scene_Left-Hand
-    # ILM_Submit-Near_Right_Scene
+    all_x_values_right = []
+    all_y_values_right = []
 
-    # print(teleportPositions[0][1][0])
+    all_x_values_left = []
+    all_y_values_left = []
 
+    xy_values_right = []
+    xy_values_left = []
 
-    all_x_values = []
-    all_y_values = []
-
-    xy_values = []
     x_values = []
     y_values = []
     # 1. Probanden
-    for a in teleportPositions:
+    for a in teleportPositionsRight:
         # print(a[1])
         # 2. Verschiedene Teleport Positionen je nach Proband
         for b in a[1]:
@@ -111,10 +111,34 @@ if __name__ == "__main__":
             x_values.append(float(b[0]))
             y_values.append(float(b[2]))
 
-            all_x_values.append(float(b[0]))
-            all_y_values.append(float(b[2]))
+            all_x_values_right.append(float(b[0]))
+            all_y_values_right.append(float(b[2]))
 
-            xy_values.append([float(b[0]), float(b[2])])
+            xy_values_right.append([float(b[0]), float(b[2])])
+
+
+
+        # plt.scatter(x_values, y_values, label=a[0])
+        # print('X-Values:  ' + str(x_values))
+        # print('Y-Values:  ' + str(y_values))
+
+
+
+        x_values = []
+        y_values = []
+
+    for a in teleportPositionsLeft:
+        # print(a[1])
+        # 2. Verschiedene Teleport Positionen je nach Proband
+        for b in a[1]:
+            # print(b[1][0])
+            x_values.append(float(b[0]))
+            y_values.append(float(b[2]))
+
+            all_x_values_left.append(float(b[0]))
+            all_y_values_left.append(float(b[2]))
+
+            xy_values_left.append([float(b[0]), float(b[2])])
 
 
 
@@ -125,32 +149,57 @@ if __name__ == "__main__":
         y_values = []
 
 
+    # fig, (ax1, ax2) = plt.subplots(1, 2)
+    fig, axs = plt.subplots(1, 2, figsize=(10, 10))
+    fig = plt.title('Teleport Positionen der rechten Hand')
+
+    h_1 = axs[0].hist2d(all_x_values_left, all_y_values_left, bins=10, vmin=0, vmax=50, cmap=plt.cm.YlGnBu)
+    axs[0].set_title('Linke Hand')
+
+
+    # plt.colorbar(h[3], ax=ax1, label='Anzahl Teleport-Positionen')
+
+    h_2 = axs[1].hist2d(all_x_values_right, all_y_values_right, bins=10, vmin=0, vmax=50, cmap=plt.cm.YlGnBu)
+    axs[1].set_title('Rechte Hand')
+
+    axs[0].set_facecolor((1.0, 0.47, 0.42))
+    axs[1].set_facecolor((1.0, 0.47, 0.42))
+
+
+
     #plt.legend()
-    fig = plt.title('Teleport Positionen der linken Hand')
-    #plt.xlabel("X-Koordinaten")
-    #plt.ylabel("Z-Koordinaten")
+
+    axs[0].set(xlabel="X-Koordinaten", ylabel="Z-Koordinaten")
+    axs[1].set(xlabel="X-Koordinaten", ylabel="")
 
 
+    #print(str(xy_values))
+    #print(all_x_values)
+    #print(all_y_values)
+    # plt.hist(xy_values, num_bins)
 
     a = np.random.random((16, 16))
-    data = np.random.random((2, 5))
+    print('a')
+    print(a)
 
-    print(data)
 
-    print(str(xy_values))
-    print(all_x_values)
-    print(all_y_values)
-    # plt.hist(xy_values, num_bins)
-    # plt.hist2d(all_x_values, all_y_values, bins=10) # imshow(data, cmap='hot', interpolation='nearest')
+    print('all x right')
+    print(all_x_values_right)
+    #ax = plt.subplot()
+    # h = plt.hist2d(all_x_values, all_y_values, bins=10)
+    # print(h[3])
+
+    # plt.colorbar(h_1[3], ax=axs[0], label='Anzahl Teleport-Positionen', )
+    plt.colorbar(h_2[3], ax=axs[1], label='Anzahl der Teleport-Positionen', )
 
     # fig, ax = plt.subplots()
     # plt.hist2d(all_x_values, all_y_values, bins=10, norm=colors.Normalize())
 
-    fig, ax = plt.subplots()
+    # fig, ax = plt.subplots()
 
-    ax.hist2d(all_x_values, all_y_values, bins=10) #, np.arange(-3, 3, 0.1)))
+    # ax.hist2d(all_x_values, all_y_values, bins=10) #, np.arange(-3, 3, 0.1)))
 
-    ax.set(xlim=(-6, 6), ylim=(-8, 8))
+    #ax.set(xlim=(-6, 6), ylim=(-8, 8))
 
 
     plt.show()

@@ -110,9 +110,7 @@ def boxplotCap(valArray):
            f'Median = {round(statistics.median(valArray), 3)} s \n ' \
            f'Mittelwert = {round(statistics.mean(valArray), 3)} s \n ' \
            f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
-           f'M. Abweichung = {round(mean(valArray), 3)} s \n ' \
-           f'1. Quartil = {round(np.percentile(valArray, 25), 3)} s \n' \
-           f'3. Quartil = {round(np.percentile(valArray, 75), 3)} s ';
+           f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
 
 
 # f'Varianz = {round(statistics.variance(valArray), 3)} \n ' \
@@ -126,7 +124,7 @@ if __name__ == "__main__":
 
 
     #probands = col.distinct('prob')
-    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
    # probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22']
     # probands = col.distinct('prob')
     print(probands)
@@ -136,7 +134,7 @@ if __name__ == "__main__":
     deviceName = query_string
 
     devices = ['MQ2', 'MQP']
-    devices = ['MQP']
+    devices = ['MQ2']
 
     # sceneTeleportRightMQ_1 = runAnalyze(probands, sceneName, devices, '1')
     sceneTeleportRightMQ_2 = runAnalyze(probands, sceneName, devices, '2')
@@ -204,7 +202,7 @@ if __name__ == "__main__":
     # (just use two decimal places of precision)
 
     # fig = plt.figure(figsize=(10, 7))
-    plt.title('Bearbeitungszeit der Teleport Szene mit beiden Händen und der Meta Quest Pro')
+    plt.title('Bearbeitungszeit der Teleport Szene mit beiden Händen und der Meta Quest 2')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     plt.boxplot(allTimes)
     plt.ylabel('Sekunden')

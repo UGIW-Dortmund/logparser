@@ -134,7 +134,7 @@ if __name__ == "__main__":
     deviceName = query_string
 
     devices = ['MQ2', 'MQP']
-    devices = ['MQ2']
+    # devices = ['MQ2']
 
     # sceneTeleportRightMQ_1 = runAnalyze(probands, sceneName, devices, '1')
     sceneTeleportRightMQ_2 = runAnalyze(probands, sceneName, devices, '2')

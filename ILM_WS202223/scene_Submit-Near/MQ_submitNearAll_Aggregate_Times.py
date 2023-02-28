@@ -536,11 +536,14 @@ def runAnalyzeButton(probands, sceneName, devices, button):
 # This is added so that many files can reuse the function get_database()
 def boxplotCap(valArray):
 
-    return f' \n n = {len(valArray)} \n' \
+    return f' \n n = {len(valArray)} \n \n ' \
             f'Median = {round(statistics.median(valArray), 3)} s \n ' \
             f'Mittelwert = {round(statistics.mean(valArray), 3)} s \n ' \
-            f'S. Dev = {round(statistics.stdev(valArray), 3)} s \n ';
-           # f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
+            f'S. Dev = {round(statistics.stdev(valArray), 3)} s \n ' \
+            f'M. Abweichung = {round(mean(valArray), 3)} s \n ' \
+            f'1. Quartil = {round(np.percentile(valArray, 25), 3)} s \n' \
+            f'3. Quartil = {round(np.percentile(valArray, 75), 3)} s ';
+
 
 #f'\n n = {len(valArray)} \n Wert = {valArray}';
 
@@ -695,8 +698,6 @@ if __name__ == "__main__":
         firstElementsLeftArray.append(elem)
 
 
-
-
     secondElementsLeftArray = []
     for elem in sceneSubmitNearButton_2_Left:
         secondElementsLeftArray.append(elem)
@@ -712,14 +713,11 @@ if __name__ == "__main__":
         secondElementsLeftArray.append(elem)
 
 
-
     for elem in sceneSubmitNearDropdown_2_Left:
         secondElementsLeftArray.append(elem)
 
     for elem in sceneSubmitNearDropdown_3_Left:
         secondElementsLeftArray.append(elem)
-
-
 
     for elem in sceneSubmitNearSlider_2_Left:
         secondElementsLeftArray.append(elem)
@@ -735,7 +733,32 @@ if __name__ == "__main__":
                     sceneSubmitNearSlider_Left, sceneSubmitNearSlider_2_Left, sceneSubmitNearSlider_3_Left,
                     sceneSubmitNearDropdown_Left, sceneSubmitNearDropdown_2_Left, sceneSubmitNearDropdown_3_Left]
 
-    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
+
+    # ALL
+
+    firstElementsArray = []
+
+    for elem in firstElementsLeftArray:
+        firstElementsArray.append(elem)
+
+    for elem in firstElementRightArray:
+        firstElementsArray.append(elem)
+
+
+    secondElementsArray = []
+
+    for elem in secondElementsLeftArray:
+        secondElementsArray.append(elem)
+
+    for elem in secondElementRightArray:
+        secondElementsArray.append(elem)
+
+    boxplotElementArray = [firstElementsArray, secondElementsArray]
+
+
+
+
+    fig, axs = plt.subplots(1, 3, figsize=(10, 8))
 
 
     fig.suptitle('Bearbeitungszeit aller Schaltflächen mit dem Submit Near Operator')
@@ -744,15 +767,18 @@ if __name__ == "__main__":
     axs[0].boxplot(boxplotElementRightArray, notch=False)
 
     axs[1].boxplot(boxplotElementLeftArray, notch=False)
+    axs[2].boxplot(boxplotElementArray, notch=False)
     axs[1].sharey(axs[0])
+    axs[2].sharey(axs[0])
 
 
 
     axs[0].set(ylabel='Sekunden')
     axs[1].set(ylabel='Sekunden')
+    axs[2].set(ylabel='Sekunden')
 
 
-    axs[0].set_title('Rechte Hand')
+    axs[0].set_title('Erste Szenen mit der rechten Hand')
     axs[0].set_xticks([1, 2], [
                                   "Erste Schaltflächen" + boxplotCap(boxplotElementRightArray[0]),
                                   "Nachgelagerte Schalftlächen" + boxplotCap(boxplotElementRightArray[1])
@@ -760,11 +786,19 @@ if __name__ == "__main__":
                                   ])
 
 
-    axs[1].set_title('Linke Hand')
+    axs[1].set_title('Zweite Szenen mit der linken Hand')
     axs[1].set_xticks([1, 2], [
 
                                     "Erste Schaltflächen" + boxplotCap(boxplotElementLeftArray[0]),
                                     "Nachgelagerte Schalftlächen" + boxplotCap(boxplotElementLeftArray[1])
+
+                                ])
+
+    axs[2].set_title('Beide Hände zusammengefasst')
+    axs[2].set_xticks([1, 2], [
+
+                                    "Erste Schaltflächen" + boxplotCap(boxplotElementArray[0]),
+                                    "Nachgelagerte Schalftlächen" + boxplotCap(boxplotElementArray[1])
 
                                 ])
 

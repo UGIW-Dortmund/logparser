@@ -25,7 +25,7 @@ def get_database():
 
 
 
-def runAnalyzeFirstButton(probands, sceneName, devices):
+def runAnalyzeFirstSlider(probands, sceneName, devices):
 
     allData = []
 
@@ -37,7 +37,8 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
 
             x = col.find({  'scene': sceneName,
                             'dev': ger,
-                            'action': 'Start Scene',
+                            'action': 'Submit Toggle',
+                            'actionvalue': '3',
                             'prob': probandId
                             })
 
@@ -54,8 +55,8 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
-                              'action': 'Submit Button',
-                              'actionvalue': '1',
+                              'action': 'Submit Slider',
+                              'actionvalue': 'Slider1',
                               'prob': probandId,
                               })
 
@@ -86,7 +87,7 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
     return allData
 
 
-def runAnalyzeButton(probands, sceneName, devices, button):
+def runAnalyzeSlider(probands, sceneName, devices, slider):
 
     allData = []
 
@@ -99,8 +100,8 @@ def runAnalyzeButton(probands, sceneName, devices, button):
 
             x = col.find({  'scene': sceneName,
                             'dev': ger,
-                            'action': 'Submit Button',
-                            'actionvalue': button,
+                            'action': 'Submit Slider',
+                            'actionvalue': 'Slider' + str(slider),
                             'prob': probandId
                             })
 
@@ -114,13 +115,13 @@ def runAnalyzeButton(probands, sceneName, devices, button):
                 startAction = x_list[0].get('time')
                 startDate = x_list[0].get('date')
 
-                next_button = int(button) + 1
+                next_slider = int(slider) + 1
 
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
-                              'action': 'Submit Button',
-                              'actionvalue': str(next_button),
+                              'action': 'Submit Slider',
+                              'actionvalue': 'Slider' + str(next_slider),
                               'prob': probandId,
                               })
 
@@ -178,43 +179,43 @@ if __name__ == "__main__":
     sceneName = 'ILM_Submit-Near_Left_Scene'
     devices = ['MQP', 'MQ2']
 
-    sceneSubmitNearButton = runAnalyzeFirstButton(probands, sceneName, devices)
-    sceneSubmitNearButton_2 = runAnalyzeButton(probands, sceneName, devices, '1')
-    sceneSubmitNearButton_3 = runAnalyzeButton(probands, sceneName, devices, '2')
+    sceneSubmitNearButton = runAnalyzeFirstSlider(probands, sceneName, devices)
+    sceneSubmitNearButton_2 = runAnalyzeSlider(probands, sceneName, devices, '1')
+    sceneSubmitNearButton_3 = runAnalyzeSlider(probands, sceneName, devices, '2')
 
     allTimes = [sceneSubmitNearButton, sceneSubmitNearButton_2, sceneSubmitNearButton_3]
 
     sceneName = 'ILM_Submit-Near_Right_Scene'
 
-    sceneSubmitNearButton_Right = runAnalyzeFirstButton(probands, sceneName, devices)
-    sceneSubmitNearButton_2_Right = runAnalyzeButton(probands, sceneName, devices, '1')
-    sceneSubmitNearButton_3_Right = runAnalyzeButton(probands, sceneName, devices, '2')
+    sceneSubmitNearButton_Right = runAnalyzeFirstSlider(probands, sceneName, devices)
+    sceneSubmitNearButton_2_Right = runAnalyzeSlider(probands, sceneName, devices, '1')
+    sceneSubmitNearButton_3_Right = runAnalyzeSlider(probands, sceneName, devices, '2')
 
     allTimesRight = [sceneSubmitNearButton_Right, sceneSubmitNearButton_2_Right, sceneSubmitNearButton_3_Right]
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
-    fig.suptitle('Bearbeitungszeit der Buttons')
+    fig.suptitle('Bearbeitungszeit der Slider')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[1].boxplot(allTimes, notch=False)
+    axs[0].boxplot(allTimes, notch=False)
     axs[1].sharey(axs[0])
-    axs[0].boxplot(allTimesRight, notch=False)
+    axs[1].boxplot(allTimesRight, notch=False)
 
 
     axs[0].set(ylabel='Sekunden')
     axs[1].set(ylabel='Sekunden')
 
 
-    axs[1].set_title('2. Szene: Linke Hand')
-    axs[1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                              "Button 2" + boxplotCap(allTimes[1]),
-                              "Button 3" + boxplotCap(allTimes[2])])
+    axs[0].set_title('Linke Hand')
+    axs[0].set_xticks([1, 2, 3], ["Slider 1" + boxplotCap(allTimes[0]),
+                              "Slider 2" + boxplotCap(allTimes[1]),
+                              "Slider 3" + boxplotCap(allTimes[2])])
 
-    axs[0].set_title('1. Szene: Rechte Hand')
-    axs[0].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimesRight[0]),
-                                  "Button 2" + boxplotCap(allTimesRight[1]),
-                                  "Button 3" + boxplotCap(allTimesRight[2])])
+    axs[1].set_title('Rechte Hand')
+    axs[1].set_xticks([1, 2, 3], ["Slider 1" + boxplotCap(allTimesRight[0]),
+                                  "Slider 2" + boxplotCap(allTimesRight[1]),
+                                  "Slider 3" + boxplotCap(allTimesRight[2])])
 
     plt.show()
 

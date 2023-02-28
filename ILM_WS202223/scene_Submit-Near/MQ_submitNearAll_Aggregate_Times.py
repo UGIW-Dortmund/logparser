@@ -613,21 +613,67 @@ if __name__ == "__main__":
                           sceneSubmitNearSlider_Right,
                           sceneSubmitNearDropdown_Right]
 
+
+    firstElementRightArray = []
+    for elem in sceneSubmitNearButton_Right:
+        firstElementRightArray.append(elem)
+
+    for elem in sceneSubmitNearToggle_Right:
+        firstElementRightArray.append(elem)
+
+    for elem in sceneSubmitNearSlider_Right:
+        firstElementRightArray.append(elem)
+
+    for elem in sceneSubmitNearDropdown_Right:
+        firstElementRightArray.append(elem)
+
+
+
     secondElementsRight = [sceneSubmitNearButton_2_Right, sceneSubmitNearButton_3_Right,
                      sceneSubmitNearToggle_2_Right, sceneSubmitNearToggle_3_Right,
                      sceneSubmitNearSlider_2_Right,sceneSubmitNearSlider_3_Right,
                      sceneSubmitNearDropdown_2_Right, sceneSubmitNearDropdown_3_Right]
 
+    secondElementRightArray = []
+    for elem in sceneSubmitNearButton_2_Right:
+        secondElementRightArray.append(elem)
+
+    for elem in sceneSubmitNearButton_3_Right:
+        secondElementRightArray.append(elem)
+
+    for elem in sceneSubmitNearToggle_2_Right:
+        secondElementRightArray.append(elem)
+
+    for elem in sceneSubmitNearToggle_3_Right:
+        secondElementRightArray.append(elem)
+
+    for elem in sceneSubmitNearSlider_2_Right:
+        secondElementRightArray.append(elem)
+
+    for elem in sceneSubmitNearSlider_3_Right:
+        secondElementRightArray.append(elem)
+
+    for elem in sceneSubmitNearDropdown_2_Right:
+        secondElementRightArray.append(elem)
+
+    for elem in sceneSubmitNearDropdown_3_Right:
+        secondElementRightArray.append(elem)
+
+    boxplotElementRightArray = [firstElementRightArray, secondElementRightArray]
 
     allTimesRight = [sceneSubmitNearButton_Right, sceneSubmitNearButton_2_Right, sceneSubmitNearButton_3_Right,
                      sceneSubmitNearToggle_Right, sceneSubmitNearToggle_2_Right, sceneSubmitNearToggle_3_Right,
                      sceneSubmitNearSlider_Right, sceneSubmitNearSlider_2_Right, sceneSubmitNearSlider_3_Right,
                      sceneSubmitNearDropdown_Right, sceneSubmitNearDropdown_2_Right, sceneSubmitNearDropdown_3_Right]
 
+
+    ### LEFT
+
     firstElementsLeft = [sceneSubmitNearButton_Left,
                          sceneSubmitNearToggle_Left,
                          sceneSubmitNearSlider_Left,
                          sceneSubmitNearDropdown_Left]
+
 
     secondElementsLeft = [ sceneSubmitNearButton_2_Left, sceneSubmitNearButton_3_Left,
                      sceneSubmitNearToggle_2_Left, sceneSubmitNearToggle_3_Left,
@@ -635,19 +681,71 @@ if __name__ == "__main__":
                      sceneSubmitNearDropdown_2_Left, sceneSubmitNearDropdown_3_Left]
 
 
+    firstElementsLeftArray = []
+    for elem in sceneSubmitNearButton_Left:
+        firstElementsLeftArray.append(elem)
+
+    for elem in sceneSubmitNearToggle_Left:
+        firstElementsLeftArray.append(elem)
+
+    for elem in sceneSubmitNearSlider_Left:
+        firstElementsLeftArray.append(elem)
+
+    for elem in sceneSubmitNearDropdown_Left:
+        firstElementsLeftArray.append(elem)
+
+
+
+
+    secondElementsLeftArray = []
+    for elem in sceneSubmitNearButton_2_Left:
+        secondElementsLeftArray.append(elem)
+
+    for elem in sceneSubmitNearButton_3_Left:
+        secondElementsLeftArray.append(elem)
+
+
+    for elem in sceneSubmitNearToggle_2_Left:
+        secondElementsLeftArray.append(elem)
+
+    for elem in sceneSubmitNearToggle_3_Left:
+        secondElementsLeftArray.append(elem)
+
+
+
+    for elem in sceneSubmitNearDropdown_2_Left:
+        secondElementsLeftArray.append(elem)
+
+    for elem in sceneSubmitNearDropdown_3_Left:
+        secondElementsLeftArray.append(elem)
+
+
+
+    for elem in sceneSubmitNearSlider_2_Left:
+        secondElementsLeftArray.append(elem)
+
+    for elem in sceneSubmitNearSlider_3_Left:
+        secondElementsLeftArray.append(elem)
+
+    boxplotElementLeftArray = [firstElementsLeftArray, secondElementsLeftArray]
+
+
     allTimesLeft = [sceneSubmitNearButton_Left, sceneSubmitNearButton_2_Left, sceneSubmitNearButton_3_Left,
                     sceneSubmitNearToggle_Left, sceneSubmitNearToggle_2_Left, sceneSubmitNearToggle_3_Left,
                     sceneSubmitNearSlider_Left, sceneSubmitNearSlider_2_Left, sceneSubmitNearSlider_3_Left,
                     sceneSubmitNearDropdown_Left, sceneSubmitNearDropdown_2_Left, sceneSubmitNearDropdown_3_Left]
 
-    fig, axs = plt.subplots(2, 1, figsize=(10, 8))
+    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
     fig.suptitle('Bearbeitungszeit aller Schaltflächen mit dem Submit Near Operator')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[1].boxplot(allTimesRight, notch=False)
+
+    axs[0].boxplot(boxplotElementRightArray, notch=False)
+
+    axs[1].boxplot(boxplotElementLeftArray, notch=False)
     axs[1].sharey(axs[0])
-    axs[0].boxplot(allTimesRight, notch=False)
+
 
 
     axs[0].set(ylabel='Sekunden')
@@ -655,36 +753,18 @@ if __name__ == "__main__":
 
 
     axs[0].set_title('Rechte Hand')
-    axs[0].set_xticks([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [
-                                  "Button 1" + boxplotCap(allTimesRight[0]),
-                                  "Button 2" + boxplotCap(allTimesRight[1]),
-                                  "Button 3" + boxplotCap(allTimesRight[2]),
-                                  "Toggle 1" + boxplotCap(allTimesRight[3]),
-                                  "Toggle 2" + boxplotCap(allTimesRight[4]),
-                                  "Toggle 3" + boxplotCap(allTimesRight[5]),
-                                  "Slider 1" + boxplotCap(allTimesRight[6]),
-                                  "Slider 2" + boxplotCap(allTimesRight[7]),
-                                  "Slider 3" + boxplotCap(allTimesRight[8]),
-                                  "Dropdown 1" + boxplotCap(allTimesRight[9]),
-                                  "Dropdown 2" + boxplotCap(allTimesRight[10]),
-                                  "Dropdown 3" + boxplotCap(allTimesRight[11])
+    axs[0].set_xticks([1, 2], [
+                                  "Erste Schaltflächen" + boxplotCap(boxplotElementRightArray[0]),
+                                  "Nachgelagerte Schalftlächen" + boxplotCap(boxplotElementRightArray[1])
+
                                   ])
 
 
     axs[1].set_title('Linke Hand')
-    axs[1].set_xticks([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [
-                                "Button 1" + boxplotCap(allTimesLeft[0]),
-                                "Button 2" + boxplotCap(allTimesLeft[1]),
-                                "Button 3" + boxplotCap(allTimesLeft[2]),
-                                "Toggle 1" + boxplotCap(allTimesLeft[3]),
-                                "Toggle 2" + boxplotCap(allTimesLeft[4]),
-                                "Toggle 3" + boxplotCap(allTimesLeft[5]),
-                                "Slider 1" + boxplotCap(allTimesLeft[6]),
-                                  "Slider 2" + boxplotCap(allTimesLeft[7]),
-                                  "Slider 3" + boxplotCap(allTimesLeft[8]),
-                                  "Dropdown 1" + boxplotCap(allTimesLeft[9]),
-                                  "Dropdown 2" + boxplotCap(allTimesLeft[10]),
-                                  "Dropdown 3" + boxplotCap(allTimesLeft[11])
+    axs[1].set_xticks([1, 2], [
+
+                                    "Erste Schaltflächen" + boxplotCap(boxplotElementLeftArray[0]),
+                                    "Nachgelagerte Schalftlächen" + boxplotCap(boxplotElementLeftArray[1])
 
                                 ])
 

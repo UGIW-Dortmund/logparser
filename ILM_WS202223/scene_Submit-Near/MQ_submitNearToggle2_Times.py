@@ -25,7 +25,7 @@ def get_database():
 
 
 
-def runAnalyzeFirstDropdown(probands, sceneName, devices):
+def runAnalyzeFirstToggle(probands, sceneName, devices):
 
     allData = []
 
@@ -37,8 +37,8 @@ def runAnalyzeFirstDropdown(probands, sceneName, devices):
 
             x = col.find({  'scene': sceneName,
                             'dev': ger,
-                            'action': 'Submit Slider',
-                            'actionvalue': 'Slider3',
+                            'action': 'Submit Button',
+                            'actionvalue': '3',
                             'prob': probandId
                             })
 
@@ -55,8 +55,8 @@ def runAnalyzeFirstDropdown(probands, sceneName, devices):
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
-                              'action': 'Submit Dropdown',
-                              'actionvalue': 'Dropdown1',
+                              'action': 'Submit Toggle',
+                              'actionvalue': '1',
                               'prob': probandId,
                               })
 
@@ -87,7 +87,7 @@ def runAnalyzeFirstDropdown(probands, sceneName, devices):
     return allData
 
 
-def runAnalyzeDropdown(probands, sceneName, devices, dropdown):
+def runAnalyzeToggle(probands, sceneName, devices, toggle):
 
     allData = []
 
@@ -100,8 +100,8 @@ def runAnalyzeDropdown(probands, sceneName, devices, dropdown):
 
             x = col.find({  'scene': sceneName,
                             'dev': ger,
-                            'action': 'Submit Dropdown',
-                            'actionvalue': 'Dropdown' + str(dropdown),
+                            'action': 'Submit Toggle',
+                            'actionvalue': str(toggle),
                             'prob': probandId
                             })
 
@@ -115,13 +115,13 @@ def runAnalyzeDropdown(probands, sceneName, devices, dropdown):
                 startAction = x_list[0].get('time')
                 startDate = x_list[0].get('date')
 
-                next_slider = int(dropdown) + 1
+                next_toggle = int(toggle) + 1
 
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
-                              'action': 'Submit Dropdown',
-                              'actionvalue': 'Dropdown' + str(next_slider),
+                              'action': 'Submit Toggle',
+                              'actionvalue': str(next_toggle),
                               'prob': probandId,
                               })
 
@@ -179,24 +179,24 @@ if __name__ == "__main__":
     sceneName = 'ILM_Submit-Near_Left_Scene'
     devices = ['MQP', 'MQ2']
 
-    sceneSubmitNearButton = runAnalyzeFirstDropdown(probands, sceneName, devices)
-    sceneSubmitNearButton_2 = runAnalyzeDropdown(probands, sceneName, devices, '1')
-    sceneSubmitNearButton_3 = runAnalyzeDropdown(probands, sceneName, devices, '2')
+    sceneSubmitNearButton = runAnalyzeFirstToggle(probands, sceneName, devices)
+    sceneSubmitNearButton_2 = runAnalyzeToggle(probands, sceneName, devices, '1')
+    sceneSubmitNearButton_3 = runAnalyzeToggle(probands, sceneName, devices, '2')
 
     allTimesLeft = [sceneSubmitNearButton, sceneSubmitNearButton_2, sceneSubmitNearButton_3]
 
     sceneName = 'ILM_Submit-Near_Right_Scene'
 
-    sceneSubmitNearButton_Right = runAnalyzeFirstDropdown(probands, sceneName, devices)
-    sceneSubmitNearButton_2_Right = runAnalyzeDropdown(probands, sceneName, devices, '1')
-    sceneSubmitNearButton_3_Right = runAnalyzeDropdown(probands, sceneName, devices, '2')
+    sceneSubmitNearButton_Right = runAnalyzeFirstToggle(probands, sceneName, devices)
+    sceneSubmitNearButton_2_Right = runAnalyzeToggle(probands, sceneName, devices, '1')
+    sceneSubmitNearButton_3_Right = runAnalyzeToggle(probands, sceneName, devices, '2')
 
     allTimesRight = [sceneSubmitNearButton_Right, sceneSubmitNearButton_2_Right, sceneSubmitNearButton_3_Right]
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
-    fig.suptitle('Bearbeitungszeit der Dropdown-Menüs')
+    fig.suptitle('Bearbeitungszeit der Toggles')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     axs[1].boxplot(allTimesLeft, notch=False)
     axs[1].sharey(axs[0])
@@ -208,14 +208,14 @@ if __name__ == "__main__":
 
 
     axs[1].set_title('2. Szene: Linke Hand')
-    axs[1].set_xticks([1, 2, 3], ["Dropdown 1" + boxplotCap(allTimesLeft[0]),
-                              "Dropdown 2" + boxplotCap(allTimesLeft[1]),
-                              "Dropdown 3" + boxplotCap(allTimesLeft[2])])
+    axs[1].set_xticks([1, 2, 3], ["Toggle 1" + boxplotCap(allTimesLeft[0]),
+                              "Toggle 2" + boxplotCap(allTimesLeft[1]),
+                              "Toggle 3" + boxplotCap(allTimesLeft[2])])
 
     axs[0].set_title('1. Szene: Rechte Hand')
-    axs[0].set_xticks([1, 2, 3], ["Dropdown 1" + boxplotCap(allTimesRight[0]),
-                                  "Dropdown 2" + boxplotCap(allTimesRight[1]),
-                                  "Dropdown 3" + boxplotCap(allTimesRight[2])])
+    axs[0].set_xticks([1, 2, 3], ["Toggle 1" + boxplotCap(allTimesRight[0]),
+                                  "Toggle 2" + boxplotCap(allTimesRight[1]),
+                                  "Toggle 3" + boxplotCap(allTimesRight[2])])
 
     plt.show()
 

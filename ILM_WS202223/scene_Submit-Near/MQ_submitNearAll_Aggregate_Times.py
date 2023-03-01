@@ -537,12 +537,12 @@ def runAnalyzeButton(probands, sceneName, devices, button):
 def boxplotCap(valArray):
 
     return f' \n n = {len(valArray)} \n \n ' \
-            f'Median = {round(statistics.median(valArray), 3)} s \n ' \
-            f'Mittelwert = {round(statistics.mean(valArray), 3)} s \n ' \
-            f'S. Dev = {round(statistics.stdev(valArray), 3)} s \n ' \
-            f'M. Abweichung = {round(mean(valArray), 3)} s \n ' \
-            f'1. Quartil = {round(np.percentile(valArray, 25), 3)} s \n' \
-            f'3. Quartil = {round(np.percentile(valArray, 75), 3)} s ';
+            f'Me. = {round(statistics.median(valArray), 3)} s \n ' \
+            f'Mi. = {round(statistics.mean(valArray), 3)} s \n ' \
+            f'S. Ab. = {round(statistics.stdev(valArray), 3)} s \n ' \
+            f'M. Ab. = {round(mean(valArray), 3)} s \n ' \
+            f'1Q = {round(np.percentile(valArray, 25), 3)} s \n' \
+            f'3Q = {round(np.percentile(valArray, 75), 3)} s ';
 
 
 #f'\n n = {len(valArray)} \n Wert = {valArray}';
@@ -764,10 +764,10 @@ if __name__ == "__main__":
     fig.suptitle('Bearbeitungszeit aller Schaltflächen mit dem Submit Near Operator')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
 
-    axs[0].boxplot(boxplotElementRightArray, notch=False)
+    axs[0].violinplot(boxplotElementRightArray)
 
-    axs[1].boxplot(boxplotElementLeftArray, notch=False)
-    axs[2].boxplot(boxplotElementArray, notch=False)
+    axs[1].violinplot(boxplotElementLeftArray)
+    axs[2].violinplot(boxplotElementArray)
     axs[1].sharey(axs[0])
     axs[2].sharey(axs[0])
 
@@ -780,8 +780,8 @@ if __name__ == "__main__":
 
     axs[0].set_title('Erste Szenen mit der rechten Hand')
     axs[0].set_xticks([1, 2], [
-                                  "Erste Schaltflächen" + boxplotCap(boxplotElementRightArray[0]),
-                                  "Nachgelagerte Schalftlächen" + boxplotCap(boxplotElementRightArray[1])
+                                  "Erste S." + boxplotCap(boxplotElementRightArray[0]),
+                                  "Nachgelagerte S." + boxplotCap(boxplotElementRightArray[1])
 
                                   ])
 
@@ -789,16 +789,16 @@ if __name__ == "__main__":
     axs[1].set_title('Zweite Szenen mit der linken Hand')
     axs[1].set_xticks([1, 2], [
 
-                                    "Erste Schaltflächen" + boxplotCap(boxplotElementLeftArray[0]),
-                                    "Nachgelagerte Schalftlächen" + boxplotCap(boxplotElementLeftArray[1])
+                                    "Erste S." + boxplotCap(boxplotElementLeftArray[0]),
+                                    "Nachgelagerte S." + boxplotCap(boxplotElementLeftArray[1])
 
                                 ])
 
     axs[2].set_title('Beide Hände zusammengefasst')
     axs[2].set_xticks([1, 2], [
 
-                                    "Erste Schaltflächen" + boxplotCap(boxplotElementArray[0]),
-                                    "Nachgelagerte Schalftlächen" + boxplotCap(boxplotElementArray[1])
+                                    "Erste S." + boxplotCap(boxplotElementArray[0]),
+                                    "Nachgelagerte S." + boxplotCap(boxplotElementArray[1])
 
                                 ])
 

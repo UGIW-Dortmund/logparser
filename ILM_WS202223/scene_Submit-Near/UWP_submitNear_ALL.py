@@ -9,7 +9,6 @@ from statistics import mean
 from pymongo import MongoClient
 
 
-
 ###
 ### For figuring out the operating times for teleporting
 ###
@@ -23,26 +22,21 @@ def get_database():
     return client['ilm']
 
 
-
-
 def runAnalyzeFirstButton(probands, sceneName, devices):
-
     allData = []
 
     for prob in probands:
 
-
         for ger in devices:
             probandId = prob
 
-            x = col.find({  'scene': sceneName,
-                            'dev': ger,
-                            'action': 'Start Scene',
-                            'prob': probandId
-                            })
+            x = col.find({'scene': sceneName,
+                          'dev': ger,
+                          'action': 'Start Scene',
+                          'prob': probandId
+                          })
 
             x_list = list(x)
-
 
             if len(x_list) > 0:
 
@@ -50,7 +44,6 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
 
                 startAction = x_list[0].get('time')
                 startDate = x_list[0].get('date')
-
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
@@ -64,7 +57,6 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
                 # print('Y-List' + str(y_list))
 
                 if len(y_list) > 0:
-
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
@@ -86,27 +78,22 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
     return allData
 
 
-
-
 def runAnalyzeSecondButton(probands, sceneName, devices):
-
     allData = []
 
     for prob in probands:
 
-
         for ger in devices:
             probandId = prob
 
-            x = col.find({  'scene': sceneName,
-                            'dev': ger,
-                            'action': 'Submit Near',
-                            'actionvalue': 'CheckBox 1: Button Pressed',
-                            'prob': probandId
-                            })
+            x = col.find({'scene': sceneName,
+                          'dev': ger,
+                          'action': 'Submit Near',
+                          'actionvalue': 'CheckBox 1: Button Pressed',
+                          'prob': probandId
+                          })
 
             x_list = list(x)
-
 
             if len(x_list) > 0:
 
@@ -114,7 +101,6 @@ def runAnalyzeSecondButton(probands, sceneName, devices):
 
                 startAction = x_list[0].get('time')
                 startDate = x_list[0].get('date')
-
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
@@ -128,7 +114,6 @@ def runAnalyzeSecondButton(probands, sceneName, devices):
                 # print('Y-List' + str(y_list))
 
                 if len(y_list) > 0:
-
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
@@ -150,26 +135,22 @@ def runAnalyzeSecondButton(probands, sceneName, devices):
     return allData
 
 
-
 def runAnalyzeThirdButton(probands, sceneName, devices):
-
     allData = []
 
     for prob in probands:
 
-
         for ger in devices:
             probandId = prob
 
-            x = col.find({  'scene': sceneName,
-                            'dev': ger,
-                            'action': 'Submit Near',
-                            'actionvalue': 'CheckBox 2: Button Pressed',
-                            'prob': probandId
-                            })
+            x = col.find({'scene': sceneName,
+                          'dev': ger,
+                          'action': 'Submit Near',
+                          'actionvalue': 'CheckBox 2: Button Pressed',
+                          'prob': probandId
+                          })
 
             x_list = list(x)
-
 
             if len(x_list) > 0:
 
@@ -177,7 +158,6 @@ def runAnalyzeThirdButton(probands, sceneName, devices):
 
                 startAction = x_list[0].get('time')
                 startDate = x_list[0].get('date')
-
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
@@ -191,7 +171,6 @@ def runAnalyzeThirdButton(probands, sceneName, devices):
                 # print('Y-List' + str(y_list))
 
                 if len(y_list) > 0:
-
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
@@ -212,33 +191,30 @@ def runAnalyzeThirdButton(probands, sceneName, devices):
 
     return allData
 
-def runAnalyzeFirstCheckbox(probands, sceneName, devices):
 
+def runAnalyzeFirstCheckbox(probands, sceneName, devices):
     allData = []
 
     for prob in probands:
 
-
         for ger in devices:
             probandId = prob
 
-            x = col.find({  'scene': sceneName,
-                            'dev': ger,
-                            'action': 'Submit Near',
-                            'actionvalue': 'Button 1: Button Pressed',
-                            'prob': probandId
-                            })
+            x = col.find({'scene': sceneName,
+                          'dev': ger,
+                          'action': 'Submit Near',
+                          'actionvalue': 'Button 1: Button Pressed',
+                          'prob': probandId
+                          })
 
             x_list = list(x)
 
-
             if len(x_list) > 0:
 
-                #print('X-List' + str(x_list))
+                # print('X-List' + str(x_list))
 
                 startAction = x_list[0].get('time')
                 startDate = x_list[0].get('date')
-
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
@@ -252,7 +228,6 @@ def runAnalyzeFirstCheckbox(probands, sceneName, devices):
                 # print('Y-List' + str(y_list))
 
                 if len(y_list) > 0:
-
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
@@ -274,26 +249,22 @@ def runAnalyzeFirstCheckbox(probands, sceneName, devices):
     return allData
 
 
-
 def runAnalyzeSecondCheckbox(probands, sceneName, devices):
-
     allData = []
 
     for prob in probands:
 
-
         for ger in devices:
             probandId = prob
 
-            x = col.find({  'scene': sceneName,
-                            'dev': ger,
-                            'action': 'Submit Near',
-                            'actionvalue': 'Button 2: Button Pressed',
-                            'prob': probandId
-                            })
+            x = col.find({'scene': sceneName,
+                          'dev': ger,
+                          'action': 'Submit Near',
+                          'actionvalue': 'Button 2: Button Pressed',
+                          'prob': probandId
+                          })
 
             x_list = list(x)
-
 
             if len(x_list) > 0:
 
@@ -301,7 +272,6 @@ def runAnalyzeSecondCheckbox(probands, sceneName, devices):
 
                 startAction = x_list[0].get('time')
                 startDate = x_list[0].get('date')
-
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
@@ -315,20 +285,17 @@ def runAnalyzeSecondCheckbox(probands, sceneName, devices):
                 # print('Y-List' + str(y_list))
 
                 if len(y_list) > 0:
-
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
                 endAction = pd.to_datetime(endDate + ' ' + endAction)
                 startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-
                 delta = endAction - startAction
                 # float(delta.seconds + '.' + delta.)
                 allData.append(delta.total_seconds())
 
-                print(y_list[0].get('prob') + " " + str(delta))
-
+                # print(y_list[0].get('prob') + " " + str(delta))
 
                 x = None
                 y = None
@@ -342,24 +309,21 @@ def runAnalyzeSecondCheckbox(probands, sceneName, devices):
 
 
 def runAnalyzeThirdCheckbox(probands, sceneName, devices):
-
     allData = []
 
     for prob in probands:
 
-
         for ger in devices:
             probandId = prob
 
-            x = col.find({  'scene': sceneName,
-                            'dev': ger,
-                            'action': 'Submit Near',
-                            'actionvalue': 'Button 3: Button Pressed',
-                            'prob': probandId
-                            })
+            x = col.find({'scene': sceneName,
+                          'dev': ger,
+                          'action': 'Submit Near',
+                          'actionvalue': 'Button 3: Button Pressed',
+                          'prob': probandId
+                          })
 
             x_list = list(x)
-
 
             if len(x_list) > 0:
 
@@ -367,7 +331,6 @@ def runAnalyzeThirdCheckbox(probands, sceneName, devices):
 
                 startAction = x_list[0].get('time')
                 startDate = x_list[0].get('date')
-
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
@@ -381,7 +344,6 @@ def runAnalyzeThirdCheckbox(probands, sceneName, devices):
                 # print('Y-List' + str(y_list))
 
                 if len(y_list) > 0:
-
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
@@ -403,15 +365,28 @@ def runAnalyzeThirdCheckbox(probands, sceneName, devices):
     return allData
 
 
-
-
 # This is added so that many files can reuse the function get_database()
 def boxplotCap(valArray):
     return f'\n n = {len(valArray)} \n' \
            f'Me.={round(statistics.median(valArray), 3)} s \n ' \
-           f'Mi.={round(statistics.mean(valArray), 3)} s \n ';
-           # f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
-           # f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
+           f'Mi.={round(statistics.mean(valArray), 3)} s \n ' \
+           f'S. Ab. = {round(statistics.stdev(valArray), 3)} s \n ' \
+           f'M. Ab. = {round(mean(valArray), 3)} s \n ' \
+            f'1. Q = {round(np.percentile(valArray, 25), 3)} s \n' \
+            f'3. Q = {round(np.percentile(valArray, 75), 3)} s ';
+
+
+def aggregateData(array):
+    lenArray = len(array)
+    print("Len array " + str(lenArray))
+    data = []
+
+    for i in range(0, lenArray):
+        for elem in array[i]:
+            data.append(elem)
+
+    return data;
+
 
 if __name__ == "__main__":
     # Get the database
@@ -421,7 +396,7 @@ if __name__ == "__main__":
 
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
+                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
     print(probands)
 
     sceneName = 'ILM_Submit-Near_Right'
@@ -430,23 +405,28 @@ if __name__ == "__main__":
     sceneSubmitNearButton_1_Right = runAnalyzeFirstButton(probands, sceneName, devices)
     sceneSubmitNearCheckbox_1_Right = runAnalyzeFirstCheckbox(probands, sceneName, devices)
     sceneSubmitNearButton_2_Right = runAnalyzeSecondButton(probands, sceneName, devices)
-
     # Probands without A14 = Outlier
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A15', 'A16', 'A17', 'A18',
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
-
     sceneSubmitNearCheckbox_2_Right = runAnalyzeSecondCheckbox(probands, sceneName, devices)
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
-
     sceneSubmitNearButton_3_Right = runAnalyzeThirdButton(probands, sceneName, devices)
     sceneSubmitNearCheckbox_3_Right = runAnalyzeThirdCheckbox(probands, sceneName, devices)
 
     allTimes = [sceneSubmitNearButton_1_Right, sceneSubmitNearCheckbox_1_Right,
                 sceneSubmitNearButton_2_Right, sceneSubmitNearCheckbox_2_Right,
                 sceneSubmitNearButton_3_Right, sceneSubmitNearCheckbox_3_Right]
+
+    aggrRight_HPG2_first = [sceneSubmitNearButton_1_Right, sceneSubmitNearCheckbox_1_Right]
+    aggrRight_HPG2_second = [sceneSubmitNearButton_2_Right, sceneSubmitNearCheckbox_2_Right,
+                             sceneSubmitNearButton_3_Right, sceneSubmitNearCheckbox_3_Right]
+
+    aggrRight_HPG2_first = aggregateData(aggrRight_HPG2_first)
+    aggrRight_HPG2_second = aggregateData(aggrRight_HPG2_second)
+    box_aggrRight_HPG2 = [aggrRight_HPG2_first, aggrRight_HPG2_second]
 
     sceneName = 'ILM_Submit-Near_Left'
 
@@ -458,8 +438,16 @@ if __name__ == "__main__":
     sceneSubmitNearCheckbox_3_Left = runAnalyzeThirdCheckbox(probands, sceneName, devices)
 
     allTimesLeft = [sceneSubmitNearButton_1_Left, sceneSubmitNearCheckbox_1_Left,
-                        sceneSubmitNearButton_2_Left, sceneSubmitNearCheckbox_2_Left,
-                        sceneSubmitNearButton_3_Left, sceneSubmitNearCheckbox_3_Left]
+                    sceneSubmitNearButton_2_Left, sceneSubmitNearCheckbox_2_Left,
+                    sceneSubmitNearButton_3_Left, sceneSubmitNearCheckbox_3_Left]
+
+    aggrLeft_HPG2_first = [sceneSubmitNearButton_1_Left, sceneSubmitNearCheckbox_1_Left]
+    aggrLeft_HPG2_second = [sceneSubmitNearButton_2_Left, sceneSubmitNearCheckbox_2_Left,
+                            sceneSubmitNearButton_3_Left, sceneSubmitNearCheckbox_3_Left]
+
+    aggrLeft_HPG2_first = aggregateData(aggrLeft_HPG2_first)
+    aggrLeft_HPG2_second = aggregateData(aggrLeft_HPG2_second)
+    box_aggrLeft_HPG2 = [aggrLeft_HPG2_first, aggrLeft_HPG2_second]
 
     devices = ['HL2']
 
@@ -471,8 +459,19 @@ if __name__ == "__main__":
     sceneSubmitNearCheckbox_3_Right_HL2 = runAnalyzeThirdCheckbox(probands, sceneName, devices)
 
     allTimes_HL2 = [sceneSubmitNearButton_1_Right_HL2, sceneSubmitNearCheckbox_1_Right_HL2,
-                sceneSubmitNearButton_2_Right_HL2, sceneSubmitNearCheckbox_2_Right_HL2,
-                sceneSubmitNearButton_3_Right_HL2, sceneSubmitNearCheckbox_3_Right_HL2]
+                    sceneSubmitNearButton_2_Right_HL2, sceneSubmitNearCheckbox_2_Right_HL2,
+                    sceneSubmitNearButton_3_Right_HL2, sceneSubmitNearCheckbox_3_Right_HL2]
+
+    aggrRight_HL2_first = [sceneSubmitNearButton_1_Right_HL2, sceneSubmitNearCheckbox_1_Right_HL2]
+    aggrRight_HL2_second = [sceneSubmitNearButton_2_Right_HL2, sceneSubmitNearCheckbox_2_Right_HL2,
+                            sceneSubmitNearButton_3_Right_HL2, sceneSubmitNearCheckbox_3_Right_HL2]
+
+    aggrRight_HL2_first = aggregateData(aggrRight_HL2_first)
+    aggrRight_HL2_second = aggregateData(aggrRight_HL2_second)
+
+    box_aggrRight_HL2 = [aggrRight_HL2_first, aggrRight_HL2_second]
+
+
 
     sceneName = 'ILM_Submit-Near_Left'
 
@@ -484,61 +483,95 @@ if __name__ == "__main__":
     sceneSubmitNearCheckbox_3_Left_HL2 = runAnalyzeThirdCheckbox(probands, sceneName, devices)
 
     allTimesLeft_HL2 = [sceneSubmitNearButton_1_Left_HL2, sceneSubmitNearCheckbox_1_Left_HL2,
-                sceneSubmitNearButton_2_Left_HL2, sceneSubmitNearCheckbox_2_Left_HL2,
-                sceneSubmitNearButton_3_Left_HL2, sceneSubmitNearCheckbox_3_Left_HL2]
+                        sceneSubmitNearButton_2_Left_HL2, sceneSubmitNearCheckbox_2_Left_HL2,
+                        sceneSubmitNearButton_3_Left_HL2, sceneSubmitNearCheckbox_3_Left_HL2]
+
+    aggrLeft_HL2_first = [sceneSubmitNearButton_1_Left_HL2, sceneSubmitNearCheckbox_1_Left_HL2]
+    aggrLeft_HL2_second = [sceneSubmitNearButton_2_Left_HL2, sceneSubmitNearCheckbox_2_Left_HL2,
+                           sceneSubmitNearButton_3_Left_HL2, sceneSubmitNearCheckbox_3_Left_HL2]
+
+    aggrLeft_HL2_first = aggregateData(aggrLeft_HL2_first)
+    aggrLeft_HL2_second = aggregateData(aggrLeft_HL2_second)
+
+    box_aggrLeft_HL2 = [aggrLeft_HL2_first, aggrLeft_HL2_second]
 
 
-    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
+    #### ALL Aggregate
 
+    # Right
+    aggrRightFirst = aggregateData([sceneSubmitNearButton_1_Right_HL2, sceneSubmitNearCheckbox_1_Right_HL2])
+    aggrRightSecond = [sceneSubmitNearButton_2_Right_HL2, sceneSubmitNearCheckbox_2_Right_HL2,
+                            sceneSubmitNearButton_3_Right_HL2, sceneSubmitNearCheckbox_3_Right_HL2, sceneSubmitNearButton_2_Right, sceneSubmitNearCheckbox_2_Right,
+                             sceneSubmitNearButton_3_Right, sceneSubmitNearCheckbox_3_Right]
+    aggrRightSecond = aggregateData(aggrRightSecond)
+    box_aggrRight = [aggrRightFirst, aggrRightSecond]
+
+    # Left
+    aggrLeftFirst = [sceneSubmitNearButton_1_Left, sceneSubmitNearCheckbox_1_Left,
+                     sceneSubmitNearButton_1_Left_HL2,
+                     sceneSubmitNearCheckbox_1_Left_HL2]
+    aggrLeftFirst = aggregateData(aggrLeftFirst)
+
+    aggrLeftSecond = [sceneSubmitNearButton_2_Left, sceneSubmitNearCheckbox_2_Left,
+                        sceneSubmitNearButton_3_Left, sceneSubmitNearCheckbox_3_Left,
+                        sceneSubmitNearButton_2_Left_HL2, sceneSubmitNearCheckbox_2_Left_HL2,
+                        sceneSubmitNearButton_3_Left_HL2, sceneSubmitNearCheckbox_3_Left_HL2]
+    aggrLeftSecond = aggregateData(aggrLeftSecond)
+    box_aggrLeft = [aggrLeftFirst, aggrLeftSecond]
+
+    # Both Hands
+    aggrFirst = [sceneSubmitNearButton_1_Right_HL2,
+                 sceneSubmitNearCheckbox_1_Right_HL2,
+                 sceneSubmitNearButton_1_Left,
+                 sceneSubmitNearCheckbox_1_Left,
+                 sceneSubmitNearButton_1_Left_HL2,
+                 sceneSubmitNearCheckbox_1_Left_HL2]
+    aggrFirst = aggregateData(aggrFirst)
+
+    aggrSecond = [
+                        sceneSubmitNearButton_2_Right_HL2, sceneSubmitNearCheckbox_2_Right_HL2,
+                        sceneSubmitNearButton_3_Right_HL2, sceneSubmitNearCheckbox_3_Right_HL2, sceneSubmitNearButton_2_Right, sceneSubmitNearCheckbox_2_Right,
+                        sceneSubmitNearButton_3_Right, sceneSubmitNearCheckbox_3_Right,
+                        sceneSubmitNearButton_2_Left, sceneSubmitNearCheckbox_2_Left,
+                        sceneSubmitNearButton_3_Left, sceneSubmitNearCheckbox_3_Left,
+                        sceneSubmitNearButton_2_Left_HL2, sceneSubmitNearCheckbox_2_Left_HL2,
+                        sceneSubmitNearButton_3_Left_HL2, sceneSubmitNearCheckbox_3_Left_HL2]
+
+    aggrSecond = aggregateData(aggrSecond)
+
+    box_aggr = [aggrFirst, aggrSecond]
+
+
+    fig, axs = plt.subplots(1, 3, figsize=(10, 8))
 
     fig.suptitle('Bearbeitungszeit der Buttons')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0, 0].boxplot(allTimes, notch=False)
-    axs[0, 1].boxplot(allTimesLeft, notch=False)
-    axs[0, 1].sharey(axs[0, 0])
+    axs[0].violinplot(box_aggrRight)
+    axs[1].violinplot(box_aggrLeft)
+    axs[1].sharey(axs[0])
 
-    axs[1, 0].boxplot(allTimes_HL2)
-    axs[1, 0].sharey(axs[0, 0])
+    axs[2].violinplot(box_aggr)
+    axs[2].sharey(axs[0])
 
-    axs[1, 1].boxplot(allTimesLeft_HL2)
-    axs[1, 1].sharey(axs[0, 0])
 
-    axs[0, 0].set(ylabel='Sekunden')
-    axs[0, 1].set(ylabel='Sekunden')
-    axs[1, 0].set(ylabel='Sekunden')
-    axs[1, 1].set(ylabel='Sekunden')
+    axs[0].set(ylabel='Sekunden')
+    # axs[1].set(ylabel='Sekunden')
+    # axs[2].set(ylabel='Sekunden')
 
-    axs[0, 0].set_title('1. Szene: Rechte Hand - HPG2')
-    axs[0, 0].set_xticks([1, 2, 3, 4, 5, 6], ["Button 1" + boxplotCap(allTimes[0]),
-                                           "Checkbox 1" + boxplotCap(allTimes[1]),
-                                           "Button 2" + boxplotCap(allTimes[2]),
-                                           "Checkbox 2" + boxplotCap(allTimes[3]),
-                                           "Button 3" + boxplotCap(allTimes[4]),
-                                           "Checkbox 3" + boxplotCap(allTimes[5])])
 
-    axs[1, 0].set_title('1. Szene: Rechte Hand - HL2')
-    axs[1, 0].set_xticks([1, 2, 3, 4, 5, 6], ["Button 1" + boxplotCap(allTimes_HL2[0]),
-                                              "Checkbox 1" + boxplotCap(allTimes_HL2[1]),
-                                              "Button 2" + boxplotCap(allTimes_HL2[2]),
-                                              "Checkbox 2" + boxplotCap(allTimes_HL2[3]),
-                                              "Button 3" + boxplotCap(allTimes_HL2[4]),
-                                              "Checkbox 3" + boxplotCap(allTimes_HL2[5])])
+    axs[0].set_title('1. Szene: Rechte Hand')
+    axs[0].set_xticks([1, 2], ["Erste S." + boxplotCap(box_aggrRight[0]),
+                                  "Nachgelagerte S." + boxplotCap(box_aggrRight[1])])
 
-    axs[0, 1].set_title('2. Szene: Linke Hand - HPG2')
-    axs[0, 1].set_xticks([1, 2, 3, 4, 5, 6], ["Button 1" + boxplotCap(allTimesLeft_HL2[0]),
-                                        "Checkbox 1" + boxplotCap(allTimesLeft_HL2[1]),
-                                        "Button 2" + boxplotCap(allTimesLeft_HL2[2]),
-                                        "Checkbox 2" + boxplotCap(allTimesLeft_HL2[3]),
-                                        "Button 3" + boxplotCap(allTimesLeft_HL2[4]),
-                                           "Checkbox 3" + boxplotCap(allTimesLeft_HL2[5])])
+    axs[1].set_title('2. Szene: Linke Hand')
+    axs[1].set_xticks([1, 2], ["Erste S." + boxplotCap(box_aggrLeft[0]),
+                                  "Nachgelagerte S." + boxplotCap(box_aggrLeft[1])])
 
-    axs[1, 1].set_title('2. Szene: Linke Hand - HL2')
-    axs[1, 1].set_xticks([1, 2, 3, 4, 5, 6], ["Button 1" + boxplotCap(allTimesLeft[0]),
-                                              "Checkbox 1" + boxplotCap(allTimesLeft[1]),
-                                              "Button 2" + boxplotCap(allTimesLeft[2]),
-                                              "Checkbox 2" + boxplotCap(allTimesLeft[3]),
-                                              "Button 3" + boxplotCap(allTimesLeft[4]),
-                                              "Checkbox 3" + boxplotCap(allTimesLeft[5])])
+    axs[2].set_title('Zusammenfassung rechte und linke Hand')
+    axs[2].set_xticks([1, 2], ["Erste S." + boxplotCap(box_aggr[0]),
+                                  "Nachgelagerte S." + boxplotCap(box_aggr[1])])
+
+
 
     plt.show()
 

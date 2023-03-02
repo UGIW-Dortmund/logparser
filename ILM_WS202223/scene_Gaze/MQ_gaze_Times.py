@@ -87,17 +87,6 @@ def runAnalyzeGeneric(probands, sceneName, devices, hand, fromElement, toElement
     return allData
 
 
-def aggregateDataOneDimension(array):
-    lenArray = len(array)
-    print("Len array " + str(lenArray))
-    data = []
-
-    for i in range(0, lenArray):
-        for elem in array[i]:
-            data.append(elem)
-
-    return data;
-
 def aggregateData(array):
     lenArray = len(array)
     print("Len array " + str(lenArray))
@@ -174,55 +163,10 @@ def runAnalyzeElementSteps(probands, sceneName, devices, hand):
 # This is added so that many files can reuse the function get_database()
 def boxplotCap(valArray):
     return f'\n n = {len(valArray)} \n' \
-           f'Median ={round(statistics.median(valArray), 3)} s \n ' \
-           f'Mittelwert ={round(statistics.mean(valArray), 3)} s \n '\
-            f'S. Abw. = {round(statistics.stdev(valArray), 3)} s \n ' \
-            f'M. Abw. = {round(mean(valArray), 3)} s \n ' \
-           f'1Q = {round(np.percentile(valArray, 25), 3)} s \n' \
-           f'3Q = {round(np.percentile(valArray, 75), 3)} s ';
-
-
-def convertToFloat(arr):
-
-    arr = arr.get('values')
-
-    print(arr)
-
-    arr = list(arr)
-    lenArray = len(arr)
-
-    print(lenArray)
-
-    allValues = []
-
-    for e in range(0, lenArray):
-        floatValues = []
-
-        for elem in arr[e]:
-            floatValues.append(float(elem))
-
-        allValues.append(floatValues)
-
-    return allValues
-
-def setXTicks_param(valArray, descArray):
-    xtick = []
-    i = 0
-
-    # The descirption of fields
-    for elem in valArray:
-        s = boxplotCap(elem)
-        xtick.append(descArray[i] + "\n" + s)
-        i = i + 1
-
-    lenVA = len(valArray)
-
-    # First Parameter the number of fields
-    elements = []
-    for elem in range(0, lenVA):
-        elements.append((elem + 1))
-
-    return (elements, xtick)
+           f'Me.={round(statistics.median(valArray), 3)} s \n ' \
+           f'Mi.={round(statistics.mean(valArray), 3)} s \n ';
+    # f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
+    # f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
 
 
 if __name__ == "__main__":
@@ -230,98 +174,66 @@ if __name__ == "__main__":
     dbname = get_database()
 
     col = dbname["uwp"]
-    tresor = dbname["tresor"]
 
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+    print(probands)
 
     sceneName = 'ILM_Gaze'
     devices = ['HPG2']
     hand = 'Generic'
-    # sceneGaze_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
-    sceneGaze_HPG2 = tresor.find_one({'name': 'Gaze_UWP_HPG2'})
-    #print(sceneGaze_HPG2.get('values'))
-    sceneGaze_HPG2 = convertToFloat(sceneGaze_HPG2)
+    sceneGaze_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
+    writeToDb('Gaze_UWP_HPG2', sceneGaze_HPG2)
 
-    print("Länge")
-    print(len(sceneGaze_HPG2))
-
-    sceneGaze_HPG2_first = [sceneGaze_HPG2[0], sceneGaze_HPG2[1]]
-    sceneGaze_HPG2_second = []
-
-    for e in range(2, len(sceneGaze_HPG2)):
-        sceneGaze_HPG2_second.append(sceneGaze_HPG2[e])
-
-
-
-    sceneGaze_HPG2_first = aggregateData(sceneGaze_HPG2_first)
-    sceneGaze_HPG2_second = aggregateData(sceneGaze_HPG2_second)
-
-    print("second")
-    print(sceneGaze_HPG2_second)
-
-    writeToDb("Gaze_UWP_HPG2_first", sceneGaze_HPG2_first)
-
-    writeToDb("Gaze_UWP_HPG2_second", sceneGaze_HPG2_second)
-
-    box_sceneGaze_HPG2 = [sceneGaze_HPG2_first, sceneGaze_HPG2_second]
-
-
+    sceneName = 'ILM_Gaze'
     devices = ['HL2']
 
-    # sceneGaze_HL2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
-    sceneGaze_HL2 = tresor.find_one({'name': 'Gaze_UWP_HL2'})
-    sceneGaze_HL2 = convertToFloat(sceneGaze_HL2)
+    sceneGaze_HL2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
+    writeToDb('Gaze_UWP_HL2', sceneGaze_HL2)
 
-    sceneGaze_HL2_first = [sceneGaze_HL2[0], sceneGaze_HL2[1]]
-    sceneGaze_HL2_second = []
+    print(sceneGaze_HL2)
+    allTimes = sceneGaze_HPG2
 
-    for e in range(2, len(sceneGaze_HL2)):
-        sceneGaze_HL2_second.append(sceneGaze_HL2[e])
+    fig, axs = plt.subplots(2, 1, figsize=(10, 8))
 
-    # Flatten the data
-    sceneGaze_HL2_first = aggregateData(sceneGaze_HL2_first)
-    sceneGaze_HL2_second = aggregateData(sceneGaze_HL2_second)
-
-    writeToDb("Gaze_UWP_HL2_first", sceneGaze_HL2_first)
-    writeToDb("Gaze_UWP_HL2_second", sceneGaze_HL2_second)
-
-    box_sceneGaze_HL2 = [sceneGaze_HL2_first, sceneGaze_HL2_second]
-
-
-    ### Graphic
-    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
-
-    fig.suptitle('Bearbeitungszeit mit dem Gaze-Operator')
+    fig.suptitle('Bearbeitungszeit der Buttons')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0].violinplot(box_sceneGaze_HPG2)
-    axs[1].violinplot(box_sceneGaze_HL2)
+    axs[0].boxplot(sceneGaze_HL2, notch=False)
+    axs[1].boxplot(sceneGaze_HPG2, notch=False)
     axs[1].sharey(axs[0])
 
     axs[0].set(ylabel='Sekunden')
-    # axs[1].set(ylabel='Sekunden')
+    axs[1].set(ylabel='Sekunden')
 
-    xtick_HPG2 = []
+    xtick_HL = []
 
-    len2 = len(sceneGaze_HPG2)
+    for elem in sceneGaze_HL2:
+        s = boxplotCap(elem)
 
-    for elem2 in sceneGaze_HPG2:
-        s = boxplotCap(elem2)
-        xtick_HPG2.append(s)
-
-    descArrayXTicks = ["Erste S.", "Nachgelagerte S."]
-
-    (elemHL, xHL) = setXTicks_param(box_sceneGaze_HL2, descArrayXTicks)
-    (elemHPG2, xHPG2) = setXTicks_param(box_sceneGaze_HPG2, descArrayXTicks)
-
-
+        xtick_HL.append(s)
 
     axs[0].set_title('Gaze mit der MS HoloLens 2')
-    axs[0].set_xticks(elemHL, xHL)
+    axs[0].set_xticks(xtick_HL)
 
     axs[1].set_title('Gaze mit der HP Reverb G2')
-    axs[1].set_xticks(elemHPG2, xHPG2)
+
+    '''
+
+     axs[0].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
+                                           "Checkbox 1" + boxplotCap(allTimes[1]),
+                                           "Button 2" + boxplotCap(allTimes[2])])
+
+    axs[0, 1].set_title('2. Szene: Linke Hand - HPG2')
+    axs[0, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
+                                        "Checkbox 1" + boxplotCap(allTimes[1]),
+                                        "Button 2" + boxplotCap(allTimes[2])])
+
+    axs[1, 1].set_title('2. Szene: Linke Hand - HL2')
+    axs[1, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
+                                              "Checkbox 1" + boxplotCap(allTimes[1]),
+                                              "Button 2" + boxplotCap(allTimes[2])])
+    '''
 
     plt.show()
 

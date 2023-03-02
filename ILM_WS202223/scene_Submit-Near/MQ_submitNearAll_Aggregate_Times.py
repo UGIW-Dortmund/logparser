@@ -533,6 +533,15 @@ def runAnalyzeButton(probands, sceneName, devices, button):
     return allData
 
 
+def writeToDb(name, value):
+    dbname = get_database()
+    tresor = dbname["tresor"]
+
+    dto = {"name": name, "values": value}
+    tresor.insert_one(dto)
+
+
+
 # This is added so that many files can reuse the function get_database()
 def boxplotCap(valArray):
 
@@ -744,6 +753,7 @@ if __name__ == "__main__":
     for elem in firstElementRightArray:
         firstElementsArray.append(elem)
 
+    writeToDb("SN_AD_first", firstElementsArray)
 
     secondElementsArray = []
 
@@ -755,6 +765,7 @@ if __name__ == "__main__":
 
     boxplotElementArray = [firstElementsArray, secondElementsArray]
 
+    writeToDb("SN_AD_second", secondElementsArray)
 
 
 

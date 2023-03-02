@@ -78,6 +78,14 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
     return allData
 
 
+def writeToDb(name, value):
+    dbname = get_database()
+    tresor = dbname["tresor"]
+
+    dto = {"name": name, "values": value}
+    tresor.insert_one(dto)
+
+
 def runAnalyzeSecondButton(probands, sceneName, devices):
     allData = []
 
@@ -393,6 +401,7 @@ if __name__ == "__main__":
     dbname = get_database()
 
     col = dbname["uwp"]
+    tresor = dbname["tresor"]
 
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
@@ -426,6 +435,15 @@ if __name__ == "__main__":
 
     aggrRight_HPG2_first = aggregateData(aggrRight_HPG2_first)
     aggrRight_HPG2_second = aggregateData(aggrRight_HPG2_second)
+
+    aggrRight_HPG2_first_db = {"name": "SN_UWP_R_HPG2_first",
+                               "values": aggrRight_HPG2_first}
+    tresor.insert_one(aggrRight_HPG2_first_db)
+
+    aggrRight_HPG2_second_db = {"name": "SN_UWP_R_HPG2_second",
+                               "values": aggrRight_HPG2_second}
+    tresor.insert_one(aggrRight_HPG2_second_db)
+
     box_aggrRight_HPG2 = [aggrRight_HPG2_first, aggrRight_HPG2_second]
 
     sceneName = 'ILM_Submit-Near_Left'
@@ -446,7 +464,16 @@ if __name__ == "__main__":
                             sceneSubmitNearButton_3_Left, sceneSubmitNearCheckbox_3_Left]
 
     aggrLeft_HPG2_first = aggregateData(aggrLeft_HPG2_first)
+    aggrLeft_HPG2_first_db = {"name": "SN_UWP_L_HPG2_first",
+                                "values": aggrLeft_HPG2_first}
+    tresor.insert_one(aggrLeft_HPG2_first_db)
+
     aggrLeft_HPG2_second = aggregateData(aggrLeft_HPG2_second)
+    aggrLeft_HPG2_second_db = {"name": "SN_UWP_L_HPG2_second",
+                                "values": aggrLeft_HPG2_second}
+    tresor.insert_one(aggrLeft_HPG2_second_db)
+
+
     box_aggrLeft_HPG2 = [aggrLeft_HPG2_first, aggrLeft_HPG2_second]
 
     devices = ['HL2']
@@ -468,6 +495,16 @@ if __name__ == "__main__":
 
     aggrRight_HL2_first = aggregateData(aggrRight_HL2_first)
     aggrRight_HL2_second = aggregateData(aggrRight_HL2_second)
+
+
+    aggrRight_HL2_first_db = {"name": "SN_UWP_R_HL2_first",
+                               "values": aggrRight_HL2_first}
+    tresor.insert_one(aggrRight_HL2_first_db)
+
+    aggrRight_HL2_second_db = {"name": "SN_UWP_R_HL2_first",
+                              "values": aggrRight_HL2_second}
+    tresor.insert_one(aggrRight_HL2_second_db)
+
 
     box_aggrRight_HL2 = [aggrRight_HL2_first, aggrRight_HL2_second]
 
@@ -493,6 +530,15 @@ if __name__ == "__main__":
     aggrLeft_HL2_first = aggregateData(aggrLeft_HL2_first)
     aggrLeft_HL2_second = aggregateData(aggrLeft_HL2_second)
 
+    aggrLeft_HL2_first_db = {"name": "SN_UWP_L_HL2_first",
+                              "values": aggrLeft_HL2_first}
+    tresor.insert_one(aggrLeft_HL2_first_db)
+
+    aggrLeft_HL2_second_db = {"name": "SN_UWP_L_HL2_second",
+                              "values": aggrLeft_HL2_second}
+    tresor.insert_one(aggrLeft_HL2_second_db)
+
+
     box_aggrLeft_HL2 = [aggrLeft_HL2_first, aggrLeft_HL2_second]
 
 
@@ -505,6 +551,15 @@ if __name__ == "__main__":
                              sceneSubmitNearButton_3_Right, sceneSubmitNearCheckbox_3_Right]
     aggrRightSecond = aggregateData(aggrRightSecond)
     box_aggrRight = [aggrRightFirst, aggrRightSecond]
+
+    aggrRight_First_db = {"name": "SN_UWP_R_first",
+                              "values": aggrRightFirst}
+    tresor.insert_one(aggrRight_First_db)
+
+    aggrRight_second_db = {"name": "SN_UWP_R_second",
+                          "values": aggrRightSecond}
+    tresor.insert_one(aggrRight_second_db)
+
 
     # Left
     aggrLeftFirst = [sceneSubmitNearButton_1_Left, sceneSubmitNearCheckbox_1_Left,
@@ -519,6 +574,15 @@ if __name__ == "__main__":
     aggrLeftSecond = aggregateData(aggrLeftSecond)
     box_aggrLeft = [aggrLeftFirst, aggrLeftSecond]
 
+    aggr_left_first_db = {"name": "SN_UWP_L_first",
+                           "values": aggrLeftFirst}
+    tresor.insert_one(aggr_left_first_db)
+
+    aggr_left_second_db = {"name": "SN_UWP_L_second",
+                           "values": aggrLeftSecond}
+    tresor.insert_one(aggr_left_second_db)
+
+
     # Both Hands
     aggrFirst = [sceneSubmitNearButton_1_Right_HL2,
                  sceneSubmitNearCheckbox_1_Right_HL2,
@@ -527,6 +591,11 @@ if __name__ == "__main__":
                  sceneSubmitNearButton_1_Left_HL2,
                  sceneSubmitNearCheckbox_1_Left_HL2]
     aggrFirst = aggregateData(aggrFirst)
+
+    aggr_first_db = {"name": "SN_UWP_first",
+                           "values": aggrFirst}
+    tresor.insert_one(aggr_first_db)
+
 
     aggrSecond = [
                         sceneSubmitNearButton_2_Right_HL2, sceneSubmitNearCheckbox_2_Right_HL2,
@@ -538,6 +607,10 @@ if __name__ == "__main__":
                         sceneSubmitNearButton_3_Left_HL2, sceneSubmitNearCheckbox_3_Left_HL2]
 
     aggrSecond = aggregateData(aggrSecond)
+
+    aggr_second_db = {"name": "SN_UWP_second",
+                     "values": aggrSecond}
+    tresor.insert_one(aggr_second_db)
 
     box_aggr = [aggrFirst, aggrSecond]
 

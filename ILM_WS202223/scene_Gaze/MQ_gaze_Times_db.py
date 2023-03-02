@@ -103,38 +103,28 @@ def writeToDb(name, value):
     dbname = get_database()
     tresor = dbname["tresor"]
 
-    dto = tresor.find({"name": name})
-    dto = list(dto)
-
-    print("Dto")
-    print(dto)
-
-    if (len(dto) > 0):
-        dto = {"name": name}
-        newvalues = {"$set": {"values": value}}
-        tresor.update_one(dto, newvalues)
-        print("Update element")
-    else:
-        dto = {"name": name, "values": value}
-        tresor.insert_one(dto)
-        print("New element")
+    dto = {"name": name, "values": value}
+    tresor.insert_one(dto)
 
 
 def runAnalyzeElementSteps(probands, sceneName, devices, hand):
     valArray = []
 
-    step1 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnL1', 'btnR1')
-    step2 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnR1', 'btnD3')
-    step3 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnD3', 'btnD2')
-    step4 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnD2', 'btnL3')
-    step5 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnL3', 'btnD4')
-    step6 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnD4', 'btnR3')
-    step7 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnR3', 'btnR4')
-    step8 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnR4', 'btnD1')
-    step9 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnD1', 'btnL4')
-    step10 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnL4', 'btnR2')
-    step11 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'btnR2', 'btnL2')
-
+    step1 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'T1_Cube', 'L1_Sphere')
+    step2 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'L1_Sphere', 'B1_Cube')
+    step3 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'B1_Cube', 'R1_Cube')
+    step4 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'R1_Cube', 'B2_Capsule')
+    step5 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'B2_Capsule', 'T2_Capsule')
+    step6 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'T2_Capsule', 'R2_Cube')
+    step7 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'R2_Cube', 'R3_Capsule')
+    step8 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'R3_Capsule', 'L2_Cube')
+    step9 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'L2_Cube', 'L3_Capsule')
+    step10 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'L3_Capsule', 'T3_Sphere')
+    step11 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'T3_Sphere', 'R4_Sphere')
+    step12 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'R4_Sphere', 'L4_Cube')
+    step13 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'L4_Cube', 'B3_Sphere')
+    step14 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'B3_Sphere', 'R5_Cube')
+    step15 = runAnalyzeGeneric(probands, sceneName, devices, hand, 'R5_Cube', 'L5_Sphere')
 
     valArray.append(step1)
     valArray.append(step2)
@@ -147,7 +137,10 @@ def runAnalyzeElementSteps(probands, sceneName, devices, hand):
     valArray.append(step9)
     valArray.append(step10)
     valArray.append(step11)
-
+    valArray.append(step12)
+    valArray.append(step13)
+    valArray.append(step14)
+    valArray.append(step15)
 
     # valArray = aggregateData(valArray)
 
@@ -157,10 +150,57 @@ def runAnalyzeElementSteps(probands, sceneName, devices, hand):
 # This is added so that many files can reuse the function get_database()
 def boxplotCap(valArray):
     return f'\n n = {len(valArray)} \n' \
-           f'Me.={round(statistics.median(valArray), 3)} s \n ' \
-           f'Mi.={round(statistics.mean(valArray), 3)} s \n ';
+           f'Me.={round(statistics.median(valArray), 2)}s \n ' \
+           f'Mi.={round(statistics.mean(valArray), 2)}s \n ';
     # f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
     # f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
+
+def convertToFloat(arr):
+
+    arr = arr.get('values')
+
+    print(arr)
+
+    arr = list(arr)
+    lenArray = len(arr)
+
+    print(lenArray)
+
+    allValues = []
+
+    for e in range(0, lenArray):
+        floatValues = []
+
+        for elem in arr[e]:
+            floatValues.append(float(elem))
+
+        allValues.append(floatValues)
+
+    return allValues
+
+
+def setXTicks_param(valArray, descArray):
+    xtick = []
+    i = 0
+
+    # The descirption of fields
+    for elem in valArray:
+        s = boxplotCap(elem)
+
+        if arrayDescr:
+            xtick.append(descArray[i] + "\n" + s)
+        else:
+            xtick.append(s)
+        i = i + 1
+
+    lenVA = len(valArray)
+
+    # First Parameter the number of fields
+    elements = []
+    for elem in range(0, lenVA):
+        elements.append((elem + 1))
+
+    return (elements, xtick)
 
 
 if __name__ == "__main__":
@@ -168,74 +208,47 @@ if __name__ == "__main__":
     dbname = get_database()
 
     col = dbname["uwp"]
+    tresor = dbname["tresor"]
 
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
-    print(probands)
-
-    # MQ2
-    sceneName = 'ILM_Snap_Right'
-    devices = ['MQ2']
-    hand = 'Right'
-    sceneGaze_R_MQ2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
-    writeToDb('Gaze_AD_R_MQ2', sceneGaze_R_MQ2)
-
-    sceneName = 'ILM_Snap_Left'
-    hand = 'Left'
-    sceneGaze_L_MQ2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
-    writeToDb('Gaze_AD_L_MQ2', sceneGaze_L_MQ2)
-
-    # MQP
-    sceneName = 'ILM_Snap_Right'
-    devices = ['MQP']
-    hand = 'Right'
-    sceneGaze_R_MQP = runAnalyzeElementSteps(probands, sceneName, devices, hand)
-    writeToDb('Gaze_AD_R_MQP', sceneGaze_R_MQP)
-
-    sceneName = 'ILM_Snap_Left'
-    hand = 'Left'
-    sceneGaze_L_MQP = runAnalyzeElementSteps(probands, sceneName, devices, hand)
-    writeToDb('Gaze_AD_L_MQP', sceneGaze_L_MQP)
 
 
+    # sceneGaze_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
+    sceneGaze_R_MQP = tresor.find_one({'name': 'Gaze_AD_R_MQP'})
+    sceneGaze_L_MQP = tresor.find_one({'name': 'Gaze_AD_L_MQP'})
+    sceneGaze_R_MQ2 = tresor.find_one({'name': 'Gaze_AD_R_MQ2'})
+    sceneGaze_L_MQ2 = tresor.find_one({'name': 'Gaze_AD_L_MQ2'})
 
-    print(sceneGaze_L_MQ2)
-    allTimes = sceneGaze_R_MQ2
+    sceneGaze_R_MQP = convertToFloat(sceneGaze_R_MQP)
+    sceneGaze_L_MQP = convertToFloat(sceneGaze_L_MQP)
+    sceneGaze_R_MQ2 = convertToFloat(sceneGaze_R_MQ2)
+    sceneGaze_L_MQ2 = convertToFloat(sceneGaze_L_MQ2)
+
+
 
     fig, axs = plt.subplots(2, 1, figsize=(10, 8))
 
-    fig.suptitle('Bearbeitungszeit der Buttons')
+    fig.suptitle('Bearbeitungszeit mit dem Gaze-Operator')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0].boxplot(sceneGaze_L_MQ2, notch=False)
-    axs[1].boxplot(sceneGaze_R_MQ2, notch=False)
+    axs[0].boxplot(sceneGaze_R_MQP, notch=False)
+    axs[1].boxplot(sceneGaze_L_MQP, notch=False)
     axs[1].sharey(axs[0])
 
     axs[0].set(ylabel='Sekunden')
     axs[1].set(ylabel='Sekunden')
 
+    arrayDescr = []
+
+    (e_R_MQP, x_R_MQP) = setXTicks_param(sceneGaze_R_MQP, arrayDescr)
+    (e_L_MQP, x_L_MQP) = setXTicks_param(sceneGaze_L_MQP, arrayDescr)
 
     axs[0].set_title('Gaze mit der MS HoloLens 2')
-    # axs[0].set_xticks(xtick_HL)
+    axs[0].set_xticks(e_R_MQP, x_R_MQP)
 
     axs[1].set_title('Gaze mit der HP Reverb G2')
-
-    '''
-
-     axs[0].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                           "Checkbox 1" + boxplotCap(allTimes[1]),
-                                           "Button 2" + boxplotCap(allTimes[2])])
-
-    axs[0, 1].set_title('2. Szene: Linke Hand - HPG2')
-    axs[0, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                        "Checkbox 1" + boxplotCap(allTimes[1]),
-                                        "Button 2" + boxplotCap(allTimes[2])])
-
-    axs[1, 1].set_title('2. Szene: Linke Hand - HL2')
-    axs[1, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                              "Checkbox 1" + boxplotCap(allTimes[1]),
-                                              "Button 2" + boxplotCap(allTimes[2])])
-    '''
+    axs[1].set_xticks(e_L_MQP, x_L_MQP)
 
     plt.show()
 

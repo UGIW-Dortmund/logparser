@@ -87,6 +87,17 @@ def runAnalyzeGeneric(probands, sceneName, devices, hand, fromElement, toElement
     return allData
 
 
+def aggregateDataOneDimension(array):
+    lenArray = len(array)
+    print("Len array " + str(lenArray))
+    data = []
+
+    for i in range(0, lenArray):
+        for elem in array[i]:
+            data.append(elem)
+
+    return data;
+
 def aggregateData(array):
     lenArray = len(array)
     print("Len array " + str(lenArray))
@@ -103,8 +114,21 @@ def writeToDb(name, value):
     dbname = get_database()
     tresor = dbname["tresor"]
 
-    dto = {"name": name, "values": value}
-    tresor.insert_one(dto)
+    dto = tresor.find({"name": name})
+    dto = list(dto)
+
+    print("Dto")
+    print(dto)
+
+    if (len(dto) > 0):
+        dto = {"name": name}
+        newvalues = {"$set": {"values": value}}
+        tresor.update_one(dto, newvalues)
+        print("Update element")
+    else:
+        dto = {"name": name, "values": value}
+        tresor.insert_one(dto)
+        print("New element")
 
 
 def runAnalyzeElementSteps(probands, sceneName, devices, hand):
@@ -178,6 +202,22 @@ def convertToFloat(arr):
 
     return allValues
 
+def setXTicks_param(valArray):
+    xtick = []
+
+    for elem in valArray:
+        s = boxplotCap(elem)
+        xtick.append(s)
+
+    lenVA = len(valArray)
+
+    elements = []
+    for elem in range(0, lenVA):
+        elements.append((elem + 1))
+
+    return (elements, xtick)
+
+
 if __name__ == "__main__":
     # Get the database
     dbname = get_database()
@@ -197,6 +237,29 @@ if __name__ == "__main__":
     #print(sceneGaze_HPG2.get('values'))
     sceneGaze_HPG2 = convertToFloat(sceneGaze_HPG2)
 
+    print("Länge")
+    print(len(sceneGaze_HPG2))
+
+    sceneGaze_HPG2_first = [sceneGaze_HPG2[0], sceneGaze_HPG2[1]]
+    sceneGaze_HPG2_second = []
+
+    for e in range(2, len(sceneGaze_HPG2)):
+        sceneGaze_HPG2_second.append(sceneGaze_HPG2[e])
+
+
+
+    sceneGaze_HPG2_first = aggregateData(sceneGaze_HPG2_first)
+    sceneGaze_HPG2_second = aggregateData(sceneGaze_HPG2_second)
+
+    print("second")
+    print(sceneGaze_HPG2_second)
+
+    writeToDb("Gaze_UWP_HPG2_first", sceneGaze_HPG2_first)
+
+    writeToDb("Gaze_UWP_HPG2_second", sceneGaze_HPG2_second)
+
+    box_sceneGaze_HPG2 = [sceneGaze_HPG2_first, sceneGaze_HPG2_second]
+
 
     devices = ['HL2']
 
@@ -204,14 +267,29 @@ if __name__ == "__main__":
     sceneGaze_HL2 = tresor.find_one({'name': 'Gaze_UWP_HL2'})
     sceneGaze_HL2 = convertToFloat(sceneGaze_HL2)
 
-    print(sceneGaze_HPG2)
+    sceneGaze_HL2_first = [sceneGaze_HL2[0], sceneGaze_HL2[1]]
+    sceneGaze_HL2_second = []
 
-    fig, axs = plt.subplots(2, 1, figsize=(10, 8))
+    for e in range(2, len(sceneGaze_HL2)):
+        sceneGaze_HL2_second.append(sceneGaze_HL2[e])
+
+    # Flatten the data
+    sceneGaze_HL2_first = aggregateData(sceneGaze_HL2_first)
+    sceneGaze_HL2_second = aggregateData(sceneGaze_HL2_second)
+
+    writeToDb("Gaze_UWP_HL2_first", sceneGaze_HL2_first)
+    writeToDb("Gaze_UWP_HL2_second", sceneGaze_HL2_second)
+
+    box_sceneGaze_HL2 = [sceneGaze_HL2_first, sceneGaze_HL2_second]
+
+
+    ### Graphic
+    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
     fig.suptitle('Bearbeitungszeit mit dem Gaze-Operator')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0].boxplot(sceneGaze_HL2, notch=False)
-    axs[1].boxplot(sceneGaze_HPG2, notch=False)
+    axs[0].boxplot(box_sceneGaze_HPG2, notch=False)
+    axs[1].boxplot(box_sceneGaze_HL2, notch=False)
     axs[1].sharey(axs[0])
 
     axs[0].set(ylabel='Sekunden')
@@ -226,27 +304,16 @@ if __name__ == "__main__":
         xtick_HPG2.append(s)
 
 
-    xtick_HL = []
+    (elemHL, xHL) = setXTicks_param(box_sceneGaze_HL2)
+    (elemHPG2, xHPG2) = setXTicks_param(box_sceneGaze_HPG2)
 
-    for elem in sceneGaze_HL2:
-        s = boxplotCap(elem)
-        xtick_HL.append(s)
 
-    len = len(sceneGaze_HL2)
-
-    elements = []
-    for elem in range(0, len):
-        elements.append((elem+1))
-
-    elementsHPG2 = []
-    for elem in range(0, len2):
-        elementsHPG2.append((elem + 1))
 
     axs[0].set_title('Gaze mit der MS HoloLens 2')
-    axs[0].set_xticks(elements, xtick_HL)
+    axs[0].set_xticks(elemHL, xHL)
 
     axs[1].set_title('Gaze mit der HP Reverb G2')
-    axs[1].set_xticks(elementsHPG2, xtick_HPG2)
+    axs[1].set_xticks(elemHPG2, xHPG2)
 
     plt.show()
 

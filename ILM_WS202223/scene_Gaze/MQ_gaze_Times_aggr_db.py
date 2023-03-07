@@ -61,10 +61,14 @@ def writeToDb(name, value):
 # This is added so that many files can reuse the function get_database()
 def boxplotCap(valArray):
     return f'\n n = {len(valArray)} \n' \
-           f'Me.={round(statistics.median(valArray), 2)}s \n ';
-          # f'Mi.={round(statistics.mean(valArray), 2)}s \n ';
-    # f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
-    # f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
+           f'Me. = {round(statistics.median(valArray), 3)} s \n ' \
+           f'Mi. = {round(statistics.mean(valArray), 2)}s \n ' \
+            f'S. Abw. = {round(statistics.stdev(valArray), 3)} s \n ' \
+            f'M. Abw. = {round(mean(valArray), 3)} s \n ';
+
+
+
+
 
 def convertToFloat(arr):
 
@@ -124,7 +128,7 @@ if __name__ == "__main__":
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
-
+    probands = ['A06', 'A12', 'A28']
 
     # sceneGaze_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
     sceneGaze_R_MQP = tresor.find_one({'name': 'Gaze_AD_R_MQP'})
@@ -137,44 +141,67 @@ if __name__ == "__main__":
     sceneGaze_R_MQ2 = convertToFloat(sceneGaze_R_MQ2)
     sceneGaze_L_MQ2 = convertToFloat(sceneGaze_L_MQ2)
 
+    sceneGaze_R_MQP = aggregateData(sceneGaze_R_MQP)
+    sceneGaze_L_MQP = aggregateData(sceneGaze_L_MQP)
+    sceneGaze_R_MQ2 = aggregateData(sceneGaze_R_MQ2)
+    sceneGaze_L_MQ2 = aggregateData(sceneGaze_L_MQ2)
+
+    box_MQP = [sceneGaze_R_MQP, sceneGaze_L_MQP]
+    box_MQ2 = [sceneGaze_R_MQ2, sceneGaze_L_MQ2]
+
+    box_R = [sceneGaze_R_MQP, sceneGaze_R_MQ2]
+    box_L = [sceneGaze_L_MQP, sceneGaze_L_MQ2]
+
+    writeToDb("Gaze_AD_MQP", box_MQP)
+    writeToDb("Gaze_AD_MQ2", box_MQ2)
+
+    writeToDb("Gaze_AD_R", box_R)
+    writeToDb("Gaze_AD_L", box_L)
 
 
-    fig, axs = plt.subplots(4, 1, figsize=(10, 8))
+    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
 
-    fig.suptitle('Bearbeitungszeit mit dem Gaze-Operator')
+    fig.suptitle('')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0].boxplot(sceneGaze_R_MQP, notch=False)
-    axs[1].boxplot(sceneGaze_L_MQP, notch=False)
-    axs[2].boxplot(sceneGaze_R_MQ2, notch=False)
-    axs[3].boxplot(sceneGaze_L_MQ2, notch=False)
-    axs[1].sharey(axs[0])
-    axs[2].sharey(axs[0])
-    axs[3].sharey(axs[0])
+    axs[0, 0].violinplot(box_MQP)
+    axs[1, 0].violinplot(box_MQ2)
 
-    axs[0].set(ylabel='Sekunden')
-    axs[1].set(ylabel='Sekunden')
-    axs[2].set(ylabel='Sekunden')
-    axs[3].set(ylabel='Sekunden')
+    axs[0, 1].violinplot(box_R)
+    axs[1, 1].violinplot(box_L)
 
-    arrayDescr = ['btnL1', 'btnR1', 'btnD3', 'btnD2', 'btnL3', 'btnD4', 'btnR3', 'btnR4', 'btnD1', 'btnL4', 'btnR2', 'btnL2']
 
-    (e_R_MQP, x_R_MQP) = setXTicks_param(sceneGaze_R_MQP, arrayDescr)
-    (e_L_MQP, x_L_MQP) = setXTicks_param(sceneGaze_L_MQP, arrayDescr)
+    axs[0, 1].sharey(axs[0, 0])
+    axs[1, 1].sharey(axs[0, 0])
+    axs[1, 0].sharey(axs[0, 0])
 
-    (e_R_MQ2, x_R_MQ2) = setXTicks_param(sceneGaze_R_MQ2, arrayDescr)
-    (e_L_MQ2, x_L_MQ2) = setXTicks_param(sceneGaze_L_MQ2, arrayDescr)
 
-    axs[0].set_title('Gaze mit der rechten Hand und der MQP')
-    axs[0].set_xticks(e_R_MQP, x_R_MQP)
 
-    axs[1].set_title('Gaze mit der linken Hand und der MQP')
-    axs[1].set_xticks(e_L_MQP, x_L_MQP)
+    axs[0, 0].set(ylabel='Sekunden')
+    axs[0, 1].set(ylabel='Sekunden')
+    axs[1, 0].set(ylabel='Sekunden')
+    axs[1, 1].set(ylabel='Sekunden')
 
-    axs[2].set_title('Gaze mit der rechten Hand und der MQ2')
-    axs[2].set_xticks(e_R_MQ2, x_R_MQ2)
+    arrayDescr = ['Rechte Hand', 'Linke Hand']
 
-    axs[3].set_title('Gaze mit der linken Hand und der MQ2')
-    axs[3].set_xticks(e_L_MQ2, x_L_MQ2)
+    (e_R_MQP, x_R_MQP) = setXTicks_param(box_MQP, arrayDescr)
+    (e_L_MQP, x_L_MQP) = setXTicks_param(box_MQ2, arrayDescr)
+
+    arrayDescr = ['Meta Quest Pro', 'Meta Quest 2']
+
+    (e_R_MQ2, x_R_MQ2) = setXTicks_param(box_R, arrayDescr)
+    (e_L_MQ2, x_L_MQ2) = setXTicks_param(box_L, arrayDescr)
+
+    axs[0, 0].set_title('Gaze mit der MQP')
+    axs[0, 0].set_xticks(e_R_MQP, x_R_MQP)
+
+    axs[1, 0].set_title('Gaze mit der MQP')
+    axs[1, 0].set_xticks(e_L_MQP, x_L_MQP)
+
+    axs[0, 1].set_title('Gaze mit der rechten Hand')
+    axs[0, 1].set_xticks(e_R_MQ2, x_R_MQ2)
+
+    axs[1, 1].set_title('Gaze mit der linken Hand')
+    axs[1, 1].set_xticks(e_L_MQ2, x_L_MQ2)
 
     plt.show()
 

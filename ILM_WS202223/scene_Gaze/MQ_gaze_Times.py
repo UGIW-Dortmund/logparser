@@ -22,6 +22,32 @@ def get_database():
     return client['ilm']
 
 
+
+
+def setXTicks_param(valArray, descArray):
+    xtick = []
+    i = 0
+
+    # The descirption of fields
+    for elem in valArray:
+        s = boxplotCap(elem)
+
+        if descArray:
+            xtick.append(descArray[i] + s)
+        else:
+            xtick.append(s)
+        i = i + 1
+
+    lenVA = len(valArray)
+
+    # First Parameter the number of fields
+    elements = []
+    for elem in range(0, lenVA):
+        elements.append((elem + 1))
+
+    return (elements, xtick)
+
+
 def runAnalyzeGeneric(probands, sceneName, devices, hand, fromElement, toElement):
     allData = []
 
@@ -120,6 +146,9 @@ def writeToDb(name, value):
         print("New element")
 
 
+
+
+
 def runAnalyzeElementSteps(probands, sceneName, devices, hand):
     valArray = []
 
@@ -172,6 +201,8 @@ if __name__ == "__main__":
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+
+    probands = ['A06', 'A12', 'A28']
     print(probands)
 
     # MQ2
@@ -186,6 +217,9 @@ if __name__ == "__main__":
     sceneGaze_L_MQ2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
     writeToDb('Gaze_AD_L_MQ2', sceneGaze_L_MQ2)
 
+
+
+
     # MQP
     sceneName = 'ILM_Snap_Right'
     devices = ['MQP']
@@ -199,17 +233,31 @@ if __name__ == "__main__":
     writeToDb('Gaze_AD_L_MQP', sceneGaze_L_MQP)
 
 
+    sceneGaze_R_MQP = aggregateData(sceneGaze_R_MQP)
+    sceneGaze_L_MQP = aggregateData(sceneGaze_L_MQP)
+
+
+    box_selectedProbands = [sceneGaze_R_MQP, sceneGaze_L_MQP]
+
 
     print(sceneGaze_L_MQ2)
+
+
     allTimes = sceneGaze_R_MQ2
 
     fig, axs = plt.subplots(2, 1, figsize=(10, 8))
 
     fig.suptitle('Bearbeitungszeit der Buttons')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0].boxplot(sceneGaze_L_MQ2, notch=False)
-    axs[1].boxplot(sceneGaze_R_MQ2, notch=False)
+    axs[0].boxplot(box_selectedProbands, notch=False)
+    axs[0].set_xticks([1, 2], ["Rechte Hand" + boxplotCap(box_selectedProbands[0]),
+                               "Linke Hand" + boxplotCap(box_selectedProbands[1])])
+
+
+    axs[1].boxplot(sceneGaze_R_MQP, notch=False)
     axs[1].sharey(axs[0])
+    # axs[1].set_xticks([1], boxplotCap(sceneGaze_R_MQP))
+
 
     axs[0].set(ylabel='Sekunden')
     axs[1].set(ylabel='Sekunden')
@@ -220,22 +268,6 @@ if __name__ == "__main__":
 
     axs[1].set_title('Gaze mit der HP Reverb G2')
 
-    '''
-
-     axs[0].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                           "Checkbox 1" + boxplotCap(allTimes[1]),
-                                           "Button 2" + boxplotCap(allTimes[2])])
-
-    axs[0, 1].set_title('2. Szene: Linke Hand - HPG2')
-    axs[0, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                        "Checkbox 1" + boxplotCap(allTimes[1]),
-                                        "Button 2" + boxplotCap(allTimes[2])])
-
-    axs[1, 1].set_title('2. Szene: Linke Hand - HL2')
-    axs[1, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                              "Checkbox 1" + boxplotCap(allTimes[1]),
-                                              "Button 2" + boxplotCap(allTimes[2])])
-    '''
 
     plt.show()
 

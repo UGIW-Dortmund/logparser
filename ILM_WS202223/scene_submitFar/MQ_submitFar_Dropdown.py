@@ -1,10 +1,12 @@
 import datetime
+import decimal
 import os
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import statistics
 from statistics import mean
+import locale
 
 from pymongo import MongoClient
 
@@ -23,9 +25,31 @@ def get_database():
     return client['ilm']
 
 
+def writeToDb(name, value):
+    dbname = get_database()
+    tresor = dbname["tresor"]
+
+    dto = tresor.find({"name": name})
+    dto = list(dto)
+
+    print("Dto")
+    print(dto)
+
+    # 1st Update
+    if (len(dto) > 0):
+        dto = {"name": name}
+        newvalues = {"$set": {"values": value}}
+        tresor.update_one(dto, newvalues)
+        print("Update element")
+    else:
+        # 2nd new elment
+        dto = {"name": name, "values": value}
+        tresor.insert_one(dto)
+        print("New element")
 
 
-def runAnalyzeFirstButton(probands, sceneName, devices):
+
+def runAnalyzeFirstToggle(probands, sceneName, devices):
 
     allData = []
 
@@ -37,7 +61,8 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
 
             x = col.find({  'scene': sceneName,
                             'dev': ger,
-                            'action': 'Start Scene',
+                            'action': 'Submit Slider',
+                            'actionvalue': 'Slider3',
                             'prob': probandId
                             })
 
@@ -54,8 +79,8 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
-                              'action': 'Submit Button',
-                              'actionvalue': '1',
+                              'action': 'Submit Dropdown',
+                              'actionvalue': 'Dropdown1',
                               'prob': probandId,
                               })
 
@@ -68,25 +93,25 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
-                endAction = pd.to_datetime(endDate + ' ' + endAction)
-                startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    endAction = pd.to_datetime(endDate + ' ' + endAction)
+                    startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-                delta = endAction - startAction
-                # float(delta.seconds + '.' + delta.)
-                allData.append(delta.total_seconds())
+                    delta = endAction - startAction
+                    # float(delta.seconds + '.' + delta.)
+                    allData.append(delta.total_seconds())
 
-                x = None
-                y = None
-                y_list = None
-                x_list = None
+            x = None
+            y = None
+            y_list = None
+            x_list = None
 
-                endAction = None
-                startAction = None
+            endAction = None
+            startAction = None
 
     return allData
 
 
-def runAnalyzeButton(probands, sceneName, devices, button):
+def runAnalyzeToggle(probands, sceneName, devices, toggle):
 
     allData = []
 
@@ -99,8 +124,8 @@ def runAnalyzeButton(probands, sceneName, devices, button):
 
             x = col.find({  'scene': sceneName,
                             'dev': ger,
-                            'action': 'Submit Button',
-                            'actionvalue': button,
+                            'action': 'Submit Dropdown',
+                            'actionvalue': 'Dropdown' + str(toggle),
                             'prob': probandId
                             })
 
@@ -114,13 +139,13 @@ def runAnalyzeButton(probands, sceneName, devices, button):
                 startAction = x_list[0].get('time')
                 startDate = x_list[0].get('date')
 
-                next_button = int(button) + 1
+                next_toggle = int(toggle) + 1
 
 
                 y = col.find({'scene': sceneName,
                               'dev': ger,
-                              'action': 'Submit Button',
-                              'actionvalue': str(next_button),
+                              'action': 'Submit Dropdown',
+                              'actionvalue': 'Dropdown' + str(next_toggle),
                               'prob': probandId,
                               })
 
@@ -133,12 +158,12 @@ def runAnalyzeButton(probands, sceneName, devices, button):
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
-                endAction = pd.to_datetime(endDate + ' ' + endAction)
-                startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    endAction = pd.to_datetime(endDate + ' ' + endAction)
+                    startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-                delta = endAction - startAction
-                # float(delta.seconds + '.' + delta.)
-                allData.append(delta.total_seconds())
+                    delta = endAction - startAction
+                    # float(delta.seconds + '.' + delta.)
+                    allData.append(delta.total_seconds())
 
                 x = None
                 y = None
@@ -153,8 +178,14 @@ def runAnalyzeButton(probands, sceneName, devices, button):
 
 # This is added so that many files can reuse the function get_database()
 def boxplotCap(valArray):
+    median = round(statistics.median(valArray), 2)
+    median = locale.atof(str(median), decimal.Decimal)
+    median = '{:n}'.format(median)
+
+
+
     return f'\n n = {len(valArray)} \n' \
-           f'Median = {round(statistics.median(valArray), 3)} s \n ' \
+           f'Median = {median} s \n ' \
            f'Mittelwert = {round(statistics.mean(valArray), 3)} s \n ';
            # f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
            # f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
@@ -165,6 +196,7 @@ if __name__ == "__main__":
 
     col = dbname["uwp"]
 
+    locale.setlocale(locale.LC_ALL, 'de_DE')
 
 
     #probands = col.distinct('prob')
@@ -172,35 +204,39 @@ if __name__ == "__main__":
     # probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A18']
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+                'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
     print(probands)
 
-    sceneName = 'ILM_Submit-Near_Far_Scene'
+    sceneName = 'ILM_Submit-Far_Left_Scene'
     devices = ['MQP', 'MQ2']
 
-    sceneSubmitNearButton = runAnalyzeFirstButton(probands, sceneName, devices)
-    sceneSubmitNearButton_2 = runAnalyzeButton(probands, sceneName, devices, '1')
-    sceneSubmitNearButton_3 = runAnalyzeButton(probands, sceneName, devices, '2')
+    sceneSubmitNearButton = runAnalyzeFirstToggle(probands, sceneName, devices)
+    sceneSubmitNearButton_2 = runAnalyzeToggle(probands, sceneName, devices, '1')
+    sceneSubmitNearButton_3 = runAnalyzeToggle(probands, sceneName, devices, '2')
 
-    allTimes = [sceneSubmitNearButton, sceneSubmitNearButton_2, sceneSubmitNearButton_3]
+    allTimesLeft = [sceneSubmitNearButton, sceneSubmitNearButton_2, sceneSubmitNearButton_3]
 
-    sceneName = 'ILM_Submit-Near_Far_Scene'
+    writeToDb("SF_MQ_L_Dropdown", allTimesLeft)
 
+    sceneName = 'ILM_Submit-Far_Right_Scene'
 
-    sceneSubmitNearButton_Right = runAnalyzeFirstButton(probands, sceneName, devices)
-    sceneSubmitNearButton_2_Right = runAnalyzeButton(probands, sceneName, devices, '1')
-    sceneSubmitNearButton_3_Right = runAnalyzeButton(probands, sceneName, devices, '2')
+    sceneSubmitNearButton_Right = runAnalyzeFirstToggle(probands, sceneName, devices)
+    sceneSubmitNearButton_2_Right = runAnalyzeToggle(probands, sceneName, devices, '1')
+    sceneSubmitNearButton_3_Right = runAnalyzeToggle(probands, sceneName, devices, '2')
 
     allTimesRight = [sceneSubmitNearButton_Right, sceneSubmitNearButton_2_Right, sceneSubmitNearButton_3_Right]
+
+    writeToDb("SF_MQ_R_Dropdown", allTimesRight)
+
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
-    fig.suptitle('Bearbeitungszeit der Buttons')
+    fig.suptitle('Bearbeitungszeit der Dropdown Menüs')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[1].boxplot(allTimes, notch=False)
+    axs[1].boxplot(allTimesLeft, showmeans=True)
     axs[1].sharey(axs[0])
-    axs[0].boxplot(allTimesRight, notch=False)
+    axs[0].boxplot(allTimesRight, showmeans=True)
 
 
     axs[0].set(ylabel='Sekunden')
@@ -208,14 +244,14 @@ if __name__ == "__main__":
 
 
     axs[1].set_title('2. Szene: Linke Hand')
-    axs[1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                              "Button 2" + boxplotCap(allTimes[1]),
-                              "Button 3" + boxplotCap(allTimes[2])])
+    axs[1].set_xticks([1, 2, 3], ["Dropdown 1" + boxplotCap(allTimesLeft[0]),
+                              "Dropdown 2" + boxplotCap(allTimesLeft[1]),
+                              "Dropdown 3" + boxplotCap(allTimesLeft[2])])
 
     axs[0].set_title('1. Szene: Rechte Hand')
-    axs[0].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimesRight[0]),
-                                  "Button 2" + boxplotCap(allTimesRight[1]),
-                                  "Button 3" + boxplotCap(allTimesRight[2])])
+    axs[0].set_xticks([1, 2, 3], ["Dropdown 1" + boxplotCap(allTimesRight[0]),
+                                  "Dropdown 2" + boxplotCap(allTimesRight[1]),
+                                  "Dropdown 3" + boxplotCap(allTimesRight[2])])
 
     plt.show()
 

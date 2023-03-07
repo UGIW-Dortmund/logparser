@@ -61,10 +61,10 @@ def writeToDb(name, value):
 # This is added so that many files can reuse the function get_database()
 def boxplotCap(valArray):
     return f'\n n = {len(valArray)} \n' \
-           f'Me.={round(statistics.median(valArray), 2)}s \n ';
-          # f'Mi.={round(statistics.mean(valArray), 2)}s \n ';
-    # f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
-    # f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
+           f'Me. = {round(statistics.median(valArray), 3)} s \n ' \
+           f'Mi. = {round(statistics.mean(valArray), 2)}s \n ' \
+            f'S. Abw. = {round(statistics.stdev(valArray), 3)} s \n ' \
+            f'M. Abw. = {round(mean(valArray), 3)} s \n ';
 
 def convertToFloat(arr):
 
@@ -90,6 +90,23 @@ def convertToFloat(arr):
     return allValues
 
 
+def convertToFloat1D(arr):
+
+    arr = arr.get('values')
+    arr = list(arr)
+    lenArray = len(arr)
+
+
+    allValues = []
+
+    for elem in arr:
+        allValues.append(float(elem))
+
+
+    return allValues
+
+
+
 def setXTicks_param(valArray, descArray):
     xtick = []
     i = 0
@@ -98,7 +115,7 @@ def setXTicks_param(valArray, descArray):
     for elem in valArray:
         s = boxplotCap(elem)
 
-        if arrayDescr:
+        if descArray:
             xtick.append(descArray[i] + s)
         else:
             xtick.append(s)
@@ -132,50 +149,90 @@ if __name__ == "__main__":
     sceneGaze_R_MQ2 = tresor.find_one({'name': 'Gaze_AD_R_MQ2'})
     sceneGaze_L_MQ2 = tresor.find_one({'name': 'Gaze_AD_L_MQ2'})
 
+    sceneGaze_HL2_first = tresor.find_one({'name': 'Gaze_UWP_HL2_first'})
+    sceneGaze_HL2_second = tresor.find_one({'name': 'Gaze_UWP_HL2_second'})
+
+    sceneGaze_HPG2_first = tresor.find_one({'name': 'Gaze_UWP_HPG2_first'})
+    sceneGaze_HPG2_second = tresor.find_one({'name': 'Gaze_UWP_HPG2_second'})
+
+
     sceneGaze_R_MQP = convertToFloat(sceneGaze_R_MQP)
     sceneGaze_L_MQP = convertToFloat(sceneGaze_L_MQP)
     sceneGaze_R_MQ2 = convertToFloat(sceneGaze_R_MQ2)
     sceneGaze_L_MQ2 = convertToFloat(sceneGaze_L_MQ2)
 
+    sceneGaze_HL2_first = convertToFloat1D(sceneGaze_HL2_first)
+    sceneGaze_HL2_second = convertToFloat1D(sceneGaze_HL2_second)
+    sceneGaze_HPG2_first = convertToFloat1D(sceneGaze_HPG2_first)
+    sceneGaze_HPG2_second = convertToFloat1D(sceneGaze_HPG2_second)
 
 
-    fig, axs = plt.subplots(4, 1, figsize=(10, 8))
+    sceneGaze_R_MQP = aggregateData(sceneGaze_R_MQP)
+    sceneGaze_L_MQP = aggregateData(sceneGaze_L_MQP)
+    sceneGaze_R_MQ2 = aggregateData(sceneGaze_R_MQ2)
+    sceneGaze_L_MQ2 = aggregateData(sceneGaze_L_MQ2)
 
-    fig.suptitle('Bearbeitungszeit mit dem Gaze-Operator')
+
+
+    # Aggregieren der Daten
+    operatorGaze_second = [sceneGaze_R_MQP, sceneGaze_L_MQP, sceneGaze_R_MQ2, sceneGaze_L_MQ2, sceneGaze_HL2_second, sceneGaze_HPG2_second]
+
+    operatorGaze_UWP_second = [sceneGaze_HL2_second, sceneGaze_HPG2_second]
+    operatorGaze_AD_second = [sceneGaze_R_MQP, sceneGaze_L_MQP, sceneGaze_R_MQ2, sceneGaze_L_MQ2]
+
+    operatorGaze_first = [sceneGaze_HL2_first, sceneGaze_HPG2_first]
+
+    operatorGaze_first = aggregateData(operatorGaze_first)
+    operatorGaze_second = aggregateData(operatorGaze_second)
+
+    operatorGaze_UWP_second = aggregateData(operatorGaze_UWP_second)
+    operatorGaze_AD_second = aggregateData(operatorGaze_AD_second)
+
+    writeToDb("Gaze_first", operatorGaze_first)
+    writeToDb("Gaze_second", operatorGaze_second)
+
+    writeToDb("Gaze_AD_second", operatorGaze_AD_second)
+    writeToDb("Gaze_UWP_second", operatorGaze_UWP_second)
+
+
+    operatorGaze = [operatorGaze_AD_second, operatorGaze_UWP_second]
+
+
+    print("Operator Gaze")
+    print(operatorGaze)
+
+
+
+    box_MQP = [sceneGaze_R_MQP, sceneGaze_L_MQP]
+    box_MQ2 = [sceneGaze_R_MQ2, sceneGaze_L_MQ2]
+
+    box_R = [sceneGaze_R_MQP, sceneGaze_R_MQ2]
+    box_L = [sceneGaze_L_MQP, sceneGaze_L_MQ2]
+
+    writeToDb("Gaze_AD_MQP", box_MQP)
+    writeToDb("Gaze_AD_MQ2", box_MQ2)
+
+    writeToDb("Gaze_AD_R", box_R)
+    writeToDb("Gaze_AD_L", box_L)
+
+
+
+    ### Graphic
+    fig, axs = plt.subplots(1, 1, figsize=(10, 8))
+
+    fig.suptitle('Bearbeitungszeit mit dem nachgelagerten Schaltflächen des Gaze-Operators: Gesamt mit HPG2, MQ2, MQP, HL2')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0].boxplot(sceneGaze_R_MQP, notch=False)
-    axs[1].boxplot(sceneGaze_L_MQP, notch=False)
-    axs[2].boxplot(sceneGaze_R_MQ2, notch=False)
-    axs[3].boxplot(sceneGaze_L_MQ2, notch=False)
-    axs[1].sharey(axs[0])
-    axs[2].sharey(axs[0])
-    axs[3].sharey(axs[0])
+    plt.violinplot(operatorGaze)
 
-    axs[0].set(ylabel='Sekunden')
-    axs[1].set(ylabel='Sekunden')
-    axs[2].set(ylabel='Sekunden')
-    axs[3].set(ylabel='Sekunden')
+    plt.ylabel('Sekunden')
+    # axs[1].set(ylabel='Sekunden')
 
-    arrayDescr = ['btnL1', 'btnR1', 'btnD3', 'btnD2', 'btnL3', 'btnD4', 'btnR3', 'btnR4', 'btnD1', 'btnL4', 'btnR2', 'btnL2']
 
-    (e_R_MQP, x_R_MQP) = setXTicks_param(sceneGaze_R_MQP, arrayDescr)
-    (e_L_MQP, x_L_MQP) = setXTicks_param(sceneGaze_L_MQP, arrayDescr)
+    descArrayXTicks = ["Android Plattform", "Windows Plattform"]
 
-    (e_R_MQ2, x_R_MQ2) = setXTicks_param(sceneGaze_R_MQ2, arrayDescr)
-    (e_L_MQ2, x_L_MQ2) = setXTicks_param(sceneGaze_L_MQ2, arrayDescr)
+    (elemHL, xHL) = setXTicks_param(operatorGaze, descArrayXTicks)
 
-    axs[0].set_title('Gaze mit der rechten Hand und der MQP')
-    axs[0].set_xticks(e_R_MQP, x_R_MQP)
-
-    axs[1].set_title('Gaze mit der linken Hand und der MQP')
-    axs[1].set_xticks(e_L_MQP, x_L_MQP)
-
-    axs[2].set_title('Gaze mit der rechten Hand und der MQ2')
-    axs[2].set_xticks(e_R_MQ2, x_R_MQ2)
-
-    axs[3].set_title('Gaze mit der linken Hand und der MQ2')
-    axs[3].set_xticks(e_L_MQ2, x_L_MQ2)
+    # axs[0].set_title('Gaze mit der MS HoloLens 2')
+    plt.xticks(elemHL, xHL)
 
     plt.show()
-
-

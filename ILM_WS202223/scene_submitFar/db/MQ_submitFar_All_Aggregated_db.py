@@ -7,6 +7,7 @@ import pandas as pd
 import statistics
 from statistics import mean
 import locale
+import seaborn as sns
 
 from pymongo import MongoClient
 
@@ -24,6 +25,16 @@ def get_database():
     # Create the database for our example (we will use the same database throughout the tutorial
     return client['ilm']
 
+def aggregateData(array):
+    lenArray = len(array)
+    print("Len array " + str(lenArray))
+    data = []
+
+    for i in range(0, lenArray):
+        for elem in array[i]:
+            data.append(elem)
+
+    return data;
 
 
 
@@ -194,6 +205,7 @@ if __name__ == "__main__":
     allTimesSliderLeft = tresor.find_one({'name': 'SF_MQ_L_Slider'})
     allTimesSliderLeft = convertToFloat(allTimesSliderLeft)
 
+
     allTimesSliderRight = tresor.find_one({'name': 'SF_MQ_R_Slider'})
     allTimesSliderRight = convertToFloat(allTimesSliderRight)
 
@@ -206,51 +218,56 @@ if __name__ == "__main__":
     allTimesDropdownRight = convertToFloat(allTimesDropdownRight)
 
 
+
+
     allLeft =  allTimesButtonLeft + allTimesToggleLeft\
                + allTimesSliderLeft + allTimesDropdownLeft
+
 
 
     allRight = allTimesButtonRight + allTimesToggleRight \
                + allTimesSliderRight + allTimesDropdownRight
 
-    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
+    allFirst = allTimesButtonLeft[0] + allTimesToggleLeft[0] \
+              + allTimesSliderLeft[0] + allTimesDropdownLeft[0] \
+              + allTimesButtonRight[0] + allTimesToggleRight[0] \
+              + allTimesSliderRight[0] + allTimesDropdownRight[0]
 
-    fig.suptitle('Bearbeitungszeit aller Elemente')
+    #allFirst = aggregateData(allFirst)
+
+    allSecond = allTimesButtonLeft[1] + allTimesToggleLeft[1] \
+               + allTimesSliderLeft[1] + allTimesDropdownLeft[1] \
+               + allTimesButtonRight[1] + allTimesToggleRight[1] \
+               + allTimesSliderRight[1] + allTimesDropdownRight[1] \
+                + allTimesButtonLeft[2] + allTimesToggleLeft[2] \
+                + allTimesSliderLeft[2] + allTimesDropdownLeft[2] \
+                + allTimesButtonRight[2] + allTimesToggleRight[2] \
+                + allTimesSliderRight[2] + allTimesDropdownRight[2]
+
+    # allSecond = aggregateData(allSecond)
+
+    # allBoxplot = [{'first': allFirst, 'second': allSecond}]
+
+    allBoxplot = [allFirst, allSecond]
+
+    fig = plt.subplots(figsize=(10, 8))
+
+    plt.ylabel('Sekunden')
+
+    tips = sns.load_dataset("tips")
+    print(tips)
+
+    # fig.suptitle('Bearbeitungszeit aller Elemente')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0].boxplot(allRight, showmeans=True, vert=True)
 
-    axs[1].boxplot(allLeft, showmeans=True, vert=True)
-    axs[1].sharey(axs[0])
+    descArray = ["Erste S.", "Nachgelagerte S."]
 
+    (x_nums, x_text) = setXTicks_param(allBoxplot, descArray)
 
-    axs[0].set(ylabel='Sekunden')
-    axs[1].set(ylabel='Sekunden')
+    sns.violinplot(allBoxplot, split=True)
 
-
-    descArray = ["Button 1", "Button 2", "Button 3",
-                 "Toggle 1", "Toggle 2", "Toggle 3",
-                 "Slider 1", "Slider 2", "Slider 3",
-                 "Dropdown 1", "Dropdown 2", "Dropdown 3"]
-
-    descArray = ["B1", "B2", "B3",
-                 "T1", "T2", "T3",
-                 "S1", "S2", "S3",
-                 "D1", "D2", "D3"]
-
-    # (x_nums, x_text) = setXTicks_param(allLeft, descArray)
-
-    (y_nums, y_text) = setYTicks_param(allLeft, descArray)
-
-
-
-    axs[0].set_title('1. Szenen: Rechte Hand')
-    axs[0].set_xticks(y_nums, y_text)
-
-    axs[1].set_title('2. Szenen: Linke Hand')
-    axs[1].set_xticks(y_nums, y_text)
-   # axs[1].set_xticks(x_nums, x_text)
-
+    plt.xticks([0, 1], x_text)
 
     plt.show()
 

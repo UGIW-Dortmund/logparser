@@ -234,6 +234,8 @@ if __name__ == "__main__":
               + allTimesButtonRight[0] + allTimesToggleRight[0] \
               + allTimesSliderRight[0] + allTimesDropdownRight[0]
 
+    writeToDb('SF_AD_first', allFirst)
+
     #allFirst = aggregateData(allFirst)
 
     allSecond = allTimesButtonLeft[1] + allTimesToggleLeft[1] \
@@ -245,6 +247,8 @@ if __name__ == "__main__":
                 + allTimesButtonRight[2] + allTimesToggleRight[2] \
                 + allTimesSliderRight[2] + allTimesDropdownRight[2]
 
+    writeToDb('SF_AD_second', allSecond)
+
     # allSecond = aggregateData(allSecond)
 
     # allBoxplot = [{'first': allFirst, 'second': allSecond}]
@@ -255,8 +259,6 @@ if __name__ == "__main__":
 
     plt.ylabel('Sekunden')
 
-    tips = sns.load_dataset("tips")
-    print(tips)
 
     # fig.suptitle('Bearbeitungszeit aller Elemente')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])

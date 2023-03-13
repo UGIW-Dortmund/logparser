@@ -54,6 +54,8 @@ def writeToDb(name, value):
 ### Converting data from the db
 Data from db is retrieved as strings. This method turns it into floats.
 
+
+This is for 2 Dimensions Array
 ```
 def convertToFloat(arr):
 
@@ -80,6 +82,25 @@ def convertToFloat(arr):
 ```
 
 
+This is for 1 Dimension Array
+```
+def convertToFloat(arr):
+    print(arr)
+    arr2 = arr.get('values')
+    print(arr2)
+    arr2 = list(arr2)
+    lenArray = len(arr2)
+    print(lenArray)
+
+    allValues = []
+
+    for e in range(0, lenArray):
+        allValues.append(float(e))
+
+
+
+    return allValues
+```
 
 
 ### Flatten the data 

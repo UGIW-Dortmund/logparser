@@ -106,15 +106,28 @@ Parser dedicated for ILM log files which are slightly different to the previous 
 Giving caption with stat values to the boxplots
 ```
 def boxplotCap(valArray):
+    median = round(statistics.median(valArray), 2)
+    median = str(median).replace('.', ',')
 
-    return f' \n n = {len(valArray)} \n \n ' \
-            f'Me. = {round(statistics.median(valArray), 3)} s \n ' \
-            f'Mi. = {round(statistics.mean(valArray), 3)} s \n ' \
-            f'S. Ab. = {round(statistics.stdev(valArray), 3)} s \n ' \
-            f'M. Ab. = {round(mean(valArray), 3)} s \n ' \
-            f'1Q = {round(np.percentile(valArray, 25), 3)} s \n' \
-            f'3Q = {round(np.percentile(valArray, 75), 3)} s ';
+    mean = round(statistics.mean(valArray), 2)
+    mean = str(mean).replace('.', ',')
 
+    stdev = round(statistics.stdev(valArray), 2)
+    stdev = str(stdev).replace('.', ',')
+
+    first_quartil = round(np.percentile(valArray, 25), 2)
+    first_quartil = str(first_quartil).replace('.', ',')
+
+    third_quartil = round(np.percentile(valArray, 75), 2)
+    third_quartil = str(third_quartil).replace('.', ',')
+
+
+    return f'\n n = {len(valArray)} \n' \
+           f'Me. = {median} s \n ' \
+           f'Mi. = {mean} s \n ' \
+           f'S. Abw. = {stdev} s \n ' \
+           f'1Q = {first_quartil} s \n ' \
+            f'3Q = {third_quartil} s';
 ```
 
 ### Aggregate Data

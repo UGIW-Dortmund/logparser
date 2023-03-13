@@ -22,8 +22,30 @@ def get_database():
     # Create the database for our example (we will use the same database throughout the tutorial
     return client['ilm']
 
+""" Global Definition of Boxplot Captions """
+def boxplotCap(valArray):
+    median = round(statistics.median(valArray), 2)
+    median = str(median).replace('.', ',')
+
+    mean = round(statistics.mean(valArray), 2)
+    mean = str(mean).replace('.', ',')
+
+    stdev = round(statistics.stdev(valArray), 2)
+    stdev = str(stdev).replace('.', ',')
+
+    first_quartil = round(np.percentile(valArray, 25), 2)
+    first_quartil = str(first_quartil).replace('.', ',')
+
+    third_quartil = round(np.percentile(valArray, 75), 2)
+    third_quartil = str(third_quartil).replace('.', ',')
 
 
+    return f'\n n = {len(valArray)} \n' \
+           f'Me. = {median} s \n ' \
+           f'Mi. = {mean} s \n ' \
+           f'S. Abw. = {stdev} s \n ' \
+           f'1Q = {first_quartil} s \n ' \
+            f'3Q = {third_quartil} s';
 
 
 
@@ -57,24 +79,26 @@ def runAnalyzeElementSteps(probands, sceneName, device):
 
     for p in probands:
 
-        i = runAnalyzeCompletion(p, sceneName, device)
+        for d in device:
 
-        if (i == 10):
-            sf_array = runAnalyzeSubmitFarArray(p, sceneName, device)
+            i = runAnalyzeCompletion(p, sceneName, d)
 
-            start_time = sf_array[0].get('time')
-            start_date = sf_array[0].get('date')
+            if (i == 10):
+                sf_array = runAnalyzeSubmitFarArray(p, sceneName, d)
 
-            start = pd.to_datetime(start_date + ' ' + start_time)
+                start_time = sf_array[0].get('time')
+                start_date = sf_array[0].get('date')
 
-            end_time = sf_array[len(sf_array) - 1].get('time')
-            end_date = sf_array[len(sf_array) - 1].get('date')
+                start = pd.to_datetime(start_date + ' ' + start_time)
 
-            end = pd.to_datetime(end_date + ' ' + end_time)
+                end_time = sf_array[len(sf_array) - 1].get('time')
+                end_date = sf_array[len(sf_array) - 1].get('date')
 
-            delta = end - start
+                end = pd.to_datetime(end_date + ' ' + end_time)
 
-            timeArray.append(delta)
+                delta = end - start
+
+                timeArray.append(delta.total_seconds() / 10)
 
     return timeArray
 
@@ -135,11 +159,56 @@ def runAnalyzeCompletionElement(scene, device, element, probandId):
 
 # This is added so that many files can reuse the function get_database()
 def boxplotCap(valArray):
+    median = round(statistics.median(valArray), 2)
+    median = str(median).replace('.', ',')
+
+    mean = round(statistics.mean(valArray), 2)
+    mean = str(mean).replace('.', ',')
+
+    stdev = round(statistics.stdev(valArray), 2)
+    stdev = str(stdev).replace('.', ',')
+
+    first_quartil = round(np.percentile(valArray, 25), 2)
+    first_quartil = str(first_quartil).replace('.', ',')
+
+    third_quartil = round(np.percentile(valArray, 75), 2)
+    third_quartil = str(third_quartil).replace('.', ',')
+
     return f'\n n = {len(valArray)} \n' \
-           f'Me.={round(statistics.median(valArray), 3)} s \n ' \
-           f'Mi.={round(statistics.mean(valArray), 3)} s \n ';
-           # f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
-           # f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
+           f'Me. = {median} s \n ' \
+           f'Mi. = {mean} s \n ' \
+           f'S. Abw. = {stdev} s \n ' \
+           f'1Q = {first_quartil} s \n ' \
+           f'3Q = {third_quartil} s';
+
+
+
+def setXTicks_param(valArray, descArray):
+    xtick = []
+    i = 0
+
+    # The descirption of fields
+    for elem in valArray:
+        s = boxplotCap(elem)
+
+        if descArray:
+            xtick.append(descArray[i] + s)
+        else:
+            xtick.append(s)
+        i = i + 1
+
+    lenVA = len(valArray)
+
+    # First Parameter the number of fields
+    elements = []
+    for elem in range(0, lenVA):
+        elements.append((elem + 1))
+
+    return (elements, xtick)
+
+
+
+
 
 if __name__ == "__main__":
     # Get the database
@@ -153,23 +222,34 @@ if __name__ == "__main__":
     print(probands)
 
     sceneName = 'ILM_Submit-Far_Left'
-    devices = 'HL2'
-    print(runAnalyzeElementSteps(probands, sceneName, devices))
-    # runAnalyzeCompletionForAllProbands(probands, sceneName, devices)
-
-    #sceneSubmitFar_Right_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
-    # writeToDb('SF_UWP_R_HPG2', sceneSubmitFar_Right_HPG2)
+    devices = ['HPG2']
+    SF_UWP_Left_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices)
+    devices = ['HL2']
+    SF_UWP_Left_HL2 = runAnalyzeElementSteps(probands, sceneName, devices)
 
     sceneName = 'ILM_Submit-Far_Right'
+    devices = ['HPG2']
+    SF_UWP_Right_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices)
     devices = ['HL2']
-    hand = 'Right'
-    # sceneSubmitFar_Right_HL2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
+    SF_UWP_Right_HL2 = runAnalyzeElementSteps(probands, sceneName, devices)
+
     # writeToDb('SF_UWP_R_HPG2', sceneSubmitFar_Right_HPG2)
 
 
+    allBoxplot = [SF_UWP_Right_HL2, SF_UWP_Right_HPG2, SF_UWP_Left_HL2, SF_UWP_Left_HPG2]
 
-    #print(sceneSubmitFar_Right_HPG2)
-    #allTimes = sceneSubmitFar_Right_HPG2
+    # fig = plt.subplot(figsize=(10, 8))
+
+    descArray = ['R HL2', 'R HPG2', 'L HL2', 'L HPG2']
+
+    num, val = setXTicks_param(allBoxplot, descArray)
+
+    plt.boxplot(allBoxplot, showmeans=True)
+
+    plt.xticks(num, val)
+
+    plt.show()
+
 
     '''
     fig, axs = plt.subplots(2, 2, figsize=(10, 8))

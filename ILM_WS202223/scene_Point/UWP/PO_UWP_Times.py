@@ -88,26 +88,18 @@ def writeToDb(name, value):
 def runAnalyzeCubes(probands, sceneName, device, refreshRate):
     timeArray = []
 
-    cubeValues = []
-    c1 = []
-    c2 = []
-    c3 = []
-    c4 = []
-    c5 = []
-    c6 = []
-
-    cubeArray = [['Cube_1', 300], ['Cube_2', 250], ['Cube_3', 200], ['Cube_4', 150], ['Cube_5', 120], ['Cube_6', 80]]
-    # cubeArray = [['Cube_1', 300]]
+    # Die Zeiten für die Würfel stimmen für HL2 und HPG2
+    cubeArray = [['Cube_1', 400], ['Cube_2', 300], ['Cube_3', 200], ['Cube_4', 350], ['Cube_5', 250]]
+    # cubeArray = [['Cube_1', 400]]
 
     for p in probands:
 
         for d in device:
 
-
             # For-Loop mit den verschiedenen Würfeln
             for cube in cubeArray:
 
-                start_array = runAnaStartAction(p, sceneName, d, cube[0])
+                start_array = runAnaStartAction(p, sceneName, d, str(cube[1]))
                 end_array = runAnaFinishAction(p, sceneName, d, cube[0])
 
                 if len(start_array) > 0 and len(end_array) > 0:
@@ -127,34 +119,22 @@ def runAnalyzeCubes(probands, sceneName, device, refreshRate):
 
                     delta = delta - (cube[1] * (1 / refreshRate))
 
-                    if cube[0] == 'Cube_1':
-                        c1.append(delta)
-                    elif cube[0] == 'Cube_2':
-                        c2.append(delta)
-                    elif cube[0] == 'Cube_3':
-                        c3.append(delta)
-                    elif cube[0] == 'Cube_4':
-                        c4.append(delta)
-                    elif cube[0] == 'Cube_5':
-                        c5.append(delta)
-                    elif cube[0] == 'Cube_6':
-                        c6.append(delta)
+                    if delta > 0:
+                        timeArray.append(delta)
 
                     print('For Proband: ' + str(p) + '\t' + str(cube[0]) + '\t Time: ' + str(delta))
 
-    cubeValues = [c1, c2, c3, c4, c5, c6]
-
-    return cubeValues
+    return timeArray
 
 
 """ Gibt alle SF Tupel zurück """
 
 
-def runAnaStartAction(proband, scene, device, cube):
+def runAnaStartAction(proband, scene, device, countdown):
     array = col.find({'scene': scene,
                          'dev': device,
-                         'action': 'Hover Start Interactable',
-                         'actionvalue': cube,
+                         'action': 'Point Count Start',
+                         'actionvalue': countdown,
                          'prob': proband
                          })
 
@@ -165,8 +145,8 @@ def runAnaStartAction(proband, scene, device, cube):
 def runAnaFinishAction(proband, scene, device, cube):
     array = col.find({'scene': scene,
                          'dev': device,
-                         'action': 'Hover successfully finished',
-                         'actionvalue': cube,
+                         'action': 'Point Count End',
+                         'oelement': cube,
                          'prob': proband
                          })
 
@@ -219,69 +199,35 @@ if __name__ == "__main__":
 
     rrMQ2 = 120
     rrMQP = 90
+    rrHL2 = 72
+    rrHPG2 = 120
 
-    sceneName = 'ILM_Point_Left'
-    devices = ['MQ2']
-    PO_MQ_Left_MQ2 = runAnalyzeCubes(probands, sceneName, devices, rrMQ2)
-
-    sceneName = 'ILM_Point_Right'
-    PO_MQ_Right_MQ2 = runAnalyzeCubes(probands, sceneName, devices, rrMQ2)
-
-
-    sceneName = 'ILM_Point_Left'
-    devices = ['MQP']
-    PO_MQ_Left_MQP = runAnalyzeCubes(probands, sceneName, devices, rrMQP)
+    sceneName = 'ILM_Point'
+    devices = ['HL2']
+    PO_UWP_HL2 = runAnalyzeCubes(probands, sceneName, devices, rrHL2)
 
 
-    sceneName = 'ILM_Point_Right'
-    PO_MQ_Right_MQP = runAnalyzeCubes(probands, sceneName, devices, rrMQP)
-
-
-    print(PO_MQ_Left_MQ2)
-
-    allBoxplot = PO_MQ_Left_MQ2
+    devices = ['HPG2']
+    PO_UWP_HPG2 = runAnalyzeCubes(probands, sceneName, devices, rrHPG2)
+    print(PO_UWP_HPG2)
+    # writeToDb('PO_MQ_Left_MQ2', PO_MQ_Left_MQ2)
 
 
 
-    descArray = ['Cube 1', 'Cube 2', 'Cube 3', 'Cube 4', 'Cube 5', 'Cube 6']
+    allBoxplot = [PO_UWP_HL2, PO_UWP_HPG2]
+
+
+    # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
+    descArray = ['HL2', 'HPG2']
 
     num, val = setXTicks_param(allBoxplot, descArray)
 
-    # plt.title('Bearbeitungszeit des Point-Operators MQ')
+    plt.title('Bearbeitungszeit des Point-Operators UWP')
+    plt.boxplot(allBoxplot, showmeans=True)
 
-    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
-
-    axs[0, 0].set_title('Rechte Hand - MQ2')
-    axs[0, 0].boxplot(PO_MQ_Right_MQ2, showmeans=True)
-    num, val = setXTicks_param(PO_MQ_Right_MQ2, descArray)
-    axs[0, 0].set_xticks(num, val)
-
-    axs[0, 1].set_title('Linke Hand - MQ2')
-    axs[0, 1].boxplot(PO_MQ_Left_MQ2, showmeans=True)
-    axs[0, 1].sharey(axs[0, 0])
-    num, val = setXTicks_param(PO_MQ_Left_MQ2, descArray)
-    axs[0, 1].set_xticks(num, val)
-
-    axs[1, 0].set_title('Rechte Hand - MQP')
-    axs[1, 0].boxplot(PO_MQ_Right_MQP, showmeans=True)
-    axs[1, 0].sharey(axs[0, 0])
-    num, val = setXTicks_param(PO_MQ_Right_MQP, descArray)
-    axs[1, 0].set_xticks(num, val)
-
-    axs[1, 1].set_title('Linke Hand - MQP')
-    axs[1, 1].boxplot(PO_MQ_Left_MQP, showmeans=True)
-    axs[1, 1].sharey(axs[0, 0])
-    num, val = setXTicks_param(PO_MQ_Left_MQP, descArray)
-    axs[1, 1].set_xticks(num, val)
-
-    axs[0, 0].set(ylabel='Sekunden')
-    axs[0, 1].set(ylabel='Sekunden')
-    axs[1, 0].set(ylabel='Sekunden')
-    axs[1, 1].set(ylabel='Sekunden')
-
+    plt.xticks(num, val)
+    plt.ylabel('Sekunden')
 
     plt.show()
 
     # Noch Auswirkung für die einzelnen Würfel machen!
-
-

@@ -4,7 +4,6 @@ This Parser is for proceeding the Log Files of the ILM project.
 
 ## Scripts
 
-### Standart Queries
 
 #### UWP_gaze_Times.py
 Getting all execution times of the `Gaze Operator`.
@@ -18,6 +17,24 @@ Aggregates the data from above by retrieving it from the db.
 
 ####  test.py
 Testing the single scripts for VR
+
+
+### scene_Point
+
+#### MQ
+- ``PO_MQ_Times.py``: Getting all times for pointing at the MQ applications
+
+### scene_submitFar
+
+
+#### all
+- ```SF_ALL.py```: Aggregiert alle Werte der nachgelagerten Schaltflächen.
+
+#### UWP
+
+- ``UWP_submitFar_First_Times.py``: Die Zeiten der ersten Schaltflächen aller Windows-Anwendungen
+- ``UWP_submitFar_Second_Times_2.py``: Die Zeiten aller nachgelagerten Schaltflächen für den SF-Operator
+- - ``UWP_submitFar_Second_Times.py``: Vorherige Version des oberen Skript mit einer groben Aggregation
 
 
 
@@ -147,8 +164,8 @@ def boxplotCap(valArray):
            f'Me. = {median} s \n ' \
            f'Mi. = {mean} s \n ' \
            f'S. Abw. = {stdev} s \n ' \
-           f'1Q = {first_quartil} s \n ' \
-            f'3Q = {third_quartil} s';
+           f'U.Q. = {first_quartil} s \n ' \
+           f'O.Q. = {third_quartil} s';
 ```
 
 ### Aggregate Data

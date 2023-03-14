@@ -93,46 +93,34 @@ def runAnalyzeElementSteps(probands, sceneName, device):
         for d in device:
 
             i = runAnalyzeCompletion(p, sceneName, d)
-            sf_array = runAnalyzeSubmitFarArray(p, sceneName, d)
 
             if (i == 10):
+                sf_array = runAnalyzeSubmitFarArray(p, sceneName, d)
 
+                m = 0
 
-                sf_array_start = runAnalyzeSubmitFarArrayFirst(p, sceneName, d)
-                # sf_array = runAnalyzeSubmitFarArray(p, sceneName, d)
+                ''' Mit dieser For-Schleife werden alle Deltas gewertet '''
+                for t in range(0, len(sf_array) - 1):
+                    start_time = sf_array[m].get('time')
+                    start_date = sf_array[m].get('date')
 
-                start_time = sf_array_start[0].get('time')
-                start_date = sf_array_start[0].get('date')
+                    start = pd.to_datetime(start_date + ' ' + start_time)
+                    m = m + 1
 
-                start = pd.to_datetime(start_date + ' ' + start_time)
+                    end_time = sf_array[m].get('time')
+                    end_date = sf_array[m].get('date')
 
-                end_time = sf_array[0].get('time')
-                end_date = sf_array[0].get('date')
+                    end = pd.to_datetime(end_date + ' ' + end_time)
 
-                end = pd.to_datetime(end_date + ' ' + end_time)
+                    delta = end - start
 
-                delta = end - start
-
-                timeArray.append(delta.total_seconds())
+                    timeArray.append(delta.total_seconds())
 
     return timeArray
 
 
 """ Gibt alle SF Tupel zurück """
 
-
-
-def runAnalyzeSubmitFarArrayFirst(proband, scene, device):
-    sf_array = col.find({'scene': scene,
-                         'dev': device,
-                         'action': 'Start Scene',
-                         'actionvalue': scene,
-                         'prob': proband
-                         })
-
-    sf_array = list(sf_array)
-
-    return sf_array
 
 def runAnalyzeSubmitFarArray(proband, scene, device):
     sf_array = col.find({'scene': scene,
@@ -250,16 +238,11 @@ if __name__ == "__main__":
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
     print(probands)
 
-    sceneName = 'ILM_Submit-Far_Right'
+    sceneName = 'ILM_Submit-Far_Left'
     devices = ['HPG2']
     SF_UWP_Left_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices)
     devices = ['HL2']
     SF_UWP_Left_HL2 = runAnalyzeElementSteps(probands, sceneName, devices)
-
-
-    print(SF_UWP_Left_HL2)
-
-
 
     sceneName = 'ILM_Submit-Far_Right'
     devices = ['HPG2']
@@ -267,11 +250,11 @@ if __name__ == "__main__":
     devices = ['HL2']
     SF_UWP_Right_HL2 = runAnalyzeElementSteps(probands, sceneName, devices)
 
-    writeToDb('SF_UWP_R_HPG2_first', SF_UWP_Right_HPG2)
-    writeToDb('SF_UWP_L_HPG2_first', SF_UWP_Left_HPG2)
+    writeToDb('SF_UWP_R_HPG2', SF_UWP_Right_HPG2)
+    writeToDb('SF_UWP_L_HPG2', SF_UWP_Left_HPG2)
 
-    writeToDb('SF_UWP_R_HL2_first', SF_UWP_Right_HL2)
-    writeToDb('SF_UWP_L_HL2_first', SF_UWP_Left_HL2)
+    writeToDb('SF_UWP_R_HL2', SF_UWP_Right_HL2)
+    writeToDb('SF_UWP_L_HL2', SF_UWP_Left_HL2)
 
     SF_UWP_Right = [SF_UWP_Right_HL2, SF_UWP_Right_HPG2]
     SF_UWP_Right = aggregateData(SF_UWP_Right)
@@ -279,33 +262,79 @@ if __name__ == "__main__":
     SF_UWP_Left = [SF_UWP_Left_HL2, SF_UWP_Left_HPG2]
     SF_UWP_Left = aggregateData(SF_UWP_Left)
 
-    writeToDb('SF_UWP_R_first', SF_UWP_Right)
-    writeToDb('SF_UWP_L_first', SF_UWP_Left)
+    writeToDb('SF_UWP_R', SF_UWP_Right)
+    writeToDb('SF_UWP_L', SF_UWP_Left)
 
     SF_UWP_ALL = [SF_UWP_Right, SF_UWP_Left]
     SF_UWP_ALL = aggregateData(SF_UWP_ALL)
 
-    writeToDb('SF_UWP_ALL_first', SF_UWP_ALL)
+    writeToDb('SF_UWP_ALL', SF_UWP_ALL)
 
     allBoxplot = [SF_UWP_Right_HL2, SF_UWP_Right_HPG2,
-                  SF_UWP_Left_HL2, SF_UWP_Left_HPG2,
-                  SF_UWP_Right, SF_UWP_Left,
-                  SF_UWP_ALL]
+                  SF_UWP_Left_HL2, SF_UWP_Left_HPG2]
+    # SF_UWP_Right, SF_UWP_Left,
+    #                   SF_UWP_ALL
 
-    # fig = plt.subplot(figsize=(10, 8))
+
 
     descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
+    descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2']
 
     num, val = setXTicks_param(allBoxplot, descArray)
 
-    plt.title('Bearbeitungszeit ersten Schalftlächen UWP')
-    plt.boxplot(allBoxplot, showmeans=True)
+    plt.title('Bearbeitungszeit nachgelagerte Schalftlächen UWP')
+    plt.violinplot(allBoxplot)
 
     plt.xticks(num, val)
     plt.ylabel('Sekunden')
 
     plt.show()
 
+    '''
+    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
+
+
+    fig.suptitle('Bearbeitungszeit der Buttons')
+    # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
+    axs[0, 0].boxplot(allTimes, notch=False)
+    axs[0, 1].boxplot(sceneSubmitFar_Right_HL2, notch=False)
+    axs[0, 1].sharey(axs[0, 0])
+
+    axs[1, 0].boxplot(allTimes)
+    axs[1, 0].sharey(axs[0, 0])
+
+    axs[1, 1].boxplot(allTimes)
+    axs[1, 1].sharey(axs[0, 0])
+
+    axs[0, 0].set(ylabel='Sekunden')
+    axs[0, 1].set(ylabel='Sekunden')
+    axs[1, 0].set(ylabel='Sekunden')
+    axs[1, 1].set(ylabel='Sekunden')
 
 
 
+    axs[0, 0].set_title('1. Szene: Rechte Hand - HPG2')
+    axs[0, 0].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
+                                           "Checkbox 1" + boxplotCap(allTimes[1]),
+                                           "Button 2" + boxplotCap(allTimes[2])])
+
+    axs[1, 0].set_title('1. Szene: Rechte Hand - HL2')
+    axs[1, 0].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
+                                              "Checkbox 1" + boxplotCap(allTimes[1]),
+                                              "Button 2" + boxplotCap(allTimes[2])])
+
+    axs[0, 1].set_title('2. Szene: Linke Hand - HPG2')
+    axs[0, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
+                                        "Checkbox 1" + boxplotCap(allTimes[1]),
+                                        "Button 2" + boxplotCap(allTimes[2])])
+
+    axs[1, 1].set_title('2. Szene: Linke Hand - HL2')
+    axs[1, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
+                                              "Checkbox 1" + boxplotCap(allTimes[1]),
+                                              "Button 2" + boxplotCap(allTimes[2])])
+
+
+    plt.show()
+
+
+    '''

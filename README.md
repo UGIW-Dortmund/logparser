@@ -2,27 +2,30 @@
 
 This Parser is for proceeding the Log Files of the ILM project.
 
+## Styling
+In order to read the text of the diagramms properly on DIN A4 pages. 
+Add the following settings to the diagramms: 
+- X-Ticks `` plt.xticks(num, val, fontsize=12)``
+- Diagramm Title `` plt.title('XXX', fontsize=15)``
+- Y-Label: ``    plt.ylabel('XXX', fontsize=12)``
+
 ## Scripts
 
+### scene_Grab
 
-#### UWP_gaze_Times.py
-Getting all execution times of the `Gaze Operator`.
+#### MQ
+- ``GR_MQ_Times `` Aggregation of all times
+- `` GR_MQ_Times_boxes `` Separation of the different cubes in the android scene.
+- `` GR_MQ_Times_First-Second `` Separation into first and second times
 
-#### UWP_gaze_Times_db.py
 
-Getting the data from above from the db.
-
-#### UWP_gaze_Times_db_aggr_db.py
-Aggregates the data from above by retrieving it from the db.
-
-####  test.py
-Testing the single scripts for VR
-
+#### UWP
+- ``GR_UWP_Times `` Checks if the Cubes are in the correct place and get the delta times 
 
 ### scene_Point
 
 #### MQ
-- ``PO_MQ_Times.py``: Getting all times for pointing at the MQ applications
+- ``PO_MQ_Times``: Getting all times for pointing at the MQ applications
 
 ### scene_submitFar
 
@@ -32,8 +35,8 @@ Testing the single scripts for VR
 
 #### UWP
 
-- ``UWP_submitFar_First_Times.py``: Die Zeiten der ersten Schaltflächen aller Windows-Anwendungen
-- ``UWP_submitFar_Second_Times_2.py``: Die Zeiten aller nachgelagerten Schaltflächen für den SF-Operator
+- ``UWP_submitFar_First_Times``: Die Zeiten der ersten Schaltflächen aller Windows-Anwendungen
+- ``UWP_submitFar_Second_Times_2``: Die Zeiten aller nachgelagerten Schaltflächen für den SF-Operator
 - - ``UWP_submitFar_Second_Times.py``: Vorherige Version des oberen Skript mit einer groben Aggregation
 
 

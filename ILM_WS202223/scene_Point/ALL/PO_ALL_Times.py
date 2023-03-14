@@ -85,77 +85,28 @@ def writeToDb(name, value):
 """ Ermittelt die Zeiten, welche die Probanden gebraucht haben """
 
 
-def runAnalyzeCubes(probands, sceneName, device, refreshRate):
-    timeArray = []
 
-    # Die Zeiten für die Würfel stimmen für HL2 und HPG2
-    cubeArray = [['Cube_1', 400], ['Cube_2', 300], ['Cube_3', 200], ['Cube_4', 350], ['Cube_5', 250]]
-    # cubeArray = [['Cube_1', 400]]
+def convertToFloat(arr):
 
-    for p in probands:
+    print(arr)
 
-        for d in device:
+    arr2 = arr.get('values')
 
-            # For-Loop mit den verschiedenen Würfeln
-            for cube in cubeArray:
+    print(arr2)
 
-                start_array = runAnaStartAction(p, sceneName, d, str(cube[1]))
-                end_array = runAnaFinishAction(p, sceneName, d, cube[0])
+    arr2 = list(arr2)
+    lenArray = len(arr2)
 
-                if len(start_array) > 0 and len(end_array) > 0:
-                    start_time = start_array[0].get('time')
-                    start_date = start_array[0].get('date')
+    print(lenArray)
 
-                    start = pd.to_datetime(start_date + ' ' + start_time)
+    allValues = []
 
-                    end_time = end_array[0].get('time')
-                    end_date = end_array[0].get('date')
-
-                    end = pd.to_datetime(end_date + ' ' + end_time)
-
-                    delta = end - start
-
-                    delta = delta.total_seconds()
-
-                    delta = delta - (cube[1] * (1 / refreshRate))
-
-                    if delta > 0:
-                        timeArray.append(delta)
-
-                    print('For Proband: ' + str(p) + '\t' + str(cube[0]) + '\t Time: ' + str(delta))
-
-    return timeArray
-
-
-""" Gibt alle SF Tupel zurück """
-
-
-def runAnaStartAction(proband, scene, device, countdown):
-    array = col.find({'scene': scene,
-                         'dev': device,
-                         'action': 'Point Count Start',
-                         'actionvalue': countdown,
-                         'prob': proband
-                         })
-
-    array = list(array)
-
-    return array
-
-def runAnaFinishAction(proband, scene, device, cube):
-    array = col.find({'scene': scene,
-                         'dev': device,
-                         'action': 'Point Count End',
-                         'oelement': cube,
-                         'prob': proband
-                         })
-
-    array = list(array)
-
-    return array
+    for e in range(0, lenArray):
+        allValues.append(float(arr2[e]))
 
 
 
+    return allValues
 
 
 
@@ -188,6 +139,7 @@ if __name__ == "__main__":
     dbname = get_database()
 
     col = dbname["uwp"]
+    tresor = dbname["tresor"]
 
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
@@ -204,28 +156,30 @@ if __name__ == "__main__":
 
     sceneName = 'ILM_Point'
     devices = ['HL2']
-    PO_UWP_HL2 = runAnalyzeCubes(probands, sceneName, devices, rrHL2)
-    writeToDb('PO_UWP_HL2', PO_UWP_HL2)
+    PO_UWP_HL2 = tresor.find_one({'name': 'PO_UWP_HL2'})
 
 
-    devices = ['HPG2']
-    PO_UWP_HPG2 = runAnalyzeCubes(probands, sceneName, devices, rrHPG2)
-    print(PO_UWP_HPG2)
-    writeToDb('PO_UWP_HPG2', PO_UWP_HPG2)
+    PO_UWP_HPG2 = tresor.find_one({'name': 'PO_UWP_HPG2'})
+    PO_UWP_HPG2 = convertToFloat(PO_UWP_HPG2)
+
+    PO_MQ = tresor.find_one({'name': 'PO_MQ'})
+    PO_MQ = convertToFloat(PO_MQ)
+
+    PO_ALL = [PO_UWP_HPG2, PO_MQ]
+    PO_ALL = aggregateData(PO_ALL)
 
 
-
-
-    allBoxplot = [PO_UWP_HL2, PO_UWP_HPG2]
+    allBoxplot = [PO_MQ, PO_UWP_HPG2, PO_ALL]
 
 
     # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
-    descArray = ['HL2', 'HPG2']
+    descArray = ['Android', 'Windows', 'Gesamt']
 
     num, val = setXTicks_param(allBoxplot, descArray)
 
-    plt.title('Bearbeitungszeit des Point-Operators UWP')
-    plt.boxplot(allBoxplot, showmeans=True)
+    plt.title('Bearbeitungszeit des Point-Operators Gesamt')
+    # plt.boxplot(allBoxplot, showmeans=True)
+    plt.violinplot(allBoxplot)
 
     plt.xticks(num, val)
     plt.ylabel('Sekunden')

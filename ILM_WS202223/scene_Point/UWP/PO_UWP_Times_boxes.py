@@ -92,6 +92,14 @@ def runAnalyzeCubes(probands, sceneName, device, refreshRate):
     cubeArray = [['Cube_1', 400], ['Cube_2', 300], ['Cube_3', 200], ['Cube_4', 350], ['Cube_5', 250]]
     # cubeArray = [['Cube_1', 400]]
 
+    cubeValues = []
+    c1 = []
+    c2 = []
+    c3 = []
+    c4 = []
+    c5 = []
+
+
     for p in probands:
 
         for d in device:
@@ -120,11 +128,23 @@ def runAnalyzeCubes(probands, sceneName, device, refreshRate):
                     delta = delta - (cube[1] * (1 / refreshRate))
 
                     if delta > 0:
-                        timeArray.append(delta)
+                        if cube[0] == 'Cube_1':
+                            c1.append(delta)
+                        elif cube[0] == 'Cube_2':
+                            c2.append(delta)
+                        elif cube[0] == 'Cube_3':
+                            c3.append(delta)
+                        elif cube[0] == 'Cube_4':
+                            c4.append(delta)
+                        elif cube[0] == 'Cube_5':
+                            c5.append(delta)
+
 
                     print('For Proband: ' + str(p) + '\t' + str(cube[0]) + '\t Time: ' + str(delta))
 
-    return timeArray
+    cubeValues = [c1, c2, c3, c4, c5]
+
+    return cubeValues
 
 
 """ Gibt alle SF Tupel zurück """
@@ -205,30 +225,33 @@ if __name__ == "__main__":
     sceneName = 'ILM_Point'
     devices = ['HL2']
     PO_UWP_HL2 = runAnalyzeCubes(probands, sceneName, devices, rrHL2)
-    writeToDb('PO_UWP_HL2', PO_UWP_HL2)
 
 
     devices = ['HPG2']
     PO_UWP_HPG2 = runAnalyzeCubes(probands, sceneName, devices, rrHPG2)
     print(PO_UWP_HPG2)
-    writeToDb('PO_UWP_HPG2', PO_UWP_HPG2)
+    # writeToDb('PO_MQ_Left_MQ2', PO_MQ_Left_MQ2)
 
 
 
+    descArray = ['Cube_1', 'Cube_2', 'Cube_3', 'Cube_4', 'Cube_5']
 
-    allBoxplot = [PO_UWP_HL2, PO_UWP_HPG2]
 
+    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
-    # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
-    descArray = ['HL2', 'HPG2']
+    axs[0].set_title('HL2')
+    axs[0].boxplot(PO_UWP_HL2, showmeans=True)
+    num, val = setXTicks_param(PO_UWP_HL2, descArray)
+    axs[0].set_xticks(num, val)
 
-    num, val = setXTicks_param(allBoxplot, descArray)
+    axs[1].set_title('HPG2')
+    axs[1].boxplot(PO_UWP_HPG2, showmeans=True)
+    axs[1].sharey(axs[0])
+    num, val = setXTicks_param(PO_UWP_HPG2, descArray)
+    axs[1].set_xticks(num, val)
 
-    plt.title('Bearbeitungszeit des Point-Operators UWP')
-    plt.boxplot(allBoxplot, showmeans=True)
-
-    plt.xticks(num, val)
-    plt.ylabel('Sekunden')
+    axs[0].set(ylabel='Sekunden')
+    axs[1].set(ylabel='Sekunden')
 
     plt.show()
 

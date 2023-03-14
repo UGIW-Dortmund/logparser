@@ -41,7 +41,7 @@ def boxplotCap(valArray):
     third_quartil = round(np.percentile(valArray, 75), 2)
     third_quartil = str(third_quartil).replace('.', ',')
 
-    return f'\n n = {len(valArray)} \n' \
+    return f'\n \n n = {len(valArray)} \n' \
            f'Me. = {median} s \n ' \
            f'Mi. = {mean} s \n ' \
            f'S. Abw. = {stdev} s \n ' \
@@ -208,56 +208,58 @@ if __name__ == "__main__":
 
     devices = ['HPG2']
     sceneName = 'ILM_Grab_Right'
-    GR_MQ_Right_MQ2 = runAnalyzeCubes(probands, sceneName, devices)
+    GR_UWP_Right_HPG2 = runAnalyzeCubes(probands, sceneName, devices)
+    writeToDb('GR_UWP_Right_HPG2', GR_UWP_Right_HPG2)
+    # print(GR_MQ_Right_MQ2)
+
+    sceneName = 'ILM_Grab_Left'
+    GR_UWP_Left_HPG2 = runAnalyzeCubes(probands, sceneName, devices)
+    writeToDb('GR_UWP_Left_HPG2', GR_UWP_Left_HPG2)
+
+    devices = ['HL2']
+    sceneName = 'ILM_Grab_Right'
+    GR_UWP_Right_HL2 = runAnalyzeCubes(probands, sceneName, devices)
+    writeToDb('GR_UWP_Right_HL2', GR_UWP_Right_HL2)
+
+    sceneName = 'ILM_Grab_Left'
+    GR_UWP_Left_HL2 = runAnalyzeCubes(probands, sceneName, devices)
+    writeToDb('GR_UWP_Left_HL2', GR_UWP_Left_HL2)
 
 
-    print(GR_MQ_Right_MQ2)
+    GR_UWP_Right = [GR_UWP_Right_HPG2, GR_UWP_Right_HL2]
+    GR_UWP_Right = aggregateData(GR_UWP_Right)
+    writeToDb('GR_UWP_Right', GR_UWP_Right)
+
+    GR_UWP_Left = [GR_UWP_Left_HL2, GR_UWP_Left_HPG2]
+    GR_UWP_Left = aggregateData(GR_UWP_Left)
+    writeToDb('GR_UWP_Left', GR_UWP_Left)
+
+    GR_UWP = [GR_UWP_Right, GR_UWP_Left]
+    GR_UWP = aggregateData(GR_UWP)
+    writeToDb('GR_UWP', GR_UWP)
+
+    GR_UWP_HPG2 = [GR_UWP_Right_HPG2, GR_UWP_Left_HPG2]
+    GR_UWP_HPG2 = aggregateData(GR_UWP_HPG2)
+    writeToDb('GR_HPG2', GR_UWP_HPG2)
+
+    GR_UWP_HL2 = [GR_UWP_Right_HL2, GR_UWP_Left_HL2]
+    GR_UWP_HL2 = aggregateData(GR_UWP_HL2)
+    writeToDb('GR_UWP_HL2', GR_UWP_HL2)
 
 
-
-    '''
-    sceneName = 'ILM_Grabbing_Left'
-    GR_MQ_Left_MQ2 = runAnalyzeCubes(probands, sceneName, devices)
-    writeToDb('GR_MQ_Left_MQ2', GR_MQ_Left_MQ2)
-
-    devices = ['MQP']
-    sceneName = 'ILM_Grabbing_Right'
-    GR_MQ_Right_MQP = runAnalyzeCubes(probands, sceneName, devices)
-    writeToDb('GR_MQ_Right_MQP', GR_MQ_Right_MQP)
-
-    sceneName = 'ILM_Grabbing_Left'
-    GR_MQ_Left_MQP = runAnalyzeCubes(probands, sceneName, devices)
-    writeToDb('GR_MQ_Left_MQP', GR_MQ_Left_MQP)
-
-
-    GR_MQ_Right = [GR_MQ_Right_MQ2, GR_MQ_Right_MQP]
-    GR_MQ_Right = aggregateData(GR_MQ_Right)
-    writeToDb('GR_MQ_Right', GR_MQ_Right)
-
-    GR_MQ_Left = [GR_MQ_Left_MQ2, GR_MQ_Left_MQP]
-    GR_MQ_Left = aggregateData(GR_MQ_Left)
-    writeToDb('GR_MQ_Left', GR_MQ_Left)
-
-    GR_MQ = [GR_MQ_Right, GR_MQ_Left]
-    GR_MQ = aggregateData(GR_MQ)
-    writeToDb('GR_MQ', GR_MQ)
-
-    allBoxplot = [GR_MQ_Right_MQ2, GR_MQ_Right_MQP, GR_MQ_Left_MQ2, GR_MQ_Left_MQP, GR_MQ_Right, GR_MQ_Left, GR_MQ]
+    allBoxplot = [GR_UWP_Right_HL2, GR_UWP_Right_HPG2, GR_UWP_Left_HL2, GR_UWP_Left_HPG2, GR_UWP_Right, GR_UWP_Left, GR_UWP_HL2, GR_UWP_HPG2, GR_UWP]
 
 
     # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
-    descArray = ['Rechts MQ2', 'Rechts MQP', 'Links MQ2', 'Links MQP', 'Rechts', 'Links', 'Gesamt']
+    descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'HL2', 'HPG2', 'Gesamt']
 
     num, val = setXTicks_param(allBoxplot, descArray)
 
-    plt.title('Bearbeitungszeit des Grab-Operators MQ')
+    plt.title('Windows: Bearbeitungszeit des Grab-Operators',fontsize=15)
     plt.boxplot(allBoxplot, showmeans=True)
 
-    plt.xticks(num, val)
-    plt.ylabel('Sekunden')
+    plt.xticks(num, val,fontsize=12)
+    plt.ylabel('Sekunden', fontsize=12)
 
     plt.show()
 
-    # Noch Auswirkung für die einzelnen Würfel machen!
-
-'''

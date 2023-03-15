@@ -438,8 +438,10 @@ if __name__ == "__main__":
     M_UWP_HPG2_scenes = runAnalyzeElementSteps(probands, devices)
     writeToDb('M_UWP_HPG2_scenes', M_UWP_HPG2_scenes)
 
+    #sceneArray = [pointArray, gazeArray, grabRightArray, grabLeftArray,
+    #              subFarRightArray, subFarLeftArray, subNearRightArray, subNearLeftArray]
 
-    descArray = ['HL2', 'HPG2', 'Gesamt']
+    descArray = ['Point', 'Gaze', 'GR Right', 'GR Left', 'SF Right', 'SF Left', 'SN Right', 'SN Left']
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
@@ -455,8 +457,8 @@ if __name__ == "__main__":
     num, val = setXTicks_param(M_UWP_HPG2_scenes, descArray)
     axs[1].set_xticks(num, val)
 
-    axs[0].set(ylabel='Sekunden', fontsize=12)
-    axs[1].set(ylabel='Sekunden', fontsize=12)
+    axs[0].set(ylabel='Sekunden')
+    axs[1].set(ylabel='Sekunden')
 
     plt.show()
 

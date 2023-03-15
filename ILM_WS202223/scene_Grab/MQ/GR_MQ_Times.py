@@ -212,6 +212,15 @@ if __name__ == "__main__":
     writeToDb('GR_MQ_Left_MQP', GR_MQ_Left_MQP)
 
 
+    GR_MQ_MQP = [GR_MQ_Left_MQP, GR_MQ_Right_MQP]
+    GR_MQ_MQP = aggregateData(GR_MQ_MQP)
+    writeToDb('GR_MQ_MQP', GR_MQ_MQP)
+
+    GR_MQ_MQ2 = [GR_MQ_Left_MQ2, GR_MQ_Right_MQ2]
+    GR_MQ_MQ2 = aggregateData(GR_MQ_MQ2)
+    writeToDb('GR_MQ_MQ2', GR_MQ_MQ2)
+
+
     GR_MQ_Right = [GR_MQ_Right_MQ2, GR_MQ_Right_MQP]
     GR_MQ_Right = aggregateData(GR_MQ_Right)
     writeToDb('GR_MQ_Right', GR_MQ_Right)
@@ -224,11 +233,12 @@ if __name__ == "__main__":
     GR_MQ = aggregateData(GR_MQ)
     writeToDb('GR_MQ', GR_MQ)
 
-    allBoxplot = [GR_MQ_Right_MQ2, GR_MQ_Right_MQP, GR_MQ_Left_MQ2, GR_MQ_Left_MQP, GR_MQ_Right, GR_MQ_Left, GR_MQ]
+    allBoxplot = [GR_MQ_Right_MQ2, GR_MQ_Right_MQP, GR_MQ_Left_MQ2, GR_MQ_Left_MQP, GR_MQ_Right,
+                  GR_MQ_Left, GR_MQ_MQ2, GR_MQ_MQP, GR_MQ]
 
 
     # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
-    descArray = ['Rechts MQ2', 'Rechts MQP', 'Links MQ2', 'Links MQP', 'Rechts', 'Links', 'Gesamt']
+    descArray = ['Rechts MQ2', 'Rechts MQP', 'Links MQ2', 'Links MQP', 'Rechts', 'Links', 'MQ2', 'MQP', 'Gesamt']
 
     num, val = setXTicks_param(allBoxplot, descArray)
 

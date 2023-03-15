@@ -192,8 +192,6 @@ def convertToFloat(arr):
 
 
 
-
-
 def setXTicks_param(valArray, descArray):
     xtick = []
     i = 0

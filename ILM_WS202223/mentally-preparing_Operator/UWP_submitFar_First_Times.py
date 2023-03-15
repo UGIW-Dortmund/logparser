@@ -85,35 +85,86 @@ def writeToDb(name, value):
 """ Ermittelt die Zeiten, welche die Probanden gebraucht haben """
 
 
-def runAnalyzeElementSteps(probands, sceneName, device):
+
+def getDelta(start_array, end_array):
+    point_start_time = start_array[0].get('time')
+    point_start_date = start_array[0].get('date')
+
+    point_start = pd.to_datetime(point_start_date + ' ' + point_start_time)
+
+    end_time = end_array[0].get('time')
+    end_date = end_array[0].get('date')
+
+    point_end = pd.to_datetime(end_date + ' ' + end_time)
+
+    point_delta = point_end - point_start
+    point_delta = point_delta.total_seconds()
+
+    return point_delta
+
+
+
+def runAnalyzeElementSteps(probands, device):
     timeArray = []
+
+    pointArray = []
+    gazeArray = []
+    grabRightArray = []
 
     for p in probands:
 
         for d in device:
 
-            i = runAnalyzeCompletion(p, sceneName, d)
-            sf_array = runAnalyzeSubmitFarArray(p, sceneName, d)
+            # ILM Point
+            point_start_array = runAnalyzeStartScene(p, 'ILM_Point', d)
+            point_end_array = runAnalyzeTaskPoint(p, 'ILM_Point', d)
 
-            if (i == 10):
+            if ((len(point_start_array) > 0) and len(point_end_array) > 0):
+
+                point_delta = getDelta(point_start_array, point_end_array)
+                # print('Point for Proband ' + str(p) + ' Delta Time: ' + str(point_delta))
+
+                timeArray.append(point_delta)
+                pointArray.append(point_delta)
 
 
-                sf_array_start = runAnalyzeSubmitFarArrayFirst(p, sceneName, d)
-                # sf_array = runAnalyzeSubmitFarArray(p, sceneName, d)
 
-                start_time = sf_array_start[0].get('time')
-                start_date = sf_array_start[0].get('date')
 
-                start = pd.to_datetime(start_date + ' ' + start_time)
+            # ILM Gaze
+            gaze_start_array = runAnalyzeStartScene(p, 'ILM_Gaze', d)
+            gaze_end_array = runAnalyzeTaskGaze(p, 'ILM_Gaze', d)
 
-                end_time = sf_array[0].get('time')
-                end_date = sf_array[0].get('date')
 
-                end = pd.to_datetime(end_date + ' ' + end_time)
+            if ((len(gaze_start_array) > 0) and len(gaze_end_array) > 0):
 
-                delta = end - start
+                gaze_delta = getDelta(gaze_start_array, gaze_end_array)
+                # print('Gaze for Proband ' + str(p) + ' Delta Time: ' + str(gaze_delta))
 
-                timeArray.append(delta.total_seconds())
+                timeArray.append(gaze_delta)
+                gazeArray.append(gaze_delta)
+
+
+
+
+            # ILM Grab Right
+            grabRight_start_array = runAnalyzeSetScene(p, 'ILM_Grab_Right', d)
+            grabRight_end_array = runAnalyzeTaskGrab(p, 'ILM_Grab_Right', d)
+            
+
+            if ((len(grabRight_start_array) > 0) and len(grabRight_end_array) > 0):
+
+                grabRight_delta = getDelta(grabRight_start_array, grabRight_end_array)
+                print('Grab Right for Proband ' + str(p) + ' Delta Time: ' + str(grabRight_delta))
+
+                timeArray.append(grabRight_delta)
+                grabRightArray.append(grabRight_delta)
+
+
+
+
+
+
+
 
     return timeArray
 
@@ -122,10 +173,23 @@ def runAnalyzeElementSteps(probands, sceneName, device):
 
 
 
-def runAnalyzeSubmitFarArrayFirst(proband, scene, device):
+def runAnalyzeStartScene(proband, scene, device):
     sf_array = col.find({'scene': scene,
                          'dev': device,
                          'action': 'Start Scene',
+                         'actionvalue': scene,
+                         'prob': proband
+                         })
+
+    sf_array = list(sf_array)
+
+    return sf_array
+
+
+def runAnalyzeSetScene(proband, scene, device):
+    sf_array = col.find({'scene': scene,
+                         'dev': device,
+                         'action': 'Set Scene',
                          'actionvalue': scene,
                          'prob': proband
                          })
@@ -146,48 +210,51 @@ def runAnalyzeSubmitFarArray(proband, scene, device):
     return sf_array
 
 
-""" Iteriert alle Probanden für Check ob diese alle Elemente geklickt haben """
+def runAnalyzeTaskPoint(proband, scene, device):
+    array = col.find({'scene': scene,
+                         'dev': device,
+                         'action': 'Point Count Start',
+                         'prob': proband
+                         })
+
+    array = list(array)
+
+    return array
 
 
-def runAnalyzeCompletionForAllProbands(probands, scene, device):
-    for p in probands:
-        runAnalyzeCompletion(p, scene, device)
+
+def runAnalyzeTaskGaze(proband, scene, device):
+
+    # Kann wsl das Schlüsselwort 'object' nicht lesen.
+    # Hoffe das T1_Cube alles abdeckt
+
+    array = col.find({'scene': scene,
+                         'dev': device,
+                         'actionvalue': 'T1_Cube',
+                         'prob': proband
+                         })
+
+    array = list(array)
+
+    return array
 
 
-""" Prüft pro Proband alle Elemente """
+
+def runAnalyzeTaskGrab(proband, scene, device):
 
 
-def runAnalyzeCompletion(proband, scene, device):
-    i = 0
+    array = col.find({'scene': scene,
+                         'dev': device,
+                         'action': 'Cube Position Start',
+                         'prob': proband
+                         })
 
-    elements = ['Cube_1', 'Cube_2', 'Cube_3', 'Cube_4', 'Cube_5', 'Capsule_1', 'Capsule_2', 'Sphere_1', 'Sphere_2',
-                'Sphere_3']
+    array = list(array)
 
-    for e in elements:
-        if runAnalyzeCompletionElement(scene, device, e, proband):
-            i = i + 1
-
-    print("For Proband: " + str(proband) + ' : ' + str(i))
-
-    return i
+    return array
 
 
-""" Aufruf auf DB ob Proband ein Element geklickt hat """
 
-
-def runAnalyzeCompletionElement(scene, device, element, probandId):
-    x = col.find({'scene': scene,
-                  'dev': device,
-                  'actionvalue': element,
-                  'prob': probandId
-                  })
-
-    x_list = list(x)
-
-    if len(x_list) > 0:
-        return True
-    else:
-        return False
 
 
 # This is added so that many files can reuse the function get_database()
@@ -250,9 +317,10 @@ if __name__ == "__main__":
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
     print(probands)
 
-    sceneName = 'ILM_Submit-Far_Right'
-    devices = ['HPG2']
-    SF_UWP_Left_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices)
+    devices = ['HL2']
+    SF_UWP_Left_HPG2 = runAnalyzeElementSteps(probands, devices)
+
+    '''
     devices = ['HL2']
     SF_UWP_Left_HL2 = runAnalyzeElementSteps(probands, sceneName, devices)
 
@@ -264,6 +332,8 @@ if __name__ == "__main__":
     sceneName = 'ILM_Submit-Far_Right'
     devices = ['HPG2']
     SF_UWP_Right_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices)
+    
+    
     devices = ['HL2']
     SF_UWP_Right_HL2 = runAnalyzeElementSteps(probands, sceneName, devices)
 
@@ -305,7 +375,7 @@ if __name__ == "__main__":
     plt.ylabel('Sekunden')
 
     plt.show()
-
+    '''
 
 
 

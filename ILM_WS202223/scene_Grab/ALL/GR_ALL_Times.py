@@ -26,22 +26,22 @@ def get_database():
 
 
 def boxplotCap(valArray):
-    median = round(statistics.median(valArray), 2)
+    median = round(statistics.median(valArray), 1)
     median = str(median).replace('.', ',')
 
-    mean = round(statistics.mean(valArray), 2)
+    mean = round(statistics.mean(valArray), 1)
     mean = str(mean).replace('.', ',')
 
-    stdev = round(statistics.stdev(valArray), 2)
+    stdev = round(statistics.stdev(valArray), 1)
     stdev = str(stdev).replace('.', ',')
 
-    first_quartil = round(np.percentile(valArray, 25), 2)
+    first_quartil = round(np.percentile(valArray, 25), 1)
     first_quartil = str(first_quartil).replace('.', ',')
 
-    third_quartil = round(np.percentile(valArray, 75), 2)
+    third_quartil = round(np.percentile(valArray, 75), 1)
     third_quartil = str(third_quartil).replace('.', ',')
 
-    return f'\n n = {len(valArray)} \n' \
+    return f'\n \n n = {len(valArray)} \n' \
            f'Me. = {median} s \n ' \
            f'Mi. = {mean} s \n ' \
            f'S. Abw. = {stdev} s \n ' \
@@ -85,10 +85,10 @@ def writeToDb(name, value):
 """ Ermittelt die Zeiten, welche die Probanden gebraucht haben """
 
 
-def runAnalyzeCubes(probands, sceneName, device, cubeArray):
+def runAnalyzeCubes(probands, sceneName, device):
     timeArray = []
 
-
+    cubeArray = [['Cube_1', -4.4, 2.2], ['Cube_2', -4.3, -2.4], ['Cube_3', 1.7, 2.2], ['Cube_4', 0.3, -3.1]]
 
     for p in probands:
 
@@ -98,7 +98,7 @@ def runAnalyzeCubes(probands, sceneName, device, cubeArray):
             for cube in cubeArray:
 
                 start_array = runAnaStartAction(p, sceneName, d, cube[0])
-                end_array = runAnaFinishAction(p, sceneName, d, str(cube[1]))
+                end_array = runAnaFinishAction(p, sceneName, d, str(cube[0]))
 
                 if len(start_array) > 0 and len(end_array) > 0:
                     start_time = start_array[0].get('time')
@@ -106,23 +106,36 @@ def runAnalyzeCubes(probands, sceneName, device, cubeArray):
 
                     start = pd.to_datetime(start_date + ' ' + start_time)
 
-                    end_time = end_array[0].get('time')
-                    end_date = end_array[0].get('date')
+                    finItem = len(end_array) - 1
+                    cube_end_position = end_array[finItem].get('actionvalue')
+                    cube_end_position = str(cube_end_position).replace(')', '')
+                    cube_end_position = str(cube_end_position).replace('(', '')
+                    cube_end_position = str(cube_end_position).split(',')
+                    cube_end_position_x = float(cube_end_position[0])
+                    cube_end_position_z = float(cube_end_position[2])
 
-                    end = pd.to_datetime(end_date + ' ' + end_time)
+                    # Bedingung das die Würfel an den richtigen Orten sind - inklusive Toleranz
+                    if (cube_end_position_x >= (cube[1] - 0.2)) & (cube_end_position_x <= (cube[1] + 0.2)):
 
-                    delta = end - start
+                        if (cube_end_position_z >= (cube[2] - 0.2)) & (cube_end_position_z <= (cube[2] + 0.2)):
 
-                    delta = delta.total_seconds()
+                            end_time = end_array[finItem].get('time')
+                            end_date = end_array[finItem].get('date')
 
-                    # delta = delta - (cube[1] * (1 / refreshRate))
-                    # delta = delta - cube[1]
+                            end = pd.to_datetime(end_date + ' ' + end_time)
 
-                    # delta = delta.total_seconds()
+                            delta = end - start
 
-                    timeArray.append(delta)
+                            delta = delta.total_seconds()
 
-                    print('For Proband: ' + str(p) + '\t' + str(cube[0]) + '\t Time: ' + str(delta))
+                            print('For Proband: ' + str(p) + '\t' + str(cube[0]) + '       End Position: x: ' + str(
+                                cube_end_position_x)
+                                  + '\t z: ' + str(cube_end_position_z))
+
+                            timeArray.append(delta)
+
+
+
 
     return timeArray
 
@@ -133,8 +146,8 @@ def runAnalyzeCubes(probands, sceneName, device, cubeArray):
 def runAnaStartAction(proband, scene, device, cube):
     array = col.find({'scene': scene,
                          'dev': device,
-                         'action': 'Hover Start',
-                         'actionvalue': cube,
+                         'action': 'Cube Position Start',
+                         'oelement': cube,
                          'prob': proband
                          })
 
@@ -142,11 +155,11 @@ def runAnaStartAction(proband, scene, device, cube):
 
     return array
 
-def runAnaFinishAction(proband, scene, device, socket):
+def runAnaFinishAction(proband, scene, device, cube):
     array = col.find({'scene': scene,
                          'dev': device,
-                         'action': 'Socket Entered',
-                         'actionvalue': socket,
+                         'action': 'Cube Position End',
+                         'oelement': cube,
                          'prob': proband
                          })
 
@@ -154,6 +167,28 @@ def runAnaFinishAction(proband, scene, device, socket):
 
     return array
 
+
+def convertToFloat(arr):
+
+    print(arr)
+
+    arr2 = arr.get('values')
+
+    print(arr2)
+
+    arr2 = list(arr2)
+    lenArray = len(arr2)
+
+    print(lenArray)
+
+    allValues = []
+
+    for e in range(0, lenArray):
+        allValues.append(float(arr2[e]))
+
+
+
+    return allValues
 
 
 
@@ -188,84 +223,40 @@ if __name__ == "__main__":
     dbname = get_database()
 
     col = dbname["uwp"]
-
-    cubeArrayFirst = [['GrabCube_1', 1]]
-    cubeArraySecond = [['GrabCube_2', 2], ['GrabCube_3', 3], ['GrabCube_4', 4]]
+    tresor = dbname["tresor"]
 
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
-    devices = ['MQ2']
-    sceneName = 'ILM_Grabbing_Right'
-    GR_MQ_Right_MQ2_first = runAnalyzeCubes(probands, sceneName, devices, cubeArrayFirst)
-    GR_MQ_Right_MQ2_second = runAnalyzeCubes(probands, sceneName, devices, cubeArraySecond)
-    # writeToDb('GR_MQ_Right_MQ2', GR_MQ_Right_MQ2)
 
-    sceneName = 'ILM_Grabbing_Left'
-    GR_MQ_Left_MQ2_first = runAnalyzeCubes(probands, sceneName, devices, cubeArrayFirst)
-    GR_MQ_Left_MQ2_second = runAnalyzeCubes(probands, sceneName, devices, cubeArraySecond)
-    # writeToDb('GR_MQ_Left_MQ2', GR_MQ_Left_MQ2)
 
-    devices = ['MQP']
-    sceneName = 'ILM_Grabbing_Right'
-    GR_MQ_Right_MQP_first = runAnalyzeCubes(probands, sceneName, devices, cubeArrayFirst)
-    GR_MQ_Right_MQP_second = runAnalyzeCubes(probands, sceneName, devices, cubeArraySecond)
-    # writeToDb('GR_MQ_Right_MQP', GR_MQ_Right_MQP)
+    GR_UWP_HPG2 = tresor.find_one({'name': 'GR_HPG2'})
+    GR_UWP_HPG2 = convertToFloat(GR_UWP_HPG2)
 
-    sceneName = 'ILM_Grabbing_Left'
-    GR_MQ_Left_MQP_first = runAnalyzeCubes(probands, sceneName, devices, cubeArrayFirst)
-    GR_MQ_Left_MQP_second = runAnalyzeCubes(probands, sceneName, devices, cubeArraySecond)
-    # writeToDb('GR_MQ_Left_MQP', GR_MQ_Left_MQP)
+    GR_MQ_second = tresor.find_one({'name': 'GR_MQ_second'})
+    GR_MQ_second = convertToFloat(GR_MQ_second)
+
+    GR_VR_nE = [GR_UWP_HPG2, GR_MQ_second]
+    GR_VR_nE = aggregateData(GR_VR_nE)
+    writeToDb('GR_VR_nE', GR_VR_nE)
 
 
 
 
-    GR_MQ_Right_first = [GR_MQ_Right_MQ2_first, GR_MQ_Right_MQP_first]
-    GR_MQ_Right_first = aggregateData(GR_MQ_Right_first)
-
-
-    GR_MQ_Right_second = [GR_MQ_Right_MQ2_second, GR_MQ_Right_MQP_second]
-    GR_MQ_Right_second = aggregateData(GR_MQ_Right_second)
-
-
-
-
-
-    GR_MQ_Left_first = [GR_MQ_Left_MQ2_first, GR_MQ_Left_MQP_first]
-    GR_MQ_Left_first = aggregateData(GR_MQ_Left_first)
-
-    GR_MQ_Left_second = [GR_MQ_Left_MQ2_second, GR_MQ_Left_MQP_second]
-    GR_MQ_Left_second = aggregateData(GR_MQ_Left_second)
-
-
-
-
-
-    GR_MQ_first = [GR_MQ_Right_first]
-    GR_MQ_first = aggregateData(GR_MQ_first)
-    writeToDb('GR_MQ_first', GR_MQ_first)
-
-    GR_MQ_second = [GR_MQ_Right_second, GR_MQ_Left_second, GR_MQ_Left_first]
-    GR_MQ_second = aggregateData(GR_MQ_second)
-    writeToDb('GR_MQ_second', GR_MQ_second)
-
-    allBoxplot = [GR_MQ_Right_first, GR_MQ_Right_second, GR_MQ_Left_first, GR_MQ_Left_second, GR_MQ_first, GR_MQ_second]
+    allBoxplot = [GR_UWP_HPG2, GR_MQ_second, GR_VR_nE]
 
 
     # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
-    descArray = ['e. E. Rechts', 'n. E. Rechts', 'e. E. Links', 'n. E. Links', 'e. E..', 'n. E.']
+    descArray = ['Windows VR', 'Android n. E.', 'VR  n. E.']
 
     num, val = setXTicks_param(allBoxplot, descArray)
 
-    plt.title('Android: Bearbeitungszeit des Grab-Operators', fontsize=15)
+    plt.title('Alle: Bearbeitungszeit des Grab-Operators',fontsize=15)
     plt.boxplot(allBoxplot, showmeans=True)
 
-    plt.xticks(num, val, fontsize=12)
+    plt.xticks(num, val,fontsize=12)
     plt.ylabel('Sekunden', fontsize=12)
 
     plt.show()
-
-    # Noch Auswirkung für die einzelnen Würfel machen!
-
 

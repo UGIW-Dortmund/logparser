@@ -21,6 +21,7 @@ Add the following settings to the diagramms:
 
 #### UWP
 - ``GR_UWP_Times `` Checks if the Cubes are in the correct place and get the delta times 
+- ``GR_UWP_Times_boxes `` Checks the times of the four different cubes.
 
 ### scene_Point
 

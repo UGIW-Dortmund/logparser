@@ -88,9 +88,13 @@ def writeToDb(name, value):
 def runAnalyzeCubes(probands, sceneName, device):
     timeArray = []
 
-    droppedValues = []
-
     cubeArray = [['Cube_1', -4.4, 2.2], ['Cube_2', -4.3, -2.4], ['Cube_3', 1.7, 2.2], ['Cube_4', 0.3, -3.1]]
+
+    cubeValues = []
+    c1 = []
+    c2 = []
+    c3 = []
+    c4 = []
 
     for p in probands:
 
@@ -116,35 +120,40 @@ def runAnalyzeCubes(probands, sceneName, device):
                     cube_end_position_x = float(cube_end_position[0])
                     cube_end_position_z = float(cube_end_position[2])
 
-                    end_time = end_array[finItem].get('time')
-                    end_date = end_array[finItem].get('date')
-
-                    end = pd.to_datetime(end_date + ' ' + end_time)
-                    delta = end - start
-                    delta = delta.total_seconds()
-
                     # Bedingung das die Würfel an den richtigen Orten sind - inklusive Toleranz
                     if (cube_end_position_x >= (cube[1] - 0.2)) & (cube_end_position_x <= (cube[1] + 0.2)):
 
                         if (cube_end_position_z >= (cube[2] - 0.2)) & (cube_end_position_z <= (cube[2] + 0.2)):
 
-                            #print('For Proband: ' + str(p) + '\t' + str(cube[0]) + '       End Position: x: ' + str(
-                            #    cube_end_position_x)
-                            #      + '\t z: ' + str(cube_end_position_z))
+                            end_time = end_array[finItem].get('time')
+                            end_date = end_array[finItem].get('date')
 
-                            timeArray.append(delta)
-                        else:
+                            end = pd.to_datetime(end_date + ' ' + end_time)
 
-                            droppedValues.append(delta)
+                            delta = end - start
 
-                    else:
+                            delta = delta.total_seconds()
 
-                        droppedValues.append(delta)
+                            print('For Proband: ' + str(p) + '\t' + str(cube[0]) + '       End Position: x: ' + str(
+                                cube_end_position_x)
+                                  + '\t z: ' + str(cube_end_position_z))
 
 
-    print('Dropeed Values: \t' + str(len(droppedValues)))
+                            if cube[0] == 'Cube_1':
+                                c1.append(delta)
+                            elif cube[0] == 'Cube_2':
+                                c2.append(delta)
+                            elif cube[0] == 'Cube_3':
+                                c3.append(delta)
+                            elif cube[0] == 'Cube_4':
+                                c4.append(delta)
 
-    return timeArray
+
+
+
+    cubeValues = [c1, c2, c3, c4]
+
+    return cubeValues
 
 
 """ Gibt alle SF Tupel zurück """
@@ -177,7 +186,27 @@ def runAnaFinishAction(proband, scene, device, cube):
 
 
 
+def convertToFloat(arr):
 
+    print(arr)
+
+    arr2 = arr.get('values')
+
+    print(arr2)
+
+    arr2 = list(arr2)
+    lenArray = len(arr2)
+
+    print(lenArray)
+
+    allValues = []
+
+    for e in range(0, lenArray):
+        allValues.append(float(arr2[e]))
+
+
+
+    return allValues
 
 def setXTicks_param(valArray, descArray):
     xtick = []
@@ -208,6 +237,7 @@ if __name__ == "__main__":
     dbname = get_database()
 
     col = dbname["uwp"]
+    tresor = dbname["tresor"]
 
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
@@ -216,23 +246,19 @@ if __name__ == "__main__":
     devices = ['HPG2']
     sceneName = 'ILM_Grab_Right'
     GR_UWP_Right_HPG2 = runAnalyzeCubes(probands, sceneName, devices)
-    writeToDb('GR_UWP_Right_HPG2', GR_UWP_Right_HPG2)
-    # print(GR_MQ_Right_MQ2)
 
     sceneName = 'ILM_Grab_Left'
     GR_UWP_Left_HPG2 = runAnalyzeCubes(probands, sceneName, devices)
-    writeToDb('GR_UWP_Left_HPG2', GR_UWP_Left_HPG2)
+
 
     devices = ['HL2']
     sceneName = 'ILM_Grab_Right'
     GR_UWP_Right_HL2 = runAnalyzeCubes(probands, sceneName, devices)
-    writeToDb('GR_UWP_Right_HL2', GR_UWP_Right_HL2)
 
     sceneName = 'ILM_Grab_Left'
     GR_UWP_Left_HL2 = runAnalyzeCubes(probands, sceneName, devices)
-    writeToDb('GR_UWP_Left_HL2', GR_UWP_Left_HL2)
 
-
+    '''
     GR_UWP_Right = [GR_UWP_Right_HPG2, GR_UWP_Right_HL2]
     GR_UWP_Right = aggregateData(GR_UWP_Right)
     writeToDb('GR_UWP_Right', GR_UWP_Right)
@@ -247,26 +273,46 @@ if __name__ == "__main__":
 
     GR_UWP_HPG2 = [GR_UWP_Right_HPG2, GR_UWP_Left_HPG2]
     GR_UWP_HPG2 = aggregateData(GR_UWP_HPG2)
-    writeToDb('GR_UWP_HPG2', GR_UWP_HPG2)
+    writeToDb('GR_HPG2', GR_UWP_HPG2)
 
     GR_UWP_HL2 = [GR_UWP_Right_HL2, GR_UWP_Left_HL2]
     GR_UWP_HL2 = aggregateData(GR_UWP_HL2)
     writeToDb('GR_UWP_HL2', GR_UWP_HL2)
+    '''
 
 
-    allBoxplot = [GR_UWP_Right_HL2, GR_UWP_Right_HPG2, GR_UWP_Left_HL2, GR_UWP_Left_HPG2, GR_UWP_Right, GR_UWP_Left, GR_UWP_HL2, GR_UWP_HPG2, GR_UWP]
 
+    descArray = ['Cube 1', 'Cube 2', 'Cube 3', 'Cube 4']
 
-    # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
-    descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'HL2', 'HPG2', 'Gesamt']
+    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
 
-    num, val = setXTicks_param(allBoxplot, descArray)
+    axs[0, 0].set_title('Rechte Hand - HL2')
+    axs[0, 0].boxplot(GR_UWP_Right_HL2, showmeans=True)
+    num, val = setXTicks_param(GR_UWP_Right_HL2, descArray)
+    axs[0, 0].set_xticks(num, val, fontsize=12)
 
-    plt.title('Windows: Bearbeitungszeit des Grab-Operators',fontsize=15)
-    plt.boxplot(allBoxplot, showmeans=True)
+    axs[0, 1].set_title('Linke Hand - HL2')
+    axs[0, 1].boxplot(GR_UWP_Left_HL2, showmeans=True)
+    axs[0, 1].sharey(axs[0, 0])
+    num, val = setXTicks_param(GR_UWP_Left_HPG2, descArray)
+    axs[0, 1].set_xticks(num, val, fontsize=12)
 
-    plt.xticks(num, val,fontsize=12)
-    plt.ylabel('Sekunden', fontsize=12)
+    axs[1, 0].set_title('Rechte Hand - HPG2')
+    axs[1, 0].boxplot(GR_UWP_Right_HPG2, showmeans=True)
+    axs[1, 0].sharey(axs[0, 0])
+    num, val = setXTicks_param(GR_UWP_Right_HPG2, descArray)
+    axs[1, 0].set_xticks(num, val, fontsize=12)
+
+    axs[1, 1].set_title('Linke Hand - HPG2')
+    axs[1, 1].boxplot(GR_UWP_Left_HPG2, showmeans=True)
+    axs[1, 1].sharey(axs[0, 0])
+    num, val = setXTicks_param(GR_UWP_Left_HPG2, descArray)
+    axs[1, 1].set_xticks(num, val, fontsize=12)
+
+    axs[0, 0].set(ylabel='Sekunden')
+    axs[0, 1].set(ylabel='Sekunden')
+    axs[1, 0].set(ylabel='Sekunden')
+    axs[1, 1].set(ylabel='Sekunden')
 
     plt.show()
 

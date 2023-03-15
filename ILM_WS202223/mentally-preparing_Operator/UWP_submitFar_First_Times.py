@@ -26,27 +26,27 @@ def get_database():
 
 
 def boxplotCap(valArray):
-    median = round(statistics.median(valArray), 2)
+    median = round(statistics.median(valArray), 1)
     median = str(median).replace('.', ',')
 
-    mean = round(statistics.mean(valArray), 2)
+    mean = round(statistics.mean(valArray), 1)
     mean = str(mean).replace('.', ',')
 
-    stdev = round(statistics.stdev(valArray), 2)
+    stdev = round(statistics.stdev(valArray), 1)
     stdev = str(stdev).replace('.', ',')
 
-    first_quartil = round(np.percentile(valArray, 25), 2)
+    first_quartil = round(np.percentile(valArray, 25), 1)
     first_quartil = str(first_quartil).replace('.', ',')
 
-    third_quartil = round(np.percentile(valArray, 75), 2)
+    third_quartil = round(np.percentile(valArray, 75), 1)
     third_quartil = str(third_quartil).replace('.', ',')
 
-    return f'\n n = {len(valArray)} \n' \
+    return f'\n\n n = {len(valArray)} \n' \
            f'Me. = {median} s \n ' \
            f'Mi. = {mean} s \n ' \
            f'S. Abw. = {stdev} s \n ' \
-           f'1Q = {first_quartil} s \n ' \
-           f'3Q = {third_quartil} s';
+           f'u. Q. = {first_quartil} s \n ' \
+           f'o. Q. = {third_quartil} s';
 
 
 def aggregateData(array):
@@ -110,6 +110,11 @@ def runAnalyzeElementSteps(probands, device):
     pointArray = []
     gazeArray = []
     grabRightArray = []
+    grabLeftArray = []
+    subFarRightArray = []
+    subFarLeftArray = []
+    subNearRightArray = []
+    subNearLeftArray = []
 
     for p in probands:
 
@@ -122,7 +127,9 @@ def runAnalyzeElementSteps(probands, device):
             if ((len(point_start_array) > 0) and len(point_end_array) > 0):
 
                 point_delta = getDelta(point_start_array, point_end_array)
-                # print('Point for Proband ' + str(p) + ' Delta Time: ' + str(point_delta))
+
+                #print('Point for Proband ' + str(p) + '\t\t Delta Time: ' + str(point_delta))
+                printTimes('Point Generic', p, point_delta)
 
                 timeArray.append(point_delta)
                 pointArray.append(point_delta)
@@ -138,7 +145,9 @@ def runAnalyzeElementSteps(probands, device):
             if ((len(gaze_start_array) > 0) and len(gaze_end_array) > 0):
 
                 gaze_delta = getDelta(gaze_start_array, gaze_end_array)
-                # print('Gaze for Proband ' + str(p) + ' Delta Time: ' + str(gaze_delta))
+                # print('Gaze for Proband ' + str(p) + '\t\t Delta Time: ' + str(gaze_delta))
+                printTimes('Gaze Generic', p, gaze_delta)
+
 
                 timeArray.append(gaze_delta)
                 gazeArray.append(gaze_delta)
@@ -149,12 +158,13 @@ def runAnalyzeElementSteps(probands, device):
             # ILM Grab Right
             grabRight_start_array = runAnalyzeSetScene(p, 'ILM_Grab_Right', d)
             grabRight_end_array = runAnalyzeTaskGrab(p, 'ILM_Grab_Right', d)
-            
+
 
             if ((len(grabRight_start_array) > 0) and len(grabRight_end_array) > 0):
 
                 grabRight_delta = getDelta(grabRight_start_array, grabRight_end_array)
-                print('Grab Right for Proband ' + str(p) + ' Delta Time: ' + str(grabRight_delta))
+                # print('Grab Right for Proband ' + str(p) + '\t\t Delta Time: ' + str(grabRight_delta))
+                printTimes('GR Right', p, grabRight_delta)
 
                 timeArray.append(grabRight_delta)
                 grabRightArray.append(grabRight_delta)
@@ -164,14 +174,97 @@ def runAnalyzeElementSteps(probands, device):
 
 
 
+            # ILM Grab Left
+            grabLeft_start_array = runAnalyzeSetScene(p, 'ILM_Grab_Left', d)
+            grabLeft_end_array = runAnalyzeTaskGrab(p, 'ILM_Grab_Left', d)
 
+            if ((len(grabLeft_start_array) > 0) and len(grabLeft_end_array) > 0):
+                grabLeft_delta = getDelta(grabLeft_start_array, grabLeft_end_array)
+                # print('Grab Left for Proband ' + str(p) + '\t\t Delta Time: ' + str(grabLeft_delta))
+                printTimes('GR Left', p, grabLeft_delta)
+
+                timeArray.append(grabLeft_delta)
+                grabLeftArray.append(grabLeft_delta)
+
+
+
+            # ILM Submit Far Right
+            subFarRight_start_array = runAnalyzeSetScene(p, 'ILM_Submit-Far_Right', d)
+            subFarRight_end_array = runAnalyzeTaskSubmitFar(p, 'ILM_Submit-Far_Right', d)
+
+            if ((len(subFarRight_start_array) > 0) and len(subFarRight_end_array) > 0):
+                subFarRight_delta = getDelta(subFarRight_start_array, subFarRight_end_array)
+
+                # print('Sub Far Right for Proband ' + str(p) + '\t\t Delta Time: ' + str(subFarRight_delta))
+                printTimes('SF Right', p, subFarRight_delta)
+
+                timeArray.append(subFarRight_delta)
+                subFarRightArray.append(subFarRight_delta)
+
+
+
+
+            # ILM Submit Far Left
+            subFarLeft_start_array = runAnalyzeSetScene(p, 'ILM_Submit-Far_Left', d)
+            subFarLeft_end_array = runAnalyzeTaskSubmitFar(p, 'ILM_Submit-Far_Left', d)
+
+            if ((len(subFarLeft_start_array) > 0) and len(subFarLeft_end_array) > 0):
+                subFarLeft_delta = getDelta(subFarLeft_start_array, subFarLeft_end_array)
+
+                printTimes('SF Left', p, subFarLeft_delta)
+
+                timeArray.append(subFarLeft_delta)
+                subFarLeftArray.append(subFarLeft_delta)
+
+
+
+
+            # ILM Submit Near Right
+            subNearRight_start_array = runAnalyzeStartScene(p, 'ILM_Submit-Near_Right', d)
+            subNearRight_end_array = runAnalyzeTaskSubmitNear(p, 'ILM_Submit-Near_Right', d)
+
+            if ((len(subNearRight_start_array) > 0) and len(subNearRight_end_array) > 0):
+                subNearRight_delta = getDelta(subNearRight_start_array, subNearRight_end_array)
+
+                printTimes('SN Right', p, subNearRight_delta)
+
+                timeArray.append(subNearRight_delta)
+                subNearRightArray.append(subNearRight_delta)
+
+
+
+
+            # ILM Submit Near Left
+            subNearLeft_start_array = runAnalyzeStartSubmitNear(p, 'ILM_Submit-Near_Left', d)
+            subNearLeft_end_array = runAnalyzeTaskSubmitNear(p, 'ILM_Submit-Near_Left', d)
+
+            if ((len(subNearLeft_start_array) > 0) and len(subNearLeft_end_array) > 0):
+                subNearLeft_delta = getDelta(subNearLeft_start_array, subNearLeft_end_array)
+
+                printTimes('SN Left', p, subNearLeft_delta)
+
+                timeArray.append(subNearLeft_delta)
+                subNearLeftArray.append(subNearLeft_delta)
+
+
+
+    tempArray = []
+
+    for elem in timeArray:
+        if elem >= 0.0:
+            tempArray.append(elem)
+
+    timeArray = tempArray
 
     return timeArray
 
 
+
+
+def printTimes(operator, p, delta):
+    print('Proband ' + str(p) + '\t\t Delta Time: ' + str(delta) + "\t\t" + str(operator))
+
 """ Gibt alle SF Tupel zurück """
-
-
 
 def runAnalyzeStartScene(proband, scene, device):
     sf_array = col.find({'scene': scene,
@@ -198,16 +291,11 @@ def runAnalyzeSetScene(proband, scene, device):
 
     return sf_array
 
-def runAnalyzeSubmitFarArray(proband, scene, device):
-    sf_array = col.find({'scene': scene,
-                         'dev': device,
-                         'action': 'Submit Far',
-                         'prob': proband
-                         })
 
-    sf_array = list(sf_array)
 
-    return sf_array
+
+
+
 
 
 def runAnalyzeTaskPoint(proband, scene, device):
@@ -256,30 +344,44 @@ def runAnalyzeTaskGrab(proband, scene, device):
 
 
 
+def runAnalyzeTaskSubmitFar(proband, scene, device):
+    sf_array = col.find({'scene': scene,
+                         'dev': device,
+                         'action': 'Submit Far',
+                         'prob': proband
+                         })
 
-# This is added so that many files can reuse the function get_database()
-def boxplotCap(valArray):
-    median = round(statistics.median(valArray), 2)
-    median = str(median).replace('.', ',')
+    sf_array = list(sf_array)
 
-    mean = round(statistics.mean(valArray), 2)
-    mean = str(mean).replace('.', ',')
+    return sf_array
 
-    stdev = round(statistics.stdev(valArray), 2)
-    stdev = str(stdev).replace('.', ',')
 
-    first_quartil = round(np.percentile(valArray, 25), 2)
-    first_quartil = str(first_quartil).replace('.', ',')
 
-    third_quartil = round(np.percentile(valArray, 75), 2)
-    third_quartil = str(third_quartil).replace('.', ',')
 
-    return f'\n n = {len(valArray)} \n' \
-           f'Me. = {median} s \n ' \
-           f'Mi. = {mean} s \n ' \
-           f'S. Abw. = {stdev} s \n ' \
-           f'1Q = {first_quartil} s \n ' \
-           f'3Q = {third_quartil} s';
+def runAnalyzeStartSubmitNear(proband, scene, device):
+    array = col.find({'scene': scene,
+                         'dev': device,
+                         'action': 'Start Scene',
+                         'prob': proband
+                         })
+
+    array = list(array)
+
+    return array
+
+
+def runAnalyzeTaskSubmitNear(proband, scene, device):
+    array = col.find({'scene': scene,
+                         'dev': device,
+                         'action': 'Submit Near',
+                         'actionvalue': 'Button 1: Button Pressed',
+                         'prob': proband
+                         })
+
+    array = list(array)
+
+    return array
+
 
 
 def setXTicks_param(valArray, descArray):
@@ -318,64 +420,35 @@ if __name__ == "__main__":
     print(probands)
 
     devices = ['HL2']
-    SF_UWP_Left_HPG2 = runAnalyzeElementSteps(probands, devices)
+    M_UWP_HL2 = runAnalyzeElementSteps(probands, devices)
+    writeToDb('M_UWP_HL2', M_UWP_HL2)
 
-    '''
-    devices = ['HL2']
-    SF_UWP_Left_HL2 = runAnalyzeElementSteps(probands, sceneName, devices)
-
-
-    print(SF_UWP_Left_HL2)
-
-
-
-    sceneName = 'ILM_Submit-Far_Right'
     devices = ['HPG2']
-    SF_UWP_Right_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices)
-    
-    
-    devices = ['HL2']
-    SF_UWP_Right_HL2 = runAnalyzeElementSteps(probands, sceneName, devices)
+    M_UWP_HPG2 = runAnalyzeElementSteps(probands, devices)
+    writeToDb('M_UWP_HPG2', M_UWP_HPG2)
 
-    writeToDb('SF_UWP_R_HPG2_first', SF_UWP_Right_HPG2)
-    writeToDb('SF_UWP_L_HPG2_first', SF_UWP_Left_HPG2)
 
-    writeToDb('SF_UWP_R_HL2_first', SF_UWP_Right_HL2)
-    writeToDb('SF_UWP_L_HL2_first', SF_UWP_Left_HL2)
+    M_UWP = [M_UWP_HL2, M_UWP_HPG2]
+    M_UWP = aggregateData(M_UWP)
+    writeToDb('M_UWP', M_UWP)
 
-    SF_UWP_Right = [SF_UWP_Right_HL2, SF_UWP_Right_HPG2]
-    SF_UWP_Right = aggregateData(SF_UWP_Right)
 
-    SF_UWP_Left = [SF_UWP_Left_HL2, SF_UWP_Left_HPG2]
-    SF_UWP_Left = aggregateData(SF_UWP_Left)
-
-    writeToDb('SF_UWP_R_first', SF_UWP_Right)
-    writeToDb('SF_UWP_L_first', SF_UWP_Left)
-
-    SF_UWP_ALL = [SF_UWP_Right, SF_UWP_Left]
-    SF_UWP_ALL = aggregateData(SF_UWP_ALL)
-
-    writeToDb('SF_UWP_ALL_first', SF_UWP_ALL)
-
-    allBoxplot = [SF_UWP_Right_HL2, SF_UWP_Right_HPG2,
-                  SF_UWP_Left_HL2, SF_UWP_Left_HPG2,
-                  SF_UWP_Right, SF_UWP_Left,
-                  SF_UWP_ALL]
+    allBoxplot = [M_UWP_HL2, M_UWP_HPG2, M_UWP]
 
     # fig = plt.subplot(figsize=(10, 8))
 
-    descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
+    descArray = ['HL2', 'HPG2', 'Gesamt']
 
     num, val = setXTicks_param(allBoxplot, descArray)
 
-    plt.title('Bearbeitungszeit ersten Schalftlächen UWP')
+    plt.title('Windows: Mentale Vorbereitungszeit', fontsize=15)
     plt.boxplot(allBoxplot, showmeans=True)
 
-    plt.xticks(num, val)
-    plt.ylabel('Sekunden')
+    plt.xticks(num, val, fontsize=12)
+    plt.ylabel('Sekunden', fontsize=12)
 
     plt.show()
-    '''
+
 
 
 

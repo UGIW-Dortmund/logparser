@@ -5,6 +5,10 @@ import numpy as np
 import pandas as pd
 import statistics
 from statistics import mean
+import sys
+
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 from pymongo import MongoClient
 
@@ -556,9 +560,9 @@ if __name__ == "__main__":
     #probands = col.distinct('prob')
     # probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
     # probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A18']
-    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
-                'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
+                'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
     #probands = ['T15']
 
 
@@ -650,43 +654,23 @@ if __name__ == "__main__":
     axs[0].boxplot(allTimesRight, notch=False)
 
 
-    axs[0].set(ylabel='Sekunden')
-    axs[1].set(ylabel='Sekunden')
+    axs[0].set_ylabel('Sekunden', fontsize=12)
+    axs[1].set_ylabel('Sekunden', fontsize=12)
+
+    descArray = ["B1", "B2", "B3",
+                 "T1", "T2", "T3",
+                 "S1", "S2", "S3",
+                 "D1", "D2", "D3"]
 
 
-    axs[0].set_title('Rechte Hand')
-    axs[0].set_xticks([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [
-                                  "Button 1" + boxplotCap(allTimesRight[0]),
-                                  "Button 2" + boxplotCap(allTimesRight[1]),
-                                  "Button 3" + boxplotCap(allTimesRight[2]),
-                                  "Toggle 1" + boxplotCap(allTimesRight[3]),
-                                  "Toggle 2" + boxplotCap(allTimesRight[4]),
-                                  "Toggle 3" + boxplotCap(allTimesRight[5]),
-                                  "Slider 1" + boxplotCap(allTimesRight[6]),
-                                  "Slider 2" + boxplotCap(allTimesRight[7]),
-                                  "Slider 3" + boxplotCap(allTimesRight[8]),
-                                  "Dropdown 1" + boxplotCap(allTimesRight[9]),
-                                  "Dropdown 2" + boxplotCap(allTimesRight[10]),
-                                  "Dropdown 3" + boxplotCap(allTimesRight[11])
-                                  ])
+    num, val = gf.setXTicks_param_plain(allTimesRight, descArray)
 
+    axs[0].set_title('1. Rechte Hand')
+    axs[0].set_xticks(num, val)
 
-    axs[1].set_title('Linke Hand')
-    axs[1].set_xticks([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [
-                                "Button 1" + boxplotCap(allTimesLeft[0]),
-                                "Button 2" + boxplotCap(allTimesLeft[1]),
-                                "Button 3" + boxplotCap(allTimesLeft[2]),
-                                "Toggle 1" + boxplotCap(allTimesLeft[3]),
-                                "Toggle 2" + boxplotCap(allTimesLeft[4]),
-                                "Toggle 3" + boxplotCap(allTimesLeft[5]),
-                                "Slider 1" + boxplotCap(allTimesLeft[6]),
-                                  "Slider 2" + boxplotCap(allTimesLeft[7]),
-                                  "Slider 3" + boxplotCap(allTimesLeft[8]),
-                                  "Dropdown 1" + boxplotCap(allTimesLeft[9]),
-                                  "Dropdown 2" + boxplotCap(allTimesLeft[10]),
-                                  "Dropdown 3" + boxplotCap(allTimesLeft[11])
-
-                                ])
+    num, val = gf.setXTicks_param_plain(allTimesLeft, descArray)
+    axs[1].set_title('2. Linke Hand')
+    axs[1].set_xticks(num, val)
 
 
 

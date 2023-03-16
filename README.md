@@ -6,8 +6,12 @@ This Parser is for proceeding the Log Files of the ILM project.
 In order to read the text of the diagramms properly on DIN A4 pages. 
 Add the following settings to the diagramms: 
 - X-Ticks `` plt.xticks(num, val, fontsize=12)``
+
 - Diagramm Title `` plt.title('XXX', fontsize=15)``
-- Y-Label: ``    plt.ylabel('XXX', fontsize=12)``
+
+- X- and Y-Label: 
+  - ``plt.ylabel('XXX', fontsize=12)``
+  - ``axs[0].set_xlabel('X-Koordinaten', fontsize=12)``
 
 ## Scripts
 

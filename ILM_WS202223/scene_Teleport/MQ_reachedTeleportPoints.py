@@ -166,17 +166,16 @@ if __name__ == "__main__":
 
     #probands = col.distinct('prob')
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
-                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24',
-                'A25', 'A26', 'A27', 'A28']
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
+                'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
     print(probands)
 
-    sceneName = 'ILM_Teleport_Scene_Left-Hand'
-    query_string = {'$regex': 'MQ*'}
-    deviceName = query_string
+    sceneName = 'ILM_Teleport_Scene_Right-Hand'
+
 
     devices = ['MQ2', 'MQP']
-    devices = ['MQ2']
+    devices = ['MQP']
 
     sceneTeleportRightMQ2_1 = runAnalyze(probands, sceneName, devices, '1')
     sceneTeleportLeftMQ2_2 = runAnalyze(probands, sceneName, devices, '2')
@@ -216,7 +215,7 @@ if __name__ == "__main__":
     i = 0
 
     # fig = plt.figure(figsize=(10, 7))
-    plt.title('Bearbeitungszeit der Teleport-Szene mit der rechten Hand -- MQ2', fontsize=15)
+    plt.title('Bearbeitungszeit der Teleport-Szene mit der rechten Hand -- MQP', fontsize=15)
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     plt.boxplot(allTimes, showmeans=True)
     plt.ylabel('Sekunden', fontsize=12)

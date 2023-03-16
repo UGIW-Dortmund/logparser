@@ -5,7 +5,9 @@ This Parser is for proceeding the Log Files of the ILM project.
 ## Styling
 In order to read the text of the diagramms properly on DIN A4 pages. 
 Add the following settings to the diagramms: 
-- X-Ticks `` plt.xticks(num, val, fontsize=12)``
+- X-Ticks 
+  - `` plt.xticks(num, val, fontsize=12)``
+
 
 - Diagramm Title 
   - `` plt.title('XXX', fontsize=15)``

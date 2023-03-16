@@ -5,6 +5,9 @@ import numpy as np
 import pandas as pd
 import statistics
 from statistics import mean
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 from pymongo import MongoClient
 
@@ -421,7 +424,7 @@ if __name__ == "__main__":
 
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
+                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
     print(probands)
 
     sceneName = 'ILM_Submit-Near_Right'
@@ -434,19 +437,19 @@ if __name__ == "__main__":
     # Probands without A14 = Outlier
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
+                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
     sceneSubmitNearCheckbox_2_Right = runAnalyzeSecondCheckbox(probands, sceneName, devices)
     probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
                 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
+                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
     sceneSubmitNearButton_3_Right = runAnalyzeThirdButton(probands, sceneName, devices)
     sceneSubmitNearCheckbox_3_Right = runAnalyzeThirdCheckbox(probands, sceneName, devices)
 
-    allTimes = [sceneSubmitNearButton_1_Right, sceneSubmitNearCheckbox_1_Right,
-                sceneSubmitNearButton_2_Right, sceneSubmitNearCheckbox_2_Right,
-                sceneSubmitNearButton_3_Right, sceneSubmitNearCheckbox_3_Right]
+    allTimesRight_HPG2 = [sceneSubmitNearButton_1_Right, sceneSubmitNearCheckbox_1_Right,
+                          sceneSubmitNearButton_2_Right, sceneSubmitNearCheckbox_2_Right,
+                          sceneSubmitNearButton_3_Right, sceneSubmitNearCheckbox_3_Right]
 
     sceneName = 'ILM_Submit-Near_Left'
 
@@ -457,11 +460,13 @@ if __name__ == "__main__":
     sceneSubmitNearButton_3_Left = runAnalyzeThirdButton(probands, sceneName, devices)
     sceneSubmitNearCheckbox_3_Left = runAnalyzeThirdCheckbox(probands, sceneName, devices)
 
-    allTimesLeft = [sceneSubmitNearButton_1_Left, sceneSubmitNearCheckbox_1_Left,
-                        sceneSubmitNearButton_2_Left, sceneSubmitNearCheckbox_2_Left,
-                        sceneSubmitNearButton_3_Left, sceneSubmitNearCheckbox_3_Left]
+    allTimesLeft_HPG2 = [sceneSubmitNearButton_1_Left, sceneSubmitNearCheckbox_1_Left,
+                         sceneSubmitNearButton_2_Left, sceneSubmitNearCheckbox_2_Left,
+                         sceneSubmitNearButton_3_Left, sceneSubmitNearCheckbox_3_Left]
 
     devices = ['HL2']
+
+    sceneName = 'ILM_Submit-Near_Right'
 
     sceneSubmitNearButton_1_Right_HL2 = runAnalyzeFirstButton(probands, sceneName, devices)
     sceneSubmitNearCheckbox_1_Right_HL2 = runAnalyzeFirstCheckbox(probands, sceneName, devices)
@@ -470,9 +475,9 @@ if __name__ == "__main__":
     sceneSubmitNearButton_3_Right_HL2 = runAnalyzeThirdButton(probands, sceneName, devices)
     sceneSubmitNearCheckbox_3_Right_HL2 = runAnalyzeThirdCheckbox(probands, sceneName, devices)
 
-    allTimes_HL2 = [sceneSubmitNearButton_1_Right_HL2, sceneSubmitNearCheckbox_1_Right_HL2,
-                sceneSubmitNearButton_2_Right_HL2, sceneSubmitNearCheckbox_2_Right_HL2,
-                sceneSubmitNearButton_3_Right_HL2, sceneSubmitNearCheckbox_3_Right_HL2]
+    allTimesRight_HL2 = [sceneSubmitNearButton_1_Right_HL2, sceneSubmitNearCheckbox_1_Right_HL2,
+                         sceneSubmitNearButton_2_Right_HL2, sceneSubmitNearCheckbox_2_Right_HL2,
+                         sceneSubmitNearButton_3_Right_HL2, sceneSubmitNearCheckbox_3_Right_HL2]
 
     sceneName = 'ILM_Submit-Near_Left'
 
@@ -493,14 +498,14 @@ if __name__ == "__main__":
 
     fig.suptitle('Bearbeitungszeit der Buttons')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0, 0].boxplot(allTimes, notch=False)
-    axs[0, 1].boxplot(allTimesLeft, notch=False)
+    axs[0, 0].boxplot(allTimesRight_HPG2, showmeans=True)
+    axs[0, 1].boxplot(allTimesLeft_HPG2, showmeans=True)
     axs[0, 1].sharey(axs[0, 0])
 
-    axs[1, 0].boxplot(allTimes_HL2)
+    axs[1, 0].boxplot(allTimesRight_HL2, showmeans=True)
     axs[1, 0].sharey(axs[0, 0])
 
-    axs[1, 1].boxplot(allTimesLeft_HL2)
+    axs[1, 1].boxplot(allTimesLeft_HL2, showmeans=True)
     axs[1, 1].sharey(axs[0, 0])
 
     axs[0, 0].set(ylabel='Sekunden')
@@ -508,37 +513,32 @@ if __name__ == "__main__":
     axs[1, 0].set(ylabel='Sekunden')
     axs[1, 1].set(ylabel='Sekunden')
 
-    axs[0, 0].set_title('1. Szene: Rechte Hand - HPG2')
-    axs[0, 0].set_xticks([1, 2, 3, 4, 5, 6], ["Button 1" + boxplotCap(allTimes[0]),
-                                           "Checkbox 1" + boxplotCap(allTimes[1]),
-                                           "Button 2" + boxplotCap(allTimes[2]),
-                                           "Checkbox 2" + boxplotCap(allTimes[3]),
-                                           "Button 3" + boxplotCap(allTimes[4]),
-                                           "Checkbox 3" + boxplotCap(allTimes[5])])
 
-    axs[1, 0].set_title('1. Szene: Rechte Hand - HL2')
-    axs[1, 0].set_xticks([1, 2, 3, 4, 5, 6], ["Button 1" + boxplotCap(allTimes_HL2[0]),
-                                              "Checkbox 1" + boxplotCap(allTimes_HL2[1]),
-                                              "Button 2" + boxplotCap(allTimes_HL2[2]),
-                                              "Checkbox 2" + boxplotCap(allTimes_HL2[3]),
-                                              "Button 3" + boxplotCap(allTimes_HL2[4]),
-                                              "Checkbox 3" + boxplotCap(allTimes_HL2[5])])
+    descArray = ["Button 1", "Checkbox 1", "Button 2", "Checkbox 2", "Button 3", "Checkbox 3"]
 
-    axs[0, 1].set_title('2. Szene: Linke Hand - HPG2')
-    axs[0, 1].set_xticks([1, 2, 3, 4, 5, 6], ["Button 1" + boxplotCap(allTimesLeft_HL2[0]),
-                                        "Checkbox 1" + boxplotCap(allTimesLeft_HL2[1]),
-                                        "Button 2" + boxplotCap(allTimesLeft_HL2[2]),
-                                        "Checkbox 2" + boxplotCap(allTimesLeft_HL2[3]),
-                                        "Button 3" + boxplotCap(allTimesLeft_HL2[4]),
-                                           "Checkbox 3" + boxplotCap(allTimesLeft_HL2[5])])
+    num, val = gf.setXTicks_param_plain(allTimesRight_HPG2, descArray)
+    print("HPG2 Right")
+    gf.reqLatexTableOutput(allTimesRight_HPG2, descArray)
+    axs[0, 0].set_title('1. Rechte Hand - HPG2', fontsize=15)
+    axs[0, 0].set_xticks(num, val)
 
-    axs[1, 1].set_title('2. Szene: Linke Hand - HL2')
-    axs[1, 1].set_xticks([1, 2, 3, 4, 5, 6], ["Button 1" + boxplotCap(allTimesLeft[0]),
-                                              "Checkbox 1" + boxplotCap(allTimesLeft[1]),
-                                              "Button 2" + boxplotCap(allTimesLeft[2]),
-                                              "Checkbox 2" + boxplotCap(allTimesLeft[3]),
-                                              "Button 3" + boxplotCap(allTimesLeft[4]),
-                                              "Checkbox 3" + boxplotCap(allTimesLeft[5])])
+    num, val = gf.setXTicks_param_plain(allTimesRight_HL2, descArray)
+    print("HL2 Right")
+    gf.reqLatexTableOutput(allTimesRight_HL2, descArray)
+    axs[1, 0].set_title('1. Rechte Hand - HL2', fontsize=15)
+    axs[1, 0].set_xticks(num, val)
+
+    num, val = gf.setXTicks_param_plain(allTimesLeft_HL2, descArray)
+    print("HL2 Left")
+    gf.reqLatexTableOutput(allTimesLeft_HL2, descArray)
+    axs[1, 1].set_title('2. Linke Hand - HL2', fontsize=15)
+    axs[1, 1].set_xticks(num, val)
+
+    num, val = gf.setXTicks_param_plain(allTimesLeft_HPG2, descArray)
+    print("HPG2 Left")
+    gf.reqLatexTableOutput(allTimesLeft_HPG2, descArray)
+    axs[0, 1].set_title('2. Linke Hand - HPG2', fontsize=15)
+    axs[0, 1].set_xticks(num, val)
 
     plt.show()
 

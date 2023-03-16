@@ -661,14 +661,23 @@ if __name__ == "__main__":
                  "T1", "T2", "T3",
                  "S1", "S2", "S3",
                  "D1", "D2", "D3"]
+    descArrayFully = ["Button 1", "Button 2", "Button 3",
+                 "Toggle 1", "Toggle 2", "Toggle 3",
+                 "Slider 1", "Slider 2", "Slider 3",
+                 "Dropdown 1", "Dropdown 2", "Dropdown 3"]
 
 
     num, val = gf.setXTicks_param_plain(allTimesRight, descArray)
+    print('Rechte Hand')
+    gf.reqLatexTableOutput(allTimesRight, descArrayFully)
 
     axs[0].set_title('1. Rechte Hand')
     axs[0].set_xticks(num, val)
 
     num, val = gf.setXTicks_param_plain(allTimesLeft, descArray)
+    print('Linke Hand')
+    gf.reqLatexTableOutput(allTimesLeft, descArrayFully)
+
     axs[1].set_title('2. Linke Hand')
     axs[1].set_xticks(num, val)
 

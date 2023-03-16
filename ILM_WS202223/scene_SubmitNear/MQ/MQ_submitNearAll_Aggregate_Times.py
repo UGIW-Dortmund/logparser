@@ -793,13 +793,15 @@ if __name__ == "__main__":
     # axs[2].set(ylabel='Sekunden')
 
 
-    descArray = ["Sn-1", "Sn-2"]
+    descArray = ["Sn-1-Ad-R", "Sn-2-Ad-R"]
 
     num, val = gf.setXTicks_param(boxplotElementRightArray, descArray)
 
 
     axs[0].set_title('1. Rechte Hand')
     axs[0].set_xticks(num, val, fontsize=12)
+
+    descArray = ["Sn-1-Ad-L", "Sn-2-Ad-L"]
 
     num, val = gf.setXTicks_param(boxplotElementLeftArray, descArray)
 

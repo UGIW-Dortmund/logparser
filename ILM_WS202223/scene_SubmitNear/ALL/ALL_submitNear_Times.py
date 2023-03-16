@@ -4,6 +4,9 @@ import pandas as pd
 import statistics
 from statistics import mean
 import seaborn as sns
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 from pymongo import MongoClient
 
@@ -63,10 +66,10 @@ if __name__ == "__main__":
     tresor = dbname["tresor"]
 
     #### UWP
-    SN_UWP_first = tresor.find({'name': 'SN_UWP_first'})
+    SN_UWP_first = tresor.find({'name': 'SN_1_Wi'})
     SN_UWP_first = convertToFloat(SN_UWP_first)
 
-    SN_UWP_second = tresor.find({'name': 'SN_UWP_second'})
+    SN_UWP_second = tresor.find({'name': 'SN_2_Wi'})
     SN_UWP_second = convertToFloat(SN_UWP_second)
 
     SN_UWP_boxplot = [SN_UWP_first, SN_UWP_second]
@@ -107,17 +110,20 @@ if __name__ == "__main__":
 
     axs[0].set(ylabel='Sekunden')
 
+    descArray = ["SN-1-Wi", "SN-2-Wi"]
+    num, val = gf.setXTicks_param(SN_UWP_boxplot, descArray)
     axs[0].set_title('Windows-Anwendungen')
-    axs[0].set_xticks([1, 2], ["Erste S." + boxplotCap(SN_UWP_boxplot[0]),
-                               "Nachgelagerte S." + boxplotCap(SN_UWP_boxplot[1])])
+    axs[0].set_xticks(num, val)
 
+    descArray = ["SN-1-Ad", "SN-2-Ad"]
+    num, val = gf.setXTicks_param(SN_AD_boxplot, descArray)
     axs[1].set_title('Android-Anwendungen')
-    axs[1].set_xticks([1, 2], ["Erste S." + boxplotCap(SN_AD_boxplot[0]),
-                               "Nachgelagerte S." + boxplotCap(SN_AD_boxplot[1])])
+    axs[1].set_xticks(num, val)
 
+    descArray = ["SN-1", "SN-2"]
+    num, val = gf.setXTicks_param(SN_boxplot, descArray)
     axs[2].set_title('Zusammenfassung')
-    axs[2].set_xticks([1, 2], ["Erste S." + boxplotCap(SN_boxplot[0]),
-                               "Nachgelagerte S." + boxplotCap(SN_boxplot[1])])
+    axs[2].set_xticks(num, val)
 
     plt.show()
 

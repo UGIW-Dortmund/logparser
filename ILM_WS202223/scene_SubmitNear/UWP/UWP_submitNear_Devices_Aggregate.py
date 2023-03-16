@@ -5,6 +5,9 @@ import numpy as np
 import pandas as pd
 import statistics
 from statistics import mean
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 from pymongo import MongoClient
 
@@ -495,6 +498,7 @@ if __name__ == "__main__":
 
 
     devices = ['HL2']
+    sceneName = 'ILM_Submit-Near_Right'
 
     sceneSubmitNearButton_1_Right_HL2 = runAnalyzeFirstButton(probands, sceneName, devices)
     sceneSubmitNearCheckbox_1_Right_HL2 = runAnalyzeFirstCheckbox(probands, sceneName, devices)
@@ -535,24 +539,34 @@ if __name__ == "__main__":
     aggrLeft_HL2_second = [sceneSubmitNearButton_2_Left_HL2, sceneSubmitNearCheckbox_2_Left_HL2,
                  sceneSubmitNearButton_3_Left_HL2, sceneSubmitNearCheckbox_3_Left_HL2]
 
+
     aggrLeft_HL2_first = aggregateData(aggrLeft_HL2_first)
     aggrLeft_HL2_second = aggregateData(aggrLeft_HL2_second)
 
     box_aggrLeft_HL2 = [aggrLeft_HL2_first, aggrLeft_HL2_second]
+
+
+    SN_1_Wi = [aggrLeft_HL2_first, aggrLeft_HPG2_first, aggrRight_HPG2_first, aggrRight_HL2_first]
+    SN_1_Wi = gf.aggregateData(SN_1_Wi)
+    gf.writeToDb('SN_1_Wi', SN_1_Wi)
+
+    SN_2_Wi = [aggrLeft_HL2_second, aggrLeft_HPG2_second, aggrRight_HL2_second, aggrRight_HPG2_second]
+    SN_2_Wi = gf.aggregateData(SN_2_Wi)
+    gf.writeToDb('SN_2_Wi', SN_2_Wi)
 
     fig, axs = plt.subplots(2, 2, figsize=(10, 8))
 
 
     fig.suptitle('Bearbeitungszeit der Buttons')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0, 0].violinplot(box_aggrRight_HPG2)
-    axs[0, 1].violinplot(box_aggrLeft_HPG2)
+    axs[0, 0].violinplot(box_aggrRight_HPG2, showmedians=True)
+    axs[0, 1].violinplot(box_aggrLeft_HPG2, showmedians=True)
     axs[0, 1].sharey(axs[0, 0])
 
-    axs[1, 0].violinplot(box_aggrRight_HL2)
+    axs[1, 0].violinplot(box_aggrRight_HL2, showmedians=True)
     axs[1, 0].sharey(axs[0, 0])
 
-    axs[1, 1].violinplot(box_aggrLeft_HL2)
+    axs[1, 1].violinplot(box_aggrLeft_HL2, showmedians=True)
     axs[1, 1].sharey(axs[0, 0])
 
     axs[0, 0].set(ylabel='Sekunden')
@@ -560,21 +574,39 @@ if __name__ == "__main__":
     axs[1, 0].set(ylabel='Sekunden')
     axs[1, 1].set(ylabel='Sekunden')
 
-    axs[0, 0].set_title('1. Szene: Rechte Hand - HPG2')
-    axs[0, 0].set_xticks([1, 2], ["Erste S." + boxplotCap(box_aggrRight_HPG2[0]),
-                                    "Nachgelagerte S." + boxplotCap(box_aggrRight_HPG2[1])])
 
-    axs[1, 0].set_title('1. Szene: Rechte Hand - HL2')
-    axs[1, 0].set_xticks([1, 2], ["Erste S." + boxplotCap(box_aggrLeft_HL2[0]),
-                                              "Nachgelagerte S." + boxplotCap(box_aggrLeft_HL2[1])])
 
-    axs[0, 1].set_title('2. Szene: Linke Hand - HPG2')
-    axs[0, 1].set_xticks([1, 2], ["Erste S." + boxplotCap(box_aggrLeft_HPG2[0]),
-                                              "Nachgelagerte S." + boxplotCap(box_aggrLeft_HPG2[1])])
+    descArray = ['Sn-1-Wi-R-HPG2', 'Sn-2-Wi-R-HPG2']
+    num, val = gf.setXTicksMin(box_aggrRight_HPG2, descArray)
+    axs[0, 0].set_title('1. Rechte Hand - HPG2')
+    axs[0, 0].set_xticks(num, val)
+    print('1. Rechte Hand - HPG2')
+    gf.reqLatexTableOutput(box_aggrRight_HPG2, descArray)
 
-    axs[1, 1].set_title('2. Szene: Linke Hand - HL2')
-    axs[1, 1].set_xticks([1, 2], ["Erste S." + boxplotCap(box_aggrLeft_HL2[0]),
-                                    "Nachgelagerte S." + boxplotCap(box_aggrLeft_HL2[1])])
+
+
+    descArray = ['Sn-1-Wi-R-HL2', 'Sn-2-Wi-R-HL2']
+    num, val = gf.setXTicksMin(box_aggrRight_HL2, descArray)
+    axs[1, 0].set_title('1. Rechte Hand - HL2')
+    axs[1, 0].set_xticks(num, val)
+    print('1. Rechte Hand - HL2')
+    gf.reqLatexTableOutput(box_aggrRight_HL2, descArray)
+
+
+    descArray = ['Sn-1-Wi-L-HPG2', 'Sn-2-Wi-L-HPG2']
+    num, val = gf.setXTicksMin(box_aggrLeft_HL2, descArray)
+    axs[0, 1].set_title('2. Linke Hand - HPG2')
+    axs[0, 1].set_xticks(num, val)
+    print('2. Linke Hand - HPG2')
+    gf.reqLatexTableOutput(box_aggrLeft_HL2, descArray)
+
+
+    descArray = ['Sn-1-Wi-L-HL2', 'Sn-2-Wi-L-HL2']
+    num, val = gf.setXTicksMin(box_aggrLeft_HPG2, descArray)
+    axs[1, 1].set_title('2. Linke Hand - HL2')
+    axs[1, 1].set_xticks(num, val)
+    print('2. Linke Hand - HL2')
+    gf.reqLatexTableOutput(box_aggrLeft_HPG2, descArray)
 
     plt.show()
 

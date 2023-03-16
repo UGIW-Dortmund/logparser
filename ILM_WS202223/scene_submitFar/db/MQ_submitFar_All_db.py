@@ -7,6 +7,9 @@ import pandas as pd
 import statistics
 from statistics import mean
 import locale
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 from pymongo import MongoClient
 
@@ -213,7 +216,7 @@ if __name__ == "__main__":
     allRight = allTimesButtonRight + allTimesToggleRight \
                + allTimesSliderRight + allTimesDropdownRight
 
-    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
+    fig, axs = plt.subplots(2, 1, figsize=(10, 8))
 
 
     fig.suptitle('Bearbeitungszeit aller Elemente')
@@ -224,11 +227,11 @@ if __name__ == "__main__":
     axs[1].sharey(axs[0])
 
 
-    axs[0].set(ylabel='Sekunden')
-    axs[1].set(ylabel='Sekunden')
+    axs[0].set_ylabel('Sekunden', fontsize=12)
+    axs[1].set_ylabel('Sekunden', fontsize=12)
 
 
-    descArray = ["Button 1", "Button 2", "Button 3",
+    descArrayDetail = ["Button 1", "Button 2", "Button 3",
                  "Toggle 1", "Toggle 2", "Toggle 3",
                  "Slider 1", "Slider 2", "Slider 3",
                  "Dropdown 1", "Dropdown 2", "Dropdown 3"]
@@ -243,13 +246,17 @@ if __name__ == "__main__":
     (y_nums, y_text) = setYTicks_param(allLeft, descArray)
 
 
-
-    axs[0].set_title('1. Szenen: Rechte Hand')
+    axs[0].set_title('1. Rechte Hand', fontsize=15)
     axs[0].set_xticks(y_nums, y_text)
+    axs[0].xaxis.set_tick_params(labelsize=12)
+    print("1. Rechte Hand")
+    gf.reqLatexTableOutput(allRight, descArrayDetail)
 
-    axs[1].set_title('2. Szenen: Linke Hand')
+    axs[1].set_title('2. Linke Hand', fontsize=15)
     axs[1].set_xticks(y_nums, y_text)
-   # axs[1].set_xticks(x_nums, x_text)
+    axs[1].xaxis.set_tick_params(labelsize=12)
+    print("2. Linke Hand")
+    gf.reqLatexTableOutput(allLeft, descArrayDetail)
 
 
     plt.show()

@@ -668,18 +668,18 @@ if __name__ == "__main__":
 
 
     num, val = gf.setXTicks_param_plain(allTimesRight, descArray)
-    print('Rechte Hand')
+    print('1. Rechte Hand')
     gf.reqLatexTableOutput(allTimesRight, descArrayFully)
-
+    axs[0].xaxis.set_tick_params(labelsize=12)
     axs[0].set_title('1. Rechte Hand')
     axs[0].set_xticks(num, val)
 
     num, val = gf.setXTicks_param_plain(allTimesLeft, descArray)
-    print('Linke Hand')
+    print('2. Linke Hand')
     gf.reqLatexTableOutput(allTimesLeft, descArrayFully)
-
     axs[1].set_title('2. Linke Hand')
     axs[1].set_xticks(num, val)
+    axs[1].xaxis.set_tick_params(labelsize=12)
 
 
 

@@ -23,7 +23,52 @@ def get_database():
     # Create the database for our example (we will use the same database throughout the tutorial
     return client['ilm']
 
+def boxplotCap(valArray):
+    median = round(statistics.median(valArray), 1)
+    median = str(median).replace('.', ',')
 
+    mean = round(statistics.mean(valArray), 1)
+    mean = str(mean).replace('.', ',')
+
+    stdev = round(statistics.stdev(valArray), 1)
+    stdev = str(stdev).replace('.', ',')
+
+    first_quartil = round(np.percentile(valArray, 25), 1)
+    first_quartil = str(first_quartil).replace('.', ',')
+
+    third_quartil = round(np.percentile(valArray, 75), 1)
+    third_quartil = str(third_quartil).replace('.', ',')
+
+    return f'\n\n n = {len(valArray)} \n' \
+           f'Me. = {median} s \n ' \
+           f'Mi. = {mean} s \n ' \
+           f'S. Abw. = {stdev} s \n ' \
+           f'u. Q. = {first_quartil} s \n ' \
+           f'o. Q. = {third_quartil} s';
+
+
+def setXTicks_param(valArray, descArray):
+    xtick = []
+    i = 0
+
+    # The descirption of fields
+    for elem in valArray:
+        s = boxplotCap(elem)
+
+        if descArray:
+            xtick.append(descArray[i] + s)
+        else:
+            xtick.append(s)
+        i = i + 1
+
+    lenVA = len(valArray)
+
+    # First Parameter the number of fields
+    elements = []
+    for elem in range(0, lenVA):
+        elements.append((elem + 1))
+
+    return (elements, xtick)
 
 
 def runAnalyze(probands, sceneName, devices, anchor):
@@ -105,12 +150,18 @@ def runAnalyze(probands, sceneName, devices, anchor):
 
     return allData
 
-def boxplotCap(valArray):
-    return f'\n n = {len(valArray)} \n' \
-           f'Median = {round(statistics.median(valArray), 3)} s \n ' \
-           f'Mittelwert = {round(statistics.mean(valArray), 3)} s \n ' \
-           f'S. Abweichung = {round(statistics.stdev(valArray), 3)} s \n ' \
-           f'M. Abweichung = {round(mean(valArray), 3)} s \n ';
+
+def aggregateData(array):
+    lenArray = len(array)
+    print("Len array " + str(lenArray))
+    data = []
+
+    for i in range(0, lenArray):
+        for elem in array[i]:
+            data.append(elem)
+
+    return data;
+
 
 
 # f'Varianz = {round(statistics.variance(valArray), 3)} \n ' \
@@ -124,31 +175,27 @@ if __name__ == "__main__":
 
 
     #probands = col.distinct('prob')
-    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
-   # probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20', 'A21', 'A22']
-    # probands = col.distinct('prob')
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
+                'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+
+
     print(probands)
 
     sceneName = 'ILM_Teleport_Scene_Right-Hand'
-    query_string = {'$regex': 'MQ*'}
-    deviceName = query_string
+    # query_string = {'$regex': 'MQ*'}
+    # deviceName = query_string
 
     devices = ['MQ2', 'MQP']
-    # devices = ['MQ2']
+    devices = ['MQP']
 
     # sceneTeleportRightMQ_1 = runAnalyze(probands, sceneName, devices, '1')
     sceneTeleportRightMQ_2 = runAnalyze(probands, sceneName, devices, '2')
     sceneTeleportRightMQ_3 = runAnalyze(probands, sceneName, devices, '3')
     sceneTeleportRightMQ_4 = runAnalyze(probands, sceneName, devices, '4')
 
-    allDataRightHand = []
-
-    for elem in sceneTeleportRightMQ_2:
-        allDataRightHand.append(elem)
-    for elem in sceneTeleportRightMQ_3:
-            allDataRightHand.append(elem)
-    for elem in sceneTeleportRightMQ_4:
-        allDataRightHand.append(elem)
+    allDataRightHand = [sceneTeleportRightMQ_2, sceneTeleportRightMQ_3, sceneTeleportRightMQ_4]
+    allDataRightHand = aggregateData(allDataRightHand)
 
 
     sceneName = 'ILM_Teleport_Scene_Left-Hand'
@@ -159,25 +206,13 @@ if __name__ == "__main__":
     sceneTeleportLeftMQ_3 = runAnalyze(probands, sceneName, devices, '3')
     sceneTeleportLeftMQ_4 = runAnalyze(probands, sceneName, devices, '4')
 
-    allDataLeftHand = []
-
-    for elem in sceneTeleportLeftMQ_1:
-        allDataLeftHand.append(elem)
-    for elem in sceneTeleportLeftMQ_2:
-        allDataLeftHand.append(elem)
-    for elem in sceneTeleportLeftMQ_3:
-        allDataLeftHand.append(elem)
-    for elem in sceneTeleportLeftMQ_4:
-        allDataLeftHand.append(elem)
+    allDataLeftHand = [sceneTeleportLeftMQ_1, sceneTeleportLeftMQ_2,sceneTeleportLeftMQ_3, sceneTeleportLeftMQ_4]
+    allDataLeftHand = aggregateData(allDataLeftHand)
 
 
-    allDataHand = []
+    allDataHand = [allDataRightHand, allDataLeftHand]
+    allDataHand = aggregateData(allDataHand)
 
-    for elem in allDataLeftHand:
-        allDataHand.append(elem)
-
-    for elem in allDataRightHand:
-        allDataHand.append(elem)
 
     allTimes = [allDataRightHand, allDataLeftHand, allDataHand]
 
@@ -202,16 +237,14 @@ if __name__ == "__main__":
     # (just use two decimal places of precision)
 
     # fig = plt.figure(figsize=(10, 7))
-    plt.title('Bearbeitungszeit der Teleport Szene mit beiden Händen und der Meta Quest 2')
+    plt.title('Bearbeitungszeit der Teleport Szene mit beiden Händen und der Meta Quest Pro')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    plt.boxplot(allTimes)
+    plt.boxplot(allTimes, showmeans=True)
     plt.ylabel('Sekunden')
-    #  plt.xticks([1, 2, 3, 4], [f'T-Stop 1 zu 2 \n n = {len(allTimes[0])}' , f'T-Stop 2 zu 3 \n n = {len(allTimes[1])}', f'T-Stop 3 zu 4 \n n = {len(allTimes[2])}', f'T-Stop 4 zu 5 \n n = {len(allTimes[3])}'])
-    # plt.xticks([1, 2, 3, 4], [str(len(sceneTeleportRightMQ2)), str(len(sceneTeleportLeftMQ2)), 'MQP Rechte Hand', 'MQP Linke Hand'])
 
-    plt.xticks([1, 2, 3], [
-        "Rechte Hand \n " + boxplotCap(allTimes[0]),
-        "Linke Hand \n " + boxplotCap(allTimes[1]),
-        "Beide Hände \n " + boxplotCap(allTimes[2])])
+    descArray = ["Rechte Hand", "Linke Hand", "Beide Hände"]
+    num, val = setXTicks_param(allTimes, descArray)
+
+    plt.xticks(num, val)
 
     plt.show()

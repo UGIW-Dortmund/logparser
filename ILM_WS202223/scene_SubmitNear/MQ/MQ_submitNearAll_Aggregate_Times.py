@@ -6,6 +6,10 @@ import pandas as pd
 import statistics
 from statistics import mean
 
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
+
 from pymongo import MongoClient
 
 
@@ -769,42 +773,40 @@ if __name__ == "__main__":
 
 
 
-    fig, axs = plt.subplots(1, 3, figsize=(10, 8))
+    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
     fig.suptitle('Bearbeitungszeit aller Schaltflächen mit dem Submit Near Operator')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
 
-    axs[0].violinplot(boxplotElementRightArray)
+    axs[0].violinplot(boxplotElementRightArray, showmeans=True)
+    axs[1].violinplot(boxplotElementLeftArray, showmeans=True)
 
-    axs[1].violinplot(boxplotElementLeftArray)
-    axs[2].violinplot(boxplotElementArray)
+    # axs[2].violinplot(boxplotElementArray)
     axs[1].sharey(axs[0])
-    axs[2].sharey(axs[0])
+    # axs[2].sharey(axs[0])
 
 
 
-    axs[0].set(ylabel='Sekunden')
-    axs[1].set(ylabel='Sekunden')
-    axs[2].set(ylabel='Sekunden')
+    axs[0].set_ylabel('Sekunden', fontsize=12)
+    axs[1].set_ylabel('Sekunden', fontsize=12)
+    # axs[2].set(ylabel='Sekunden')
 
 
-    axs[0].set_title('Erste Szenen mit der rechten Hand')
-    axs[0].set_xticks([1, 2], [
-                                  "Erste S." + boxplotCap(boxplotElementRightArray[0]),
-                                  "Nachgelagerte S." + boxplotCap(boxplotElementRightArray[1])
+    descArray = ["Sn-1", "Sn-2"]
 
-                                  ])
+    num, val = gf.setXTicks_param(boxplotElementRightArray, descArray)
 
 
-    axs[1].set_title('Zweite Szenen mit der linken Hand')
-    axs[1].set_xticks([1, 2], [
+    axs[0].set_title('1. Rechte Hand')
+    axs[0].set_xticks(num, val, fontsize=12)
 
-                                    "Erste S." + boxplotCap(boxplotElementLeftArray[0]),
-                                    "Nachgelagerte S." + boxplotCap(boxplotElementLeftArray[1])
+    num, val = gf.setXTicks_param(boxplotElementLeftArray, descArray)
 
-                                ])
+    axs[1].set_title('2. Linke Hand')
+    axs[1].set_xticks(num, val, fontsize=12)
 
+    '''
     axs[2].set_title('Beide Hände zusammengefasst')
     axs[2].set_xticks([1, 2], [
 
@@ -813,7 +815,7 @@ if __name__ == "__main__":
 
                                 ])
 
-
+    '''
 
     plt.show()
 

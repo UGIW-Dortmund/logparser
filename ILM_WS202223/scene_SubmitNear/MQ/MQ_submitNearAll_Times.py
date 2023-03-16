@@ -649,9 +649,9 @@ if __name__ == "__main__":
 
     fig.suptitle('Bearbeitungszeit aller Schaltflächen mit dem Submit Near Operator')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[1].boxplot(allTimesRight, notch=False)
+    axs[1].boxplot(allTimesRight, showmeans=True)
     axs[1].sharey(axs[0])
-    axs[0].boxplot(allTimesRight, notch=False)
+    axs[0].boxplot(allTimesRight, showmeans=True)
 
 
     axs[0].set_ylabel('Sekunden', fontsize=12)

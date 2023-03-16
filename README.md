@@ -7,13 +7,18 @@ In order to read the text of the diagramms properly on DIN A4 pages.
 Add the following settings to the diagramms: 
 - X-Ticks `` plt.xticks(num, val, fontsize=12)``
 
-- Diagramm Title `` plt.title('XXX', fontsize=15)``
+- Diagramm Title 
+  - `` plt.title('XXX', fontsize=15)``
+  - 
 
 - X- and Y-Label: 
   - ``plt.ylabel('XXX', fontsize=12)``
   - ``axs[0].set_xlabel('X-Koordinaten', fontsize=12)``
 
 ## Scripts
+
+- `` generalfunctions ``: Script which inculdes all necesary functions which are shared all over other functions
+- 
 
 ### scene_Grab
 

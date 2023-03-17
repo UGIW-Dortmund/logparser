@@ -6,6 +6,7 @@ import pandas as pd
 import statistics
 from statistics import mean
 import sys
+from pandas.plotting import table
 
 sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
 import generalfunctions as gf
@@ -649,9 +650,10 @@ if __name__ == "__main__":
 
     fig.suptitle('Bearbeitungszeit aller Schaltflächen mit dem Submit Near Operator')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[1].boxplot(allTimesRight, showmeans=True)
-    axs[1].sharey(axs[0])
+
     axs[0].boxplot(allTimesRight, showmeans=True)
+    axs[1].boxplot(allTimesLeft, showmeans=True)
+    axs[1].sharey(axs[0])
 
 
     axs[0].set_ylabel('Sekunden', fontsize=12)
@@ -667,20 +669,31 @@ if __name__ == "__main__":
                  "Dropdown 1", "Dropdown 2", "Dropdown 3"]
 
 
-    num, val = gf.setXTicks_param_plain(allTimesRight, descArray)
+    num, val, df_Right = gf.setXTicksMin(allTimesRight, descArray)
     print('1. Rechte Hand')
-    gf.reqLatexTableOutput(allTimesRight, descArrayFully)
+    # gf.reqLatexTableOutput(allTimesRight, descArrayFully)
     axs[0].xaxis.set_tick_params(labelsize=12)
     axs[0].set_title('1. Rechte Hand')
-    axs[0].set_xticks(num, val)
+    axs[0].set_xticks([])
+    ttable = table(axs[0], df_Right, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+    ttable.set_fontsize(10)
+    ttable.auto_set_font_size(False)
+    axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 
-    num, val = gf.setXTicks_param_plain(allTimesLeft, descArray)
+    num, val, df_Left = gf.setXTicksMin(allTimesLeft, descArray)
     print('2. Linke Hand')
     gf.reqLatexTableOutput(allTimesLeft, descArrayFully)
     axs[1].set_title('2. Linke Hand')
-    axs[1].set_xticks(num, val)
-    axs[1].xaxis.set_tick_params(labelsize=12)
-
+    axs[1].set_xticks([])
+    ttable = table(axs[1], df_Left, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+    ttable.set_fontsize(10)
+    ttable.auto_set_font_size(False)
+    # axs[1].xaxis.set_tick_params(labelsize=12)
+    axs[1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 
 
     plt.show()

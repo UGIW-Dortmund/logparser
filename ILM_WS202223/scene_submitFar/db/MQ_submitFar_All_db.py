@@ -10,6 +10,7 @@ import locale
 import sys
 sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
 import generalfunctions as gf
+from pandas.plotting import table
 
 from pymongo import MongoClient
 
@@ -241,23 +242,47 @@ if __name__ == "__main__":
                  "S1", "S2", "S3",
                  "D1", "D2", "D3"]
 
+    columnsDesc = ("B1", "B2", "B3",
+                 "T1", "T2", "T3",
+                 "S1", "S2", "S3",
+                 "D1", "D2", "D3")
+    rows = ["n", "Me.", "Mi."]
     # (x_nums, x_text) = setXTicks_param(allLeft, descArray)
 
     (y_nums, y_text) = setYTicks_param(allLeft, descArray)
 
 
+    num, val, df_Right = gf.setXTicksMin(allRight, descArray)
+
     axs[0].set_title('1. Rechte Hand', fontsize=15)
-    axs[0].set_xticks(y_nums, y_text)
-    axs[0].xaxis.set_tick_params(labelsize=12)
+    axs[0].set_xticks([])
+    # axs[0].xaxis.set_tick_params(labelsize=12)
     print("1. Rechte Hand")
-    gf.reqLatexTableOutput(allRight, descArrayDetail)
+    # gf.reqLatexTableOutput(allRight, descArrayDetail)
+    # Add a table at the bottom of the axes
+    # the_table = plt.table(cellText=val, rowLabels=num, colLabels=descArray, loc='bottom')
+    # plt.bar(a, grouped_dataframe.loc[0].values.tolist()[:-1], width=1, label='setosa')
+    #axs[0].bar(val, height=-5)
+    ttable = table(axs[0], df_Right, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+    ttable.set_fontsize(10)
+    ttable.auto_set_font_size(False)
+    axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+
+    num, val, df_Left = gf.setXTicksMin(allLeft, descArray)
 
     axs[1].set_title('2. Linke Hand', fontsize=15)
-    axs[1].set_xticks(y_nums, y_text)
+    axs[1].set_xticks([])
     axs[1].xaxis.set_tick_params(labelsize=12)
     print("2. Linke Hand")
-    gf.reqLatexTableOutput(allLeft, descArrayDetail)
-
+    # gf.reqLatexTableOutput(allLeft, descArrayDetail)
+    ttable = table(axs[1], df_Left, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+    ttable.set_fontsize(10)
+    ttable.auto_set_font_size(False)
+    axs[1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 
     plt.show()
 

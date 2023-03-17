@@ -43,7 +43,6 @@ def boxplotCap(valArray):
 
 
 
-
 def aggregateData(array):
     lenArray = len(array)
     print("Len array " + str(lenArray))
@@ -85,9 +84,9 @@ def boxplotCapMin(valArray):
     mean = str(mean).replace('.', ',')
 
 
-    return f'\n\n n = {len(valArray)} \n' \
-           f'Me. = {median} s \n ' \
-           f'Mi. = {mean} s \n ';
+    return f'\n\n {len(valArray)} \n' \
+           f'{median} s \n ' \
+           f'{mean} s \n ';
 
 def reqLatexTableOutput(values, names):
 
@@ -158,10 +157,23 @@ def setXTicks_param(valArray, descArray):
 def setXTicksMin(valArray, descArray):
     xtick = []
     i = 0
+    df = pd.DataFrame()
+
+    rows = []
 
     # The descirption of fields
     for elem in valArray:
+
+        print("Element")
+        print(elem)
+
+        df_entry = dfEntry(descArray[i], elem, i)
+        # df.append(df_entry)
+        df.insert(loc=(len(df.columns)), column=descArray[i], value=df_entry)
+
         s = boxplotCapMin(elem)
+
+
 
         if descArray:
             xtick.append(descArray[i] + s)
@@ -176,8 +188,41 @@ def setXTicksMin(valArray, descArray):
     for elem in range(0, lenVA):
         elements.append((elem + 1))
 
-    return (elements, xtick)
+    # df = pd.DataFrame(rows)
 
+    return (elements, xtick, df)
+
+
+
+def dfEntry(nameElement, valArray, indexI):
+    nuTuple = len(valArray)
+    nuTuple = str(nuTuple)
+
+    median = round(statistics.median(valArray), 1)
+    # median = float(median)
+    median = str(median).replace('.', ',')
+    median = median + ' s'
+
+    mean = round(statistics.mean(valArray), 1)
+    mean = str(mean).replace('.', ',')
+    mean = mean + ' s'
+
+    stdev = round(statistics.stdev(valArray), 1)
+    # stdev = str(stdev).replace('.', ',')
+
+    first_quartil = round(np.percentile(valArray, 25), 1)
+    # first_quartil = str(first_quartil).replace('.', ',')
+
+    third_quartil = round(np.percentile(valArray, 75), 1)
+    # third_quartil = str(third_quartil).replace('.', ',')
+
+    new_row = pd.DataFrame()
+    #new_row = {'median': median,
+    #           'mean': mean, 'stdev': stdev,
+    #           'first_quartil': first_quartil, 'third_quartil': third_quartil}
+    new_row = ({'n': nuTuple, 'Median': median, 'Mittelwert': mean})
+
+    return new_row
 
 def setXTicks_param_plain(valArray, descArray):
     xtick = []

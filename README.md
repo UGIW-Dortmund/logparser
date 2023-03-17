@@ -17,6 +17,12 @@ Add the following settings to the diagramms:
   - ``plt.ylabel('XXX', fontsize=12)``
   - ``axs[0].set_xlabel('X-Koordinaten', fontsize=12)``
 
+- X-Ticks
+  - ``axs[0].xaxis.set_tick_params(labelsize=12)``
+
+- Grid on the line 
+  - ``axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)``
+
 ## Scripts
 
 - `` generalfunctions ``: Script which inculdes all necesary functions which are shared all over other functions

@@ -266,7 +266,8 @@ if __name__ == "__main__":
     ttable = table(axs[0], df_Right, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
         cell.set_edgecolor('lightgrey')
-    ttable.set_fontsize(10)
+        cell.set_height(0.06)
+    ttable.set_fontsize(12)
     ttable.auto_set_font_size(False)
     axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 
@@ -280,7 +281,8 @@ if __name__ == "__main__":
     ttable = table(axs[1], df_Left, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
         cell.set_edgecolor('lightgrey')
-    ttable.set_fontsize(10)
+        cell.set_height(0.06)
+    ttable.set_fontsize(12)
     ttable.auto_set_font_size(False)
     axs[1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 

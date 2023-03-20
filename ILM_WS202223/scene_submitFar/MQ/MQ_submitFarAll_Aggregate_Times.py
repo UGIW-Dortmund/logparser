@@ -537,12 +537,11 @@ def runAnalyzeButton(probands, sceneName, devices, button):
 def boxplotCap(valArray):
 
     return f' \n n = {len(valArray)} \n \n ' \
-            f'Median = {round(statistics.median(valArray), 3)} s \n ' \
-            f'Mittelwert = {round(statistics.mean(valArray), 3)} s \n ' \
-            f'S. Dev = {round(statistics.stdev(valArray), 3)} s \n ' \
-            f'M. Abweichung = {round(mean(valArray), 3)} s \n ' \
-            f'1. Quartil = {round(np.percentile(valArray, 25), 3)} s \n' \
-            f'3. Quartil = {round(np.percentile(valArray, 75), 3)} s ';
+            f'Median = {round(statistics.median(valArray), 1)} s \n ' \
+            f'Mittelwert = {round(statistics.mean(valArray), 1)} s \n ' \
+            f'S. Abw. = {round(statistics.stdev(valArray), 1)} s \n ' \
+            f'u. Q. = {round(np.percentile(valArray, 25), 1)} s \n' \
+            f'o. Q. = {round(np.percentile(valArray, 75), 1)} s ';
 
 
 #f'\n n = {len(valArray)} \n Wert = {valArray}';
@@ -566,7 +565,8 @@ if __name__ == "__main__":
 
 
     sceneName = 'ILM_Submit-Far_Left_Scene'
-    devices = ['MQP', 'MQ2']
+    # devices = ['MQP', 'MQ2']
+    devices = ['MQP']
 
     # Buttons
     sceneSubmitNearButton_Left = runAnalyzeFirstButton(probands, sceneName, devices)

@@ -132,16 +132,16 @@ if __name__ == "__main__":
     print(probands)
 
 
-    SF_UWP_Left_HPG2 = tresor.find_one({'name': 'SF_UWP_L_HPG2'})
-    SF_UWP_Left_HPG2 = convertToFloat(SF_UWP_Left_HPG2)
-    SF_UWP_Left_HL2 = tresor.find_one({'name': 'SF_UWP_L_HL2'})
-    SF_UWP_Left_HL2 = convertToFloat(SF_UWP_Left_HL2)
+    SF_UWP_Left_HPG2 = tresor.find({'name': 'SF_UWP_L_HPG2'})
+    SF_UWP_Left_HPG2 = convertToFloat(SF_UWP_Left_HPG2[0])
+    SF_UWP_Left_HL2 = tresor.find({'name': 'SF_UWP_L_HL2'})
+    SF_UWP_Left_HL2 = convertToFloat(SF_UWP_Left_HL2[0])
 
 
-    SF_UWP_Right_HPG2 = tresor.find_one({'name': 'SF_UWP_R_HPG2'})
-    SF_UWP_Right_HPG2 = convertToFloat(SF_UWP_Right_HPG2)
-    SF_UWP_Right_HL2 = tresor.find_one({'name': 'SF_UWP_L_HPG2'})
-    SF_UWP_Right_HL2 = convertToFloat(SF_UWP_Right_HL2)
+    SF_UWP_Right_HPG2 = tresor.find({'name': 'SF_UWP_R_HPG2'})
+    SF_UWP_Right_HPG2 = convertToFloat(SF_UWP_Right_HPG2[0])
+    SF_UWP_Right_HL2 = tresor.find({'name': 'SF_UWP_R_HL2'})
+    SF_UWP_Right_HL2 = convertToFloat(SF_UWP_Right_HL2[0])
 
 
     SF_UWP_Right = [SF_UWP_Right_HL2, SF_UWP_Right_HPG2]
@@ -150,10 +150,10 @@ if __name__ == "__main__":
     SF_UWP_Left = [SF_UWP_Left_HL2, SF_UWP_Left_HPG2]
     SF_UWP_Left = aggregateData(SF_UWP_Left)
 
-
-
-    SF_UWP_ALL = tresor.find_one({'name': 'SF_UWP_ALL'})
-    SF_UWP_ALL = convertToFloat(SF_UWP_ALL)
+    SF_UWP_ALL = [SF_UWP_Right, SF_UWP_Left]
+    SF_UWP_ALL = aggregateData(SF_UWP_ALL)
+    # SF_UWP_ALL = tresor.find_one({'name': 'SF_UWP_ALL'})
+    # SF_UWP_ALL = convertToFloat(SF_UWP_ALL)
 
     SF_AD_second = tresor.find_one({'name': 'SF_AD_second'})
     SF_AD_second = convertToFloat(SF_AD_second)
@@ -167,67 +167,19 @@ if __name__ == "__main__":
 
 
 
-    allBoxplot = [SF_UWP_ALL, SF_AD_second, SF_ALL]
+    allBoxplot = [SF_UWP_Right, SF_UWP_Left, SF_UWP_ALL, SF_AD_second, SF_ALL]
 
     # fig = plt.subplot(figsize=(10, 8))
 
-    descArray = ['UWP', 'MQ', 'Gesamt']
+    descArray = ['UWP Right', 'UWP Left', 'UWP', 'MQ', 'Gesamt']
 
     num, val = setXTicks_param(allBoxplot, descArray)
 
     plt.title('Bearbeitungszeit nachgelagerte Schalftlächen')
     plt.violinplot(allBoxplot)
+    # plt.axes().yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 
     plt.xticks(num, val)
     plt.ylabel('Sekunden')
 
     plt.show()
-
-    '''
-    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
-
-
-    fig.suptitle('Bearbeitungszeit der Buttons')
-    # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0, 0].boxplot(allTimes, notch=False)
-    axs[0, 1].boxplot(sceneSubmitFar_Right_HL2, notch=False)
-    axs[0, 1].sharey(axs[0, 0])
-
-    axs[1, 0].boxplot(allTimes)
-    axs[1, 0].sharey(axs[0, 0])
-
-    axs[1, 1].boxplot(allTimes)
-    axs[1, 1].sharey(axs[0, 0])
-
-    axs[0, 0].set(ylabel='Sekunden')
-    axs[0, 1].set(ylabel='Sekunden')
-    axs[1, 0].set(ylabel='Sekunden')
-    axs[1, 1].set(ylabel='Sekunden')
-
-
-
-    axs[0, 0].set_title('1. Szene: Rechte Hand - HPG2')
-    axs[0, 0].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                           "Checkbox 1" + boxplotCap(allTimes[1]),
-                                           "Button 2" + boxplotCap(allTimes[2])])
-
-    axs[1, 0].set_title('1. Szene: Rechte Hand - HL2')
-    axs[1, 0].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                              "Checkbox 1" + boxplotCap(allTimes[1]),
-                                              "Button 2" + boxplotCap(allTimes[2])])
-
-    axs[0, 1].set_title('2. Szene: Linke Hand - HPG2')
-    axs[0, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                        "Checkbox 1" + boxplotCap(allTimes[1]),
-                                        "Button 2" + boxplotCap(allTimes[2])])
-
-    axs[1, 1].set_title('2. Szene: Linke Hand - HL2')
-    axs[1, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                              "Checkbox 1" + boxplotCap(allTimes[1]),
-                                              "Button 2" + boxplotCap(allTimes[2])])
-
-
-    plt.show()
-
-
-    '''

@@ -4,6 +4,8 @@ import numpy as np
 
 from pymongo import MongoClient
 
+
+##### Database
 def get_database():
     # Provide the mongodb atlas url to connect python to mongodb using pymongo
     CONNECTION_STRING = "mongodb://fredix:memphis55@kurz-containar.de:27017"
@@ -13,10 +15,98 @@ def get_database():
     # Create the database for our example (we will use the same database throughout the tutorial
     return client['ilm']
 
+def writeToDb(name, value):
+    dbname = get_database()
+    tresor = dbname["tresor"]
+
+    dto = tresor.find({"name": name})
+    dto = list(dto)
+
+    print("Dto")
+    print(dto)
+
+    if (len(dto) > 0):
+        dto = {"name": name}
+        newvalues = {"$set": {"values": value}}
+        tresor.update_one(dto, newvalues)
+        print("Update element")
+    else:
+        dto = {"name": name, "values": value}
+        tresor.insert_one(dto)
+        print("New element")
+
+
+def getDb(queryParam):
+    dbname = get_database()
+    tresor = dbname["tresor"]
+    queryResult = tresor.find({'name': str(queryParam)})
+    return queryResult
+
+
+
 
 
 def test():
     print('test GF blub')
+
+
+### Data Helpers
+def aggregateData(array):
+    lenArray = len(array)
+    print("Len array " + str(lenArray))
+    data = []
+
+    for i in range(0, lenArray):
+        for elem in array[i]:
+            data.append(elem)
+
+    return data;
+
+
+
+def convertToFloat2D(arr):
+
+    print(arr)
+
+    arr2 = arr.get('values')
+
+    print(arr2)
+
+    arr2 = list(arr2)
+    lenArray = len(arr2)
+
+    print(lenArray)
+
+    allValues = []
+
+    for e in range(0, lenArray):
+        floatValues = []
+
+        for elem in arr2[e]:
+            floatValues.append(float(elem))
+
+        allValues.append(floatValues)
+
+    return allValues
+
+
+def convertToFloat1D(arr):
+
+    arr2 = arr.get('values')
+
+    allValues = []
+
+    for e in arr2:
+
+        allValues.append(float(e))
+
+    return allValues
+
+
+
+
+
+### Boxplots
 
 def boxplotCap(valArray):
     median = round(statistics.median(valArray), 1)
@@ -43,38 +133,8 @@ def boxplotCap(valArray):
 
 
 
-def aggregateData(array):
-    lenArray = len(array)
-    print("Len array " + str(lenArray))
-    data = []
-
-    for i in range(0, lenArray):
-        for elem in array[i]:
-            data.append(elem)
-
-    return data;
 
 
-
-def writeToDb(name, value):
-    dbname = get_database()
-    tresor = dbname["tresor"]
-
-    dto = tresor.find({"name": name})
-    dto = list(dto)
-
-    print("Dto")
-    print(dto)
-
-    if (len(dto) > 0):
-        dto = {"name": name}
-        newvalues = {"$set": {"values": value}}
-        tresor.update_one(dto, newvalues)
-        print("Update element")
-    else:
-        dto = {"name": name, "values": value}
-        tresor.insert_one(dto)
-        print("New element")
 
 def boxplotCapMin(valArray):
     median = round(statistics.median(valArray), 1)
@@ -87,6 +147,10 @@ def boxplotCapMin(valArray):
     return f'\n\n {len(valArray)} \n' \
            f'{median} s \n ' \
            f'{mean} s \n ';
+
+
+
+##### LATEX #################
 
 def reqLatexTableOutput(values, names):
 
@@ -133,10 +197,14 @@ def aggregateData(array):
 def setXTicks_param(valArray, descArray):
     xtick = []
     i = 0
+    df = pd.DataFrame()
 
     # The descirption of fields
     for elem in valArray:
         s = boxplotCap(elem)
+
+        df_entry = dfEntryMax(descArray[i], elem, i)
+        df.insert(loc=(len(df.columns)), column=descArray[i], value=df_entry)
 
         if descArray:
             xtick.append(descArray[i] + s)
@@ -151,7 +219,7 @@ def setXTicks_param(valArray, descArray):
     for elem in range(0, lenVA):
         elements.append((elem + 1))
 
-    return (elements, xtick)
+    return (elements, xtick, df)
 
 
 def setXTicksMin(valArray, descArray):
@@ -168,7 +236,6 @@ def setXTicksMin(valArray, descArray):
         print(elem)
 
         df_entry = dfEntry(descArray[i], elem, i)
-        # df.append(df_entry)
         df.insert(loc=(len(df.columns)), column=descArray[i], value=df_entry)
 
         s = boxplotCapMin(elem)
@@ -221,6 +288,42 @@ def dfEntry(nameElement, valArray, indexI):
     #           'mean': mean, 'stdev': stdev,
     #           'first_quartil': first_quartil, 'third_quartil': third_quartil}
     new_row = ({'n': nuTuple, 'Median': median, 'Mittelwert': mean})
+
+    return new_row
+
+
+def dfEntryMax(nameElement, valArray, indexI):
+    nuTuple = len(valArray)
+    nuTuple = str(nuTuple)
+
+    median = round(statistics.median(valArray), 1)
+    # median = float(median)
+    median = str(median).replace('.', ',')
+    median = median + ' s'
+
+    mean = round(statistics.mean(valArray), 1)
+    mean = str(mean).replace('.', ',')
+    mean = mean + ' s'
+
+    stdev = round(statistics.stdev(valArray), 1)
+    stdev = str(stdev).replace('.', ',')
+    stdev = str(stdev) + ' s'
+
+    first_quartil = round(np.percentile(valArray, 25), 1)
+    first_quartil = str(first_quartil).replace('.', ',')
+    first_quartil = first_quartil + ' s'
+
+    third_quartil = round(np.percentile(valArray, 75), 1)
+    third_quartil = str(third_quartil).replace('.', ',')
+    third_quartil = str(third_quartil) + ' s'
+
+
+    new_row = pd.DataFrame()
+    #new_row = {'median': median,
+    #           'mean': mean, 'stdev': stdev,
+    #           'first_quartil': first_quartil, 'third_quartil': third_quartil}
+    new_row = ({'n': nuTuple, 'Median': median, 'Mittelwert': mean,
+                'S. Abw.': stdev, 'u. Q.': first_quartil, 'o. Q.': third_quartil})
 
     return new_row
 

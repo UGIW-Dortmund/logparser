@@ -176,13 +176,14 @@ if __name__ == "__main__":
     #probands = col.distinct('prob')
     # probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
     # probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A18']
-    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
-                'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
+    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
     print(probands)
 
     sceneName = 'ILM_Submit-Far_Left_Scene'
     devices = ['MQP', 'MQ2']
+    devices = ['MQ2']
 
 
     # Toggle
@@ -257,6 +258,7 @@ if __name__ == "__main__":
 
     fig = plt.subplots(figsize=(10, 8))
 
+    plt.title('Android: Sf MQ2')
     plt.ylabel('Sekunden')
 
 
@@ -265,6 +267,7 @@ if __name__ == "__main__":
 
     descArray = ["Erste S.", "Nachgelagerte S."]
 
+    plt.axes().yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     (x_nums, x_text) = setXTicks_param(allBoxplot, descArray)
 
     sns.violinplot(allBoxplot, split=True)

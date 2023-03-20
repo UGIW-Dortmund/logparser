@@ -4,11 +4,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import statistics
+import seaborn as sns
 from statistics import mean
 from pandas.plotting import table
 import sys
 sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
 import generalfunctions as gf
+##Locale settings
+import locale
+# Set to German locale to get comma decimal separater
+locale.setlocale(locale.LC_NUMERIC, 'de_DE')
 
 from pymongo import MongoClient
 
@@ -118,29 +123,13 @@ def runAnalyzeElementSteps(probands, sceneName, device):
 
                     delta = end - start
 
-                    print(f'Proband \t {p} \t\t {sceneName} \t\t\t {d} \t\t\t {delta.total_seconds()}  ')
-
                     timeArray.append(delta.total_seconds())
 
     return timeArray
 
 
-
-def checkOutlier(arr):
-
-    newarr = []
-
-    for a in arr:
-        if a < 20.0 and a >= 0.0:
-            newarr.append(a)
-        else:
-            print(f'Outlier drop {a}')
-
-    return newarr
-
-
-
 """ Gibt alle SF Tupel zurück """
+
 
 def runAnalyzeSubmitFarArray(proband, scene, device):
     sf_array = col.find({'scene': scene,
@@ -246,41 +235,62 @@ def setXTicks_param(valArray, descArray):
 
     return (elements, xtick)
 
+def checkOutlier(arr):
+
+    newarr = []
+
+    for a in arr:
+        if a < 20.0 and a >= 0.0:
+            newarr.append(a)
+
+    return newarr
+
+
+
 
 if __name__ == "__main__":
     # Get the database
     dbname = get_database()
 
     col = dbname["uwp"]
+    tresor = dbname["tresor"]
 
-    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
-                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
-                'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
+                'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
+                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
     print(probands)
 
     sceneName = 'ILM_Submit-Far_Left'
     devices = ['HPG2']
-    SF_UWP_Left_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices)
+    # SF_UWP_Left_HPG2 = tresor.find({'name': 'SF_UWP_R_HPG2'})
+    SF_UWP_Left_HPG2 = gf.getDb('SF_UWP_L_HPG2')
+    SF_UWP_Left_HPG2 = gf.convertToFloat1D(SF_UWP_Left_HPG2[0])
     SF_UWP_Left_HPG2 = checkOutlier(SF_UWP_Left_HPG2)
+    print(SF_UWP_Left_HPG2[0])
+
 
     devices = ['HL2']
-    SF_UWP_Left_HL2 = runAnalyzeElementSteps(probands, sceneName, devices)
+    SF_UWP_Left_HL2 = tresor.find({'name': 'SF_UWP_L_HL2'})
+    SF_UWP_Left_HL2 = gf.convertToFloat1D(SF_UWP_Left_HL2[0])
     SF_UWP_Left_HL2 = checkOutlier(SF_UWP_Left_HL2)
 
     sceneName = 'ILM_Submit-Far_Right'
     devices = ['HPG2']
-    SF_UWP_Right_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices)
+    SF_UWP_Right_HPG2 = gf.getDb('SF_UWP_R_HPG2')
+    SF_UWP_Right_HPG2 = gf.convertToFloat1D(SF_UWP_Right_HPG2[0])
     SF_UWP_Right_HPG2 = checkOutlier(SF_UWP_Right_HPG2)
 
+
     devices = ['HL2']
-    SF_UWP_Right_HL2 = runAnalyzeElementSteps(probands, sceneName, devices)
+    SF_UWP_Right_HL2 = gf.getDb('SF_UWP_R_HL2')
+    SF_UWP_Right_HL2 = gf.convertToFloat1D(SF_UWP_Right_HL2[0])
     SF_UWP_Right_HL2 = checkOutlier(SF_UWP_Right_HL2)
 
-    writeToDb('SF_UWP_R_HPG2', SF_UWP_Right_HPG2)
-    writeToDb('SF_UWP_L_HPG2', SF_UWP_Left_HPG2)
 
-    writeToDb('SF_UWP_R_HL2', SF_UWP_Right_HL2)
-    writeToDb('SF_UWP_L_HL2', SF_UWP_Left_HL2)
+    # writeToDb('SF_UWP_R_HPG2', SF_UWP_Right_HPG2)
+    # writeToDb('SF_UWP_L_HPG2', SF_UWP_Left_HPG2)
+    # writeToDb('SF_UWP_R_HL2', SF_UWP_Right_HL2)
+    # writeToDb('SF_UWP_L_HL2', SF_UWP_Left_HL2)
 
     SF_UWP_Right = [SF_UWP_Right_HL2, SF_UWP_Right_HPG2]
     SF_UWP_Right = aggregateData(SF_UWP_Right)
@@ -299,23 +309,31 @@ if __name__ == "__main__":
     allBoxplot = [SF_UWP_Right_HL2, SF_UWP_Right_HPG2,
                   SF_UWP_Left_HL2, SF_UWP_Left_HPG2]
 
+    plt.rcParams['axes.formatter.use_locale'] = True
     fig, axs = plt.subplots(1, 1, figsize=(10, 8))
 
-    descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
-    descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2']
+    # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
+    descArray = ['Sf-2-HL2-R', 'Sf-2-HPG2-R', 'Sf-2-HL2-L', 'Sf-2-HPG2-L']
 
     (num, val, df) = gf.setXTicks_param(allBoxplot, descArray)
 
-    plt.title('Bearbeitungszeit nachgelagerte Schalftlächen UWP')
-    plt.violinplot(allBoxplot, showmeans=True)
+
+    plt.title('Windows: Submit-Far-Operator', fontsize=15)
+
+    sns.violinplot(allBoxplot, showmeans=True, color="skyblue")
+    sns.swarmplot(allBoxplot, color="black")
     ttable = table(axs, df, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
         cell.set_edgecolor('lightgrey')
-    ttable.set_fontsize(10)
+        cell.set_height(0.05)
+
+    ttable.set_fontsize(12)
     ttable.auto_set_font_size(False)
     axs.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 
-    # plt.xticks(num, val)
-    plt.ylabel('Sekunden')
+    plt.xticks([])
+    plt.ylabel('Sekunden', fontsize=12)
 
     plt.show()
+
+

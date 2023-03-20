@@ -208,7 +208,7 @@ if __name__ == "__main__":
     print(probands)
 
     sceneName = 'ILM_Submit-Far_Left_Scene'
-    devices = ['MQP']
+    devices = ['MQP', 'MQ2']
 
     sceneSubmitNearButton = runAnalyzeFirstToggle(probands, sceneName, devices)
     sceneSubmitNearButton_2 = runAnalyzeToggle(probands, sceneName, devices, '1')
@@ -216,7 +216,7 @@ if __name__ == "__main__":
 
     allTimesLeft = [sceneSubmitNearButton, sceneSubmitNearButton_2, sceneSubmitNearButton_3]
 
-    writeToDb("SF_MQ_L_Toggle_MQP", allTimesLeft)
+    writeToDb("SF_MQ_L_Toggle", allTimesLeft)
 
     sceneName = 'ILM_Submit-Far_Right_Scene'
 
@@ -226,7 +226,7 @@ if __name__ == "__main__":
 
     allTimesRight = [sceneSubmitNearButton_Right, sceneSubmitNearButton_2_Right, sceneSubmitNearButton_3_Right]
 
-    writeToDb("SF_MQ_R_Toggle_MQP", allTimesRight)
+    writeToDb("SF_MQ_R_Toggle", allTimesRight)
 
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))

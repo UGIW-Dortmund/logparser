@@ -7,7 +7,9 @@ import statistics
 from statistics import mean
 
 from pymongo import MongoClient
-
+import sys
+sys.path.append('/ILM_WS202223')
+import generalfunctions as gf
 
 
 ###
@@ -170,9 +172,9 @@ if __name__ == "__main__":
 
     col = dbname["uwp"]
 
-    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
-                'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19',  'A20',
+                'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
 
 
@@ -182,13 +184,13 @@ if __name__ == "__main__":
     devices = ['HPG2']
     hand = 'Generic'
     sceneGaze_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
-    writeToDb('Gaze_UWP_HPG2', sceneGaze_HPG2)
+    writeToDb('Ga-Wi-HPG2', sceneGaze_HPG2)
 
     sceneName = 'ILM_Gaze'
     devices = ['HL2']
 
     sceneGaze_HL2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
-    writeToDb('Gaze_UWP_HL2', sceneGaze_HL2)
+    writeToDb('Ga-Wi-HL2', sceneGaze_HL2)
 
 
 
@@ -202,6 +204,8 @@ if __name__ == "__main__":
     fig.suptitle('Bearbeitungszeit der Buttons')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     axs[0].boxplot(sceneGaze_HL2, notch=False)
+    # axs[0].sns.violinplot(sceneGaze_HL2, showmeans=True, color="skyblue")
+    # axs[0].sns.swarmplot(sceneGaze_HL2, color="black")
     axs[1].boxplot(sceneGaze_HPG2, notch=False)
     axs[1].sharey(axs[0])
 
@@ -216,27 +220,10 @@ if __name__ == "__main__":
 
         xtick_HL.append(s)
 
-    axs[0].set_title('Gaze mit der MS HoloLens 2')
+    axs[0].set_title('Gaze mit der HoloLens 2')
     axs[0].set_xticks(xtick_HL)
 
-    axs[1].set_title('Gaze mit der HP Reverb G2')
-
-    '''
-    
-     axs[0].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                           "Checkbox 1" + boxplotCap(allTimes[1]),
-                                           "Button 2" + boxplotCap(allTimes[2])])
-    
-    axs[0, 1].set_title('2. Szene: Linke Hand - HPG2')
-    axs[0, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                        "Checkbox 1" + boxplotCap(allTimes[1]),
-                                        "Button 2" + boxplotCap(allTimes[2])])
-
-    axs[1, 1].set_title('2. Szene: Linke Hand - HL2')
-    axs[1, 1].set_xticks([1, 2, 3], ["Button 1" + boxplotCap(allTimes[0]),
-                                              "Checkbox 1" + boxplotCap(allTimes[1]),
-                                              "Button 2" + boxplotCap(allTimes[2])])
-    '''
+    axs[1].set_title('Gaze mit der Reverb G2')
 
 
     plt.show()

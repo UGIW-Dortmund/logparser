@@ -5,6 +5,9 @@ import numpy as np
 import pandas as pd
 import statistics
 from statistics import mean
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 from pymongo import MongoClient
 
@@ -198,12 +201,12 @@ if __name__ == "__main__":
 
     col = dbname["uwp"]
 
-    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
-                'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
+                'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
-    probands = ['A06', 'A12', 'A28']
-    print(probands)
+    # probands = ['A06', 'A12', 'A28']
+    # print(probands)
 
     # MQ2
     sceneName = 'ILM_Snap_Right'
@@ -217,8 +220,10 @@ if __name__ == "__main__":
     sceneGaze_L_MQ2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
     writeToDb('Gaze_AD_L_MQ2', sceneGaze_L_MQ2)
 
+    sceneGaze_MQ2 = [sceneGaze_R_MQ2, sceneGaze_L_MQ2]
 
-
+    print('sceneGaze_MQ2')
+    print(sceneGaze_MQ2)
 
     # MQP
     sceneName = 'ILM_Snap_Right'
@@ -236,25 +241,25 @@ if __name__ == "__main__":
     sceneGaze_R_MQP = aggregateData(sceneGaze_R_MQP)
     sceneGaze_L_MQP = aggregateData(sceneGaze_L_MQP)
 
+    sceneGaze_MQP = [sceneGaze_R_MQP, sceneGaze_L_MQP]
+
 
     box_selectedProbands = [sceneGaze_R_MQP, sceneGaze_L_MQP]
 
 
-    print(sceneGaze_L_MQ2)
-
-
     allTimes = sceneGaze_R_MQ2
 
-    fig, axs = plt.subplots(2, 1, figsize=(10, 8))
+    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
     fig.suptitle('Bearbeitungszeit der Buttons')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0].boxplot(box_selectedProbands, notch=False)
-    axs[0].set_xticks([1, 2], ["Rechte Hand" + boxplotCap(box_selectedProbands[0]),
-                               "Linke Hand" + boxplotCap(box_selectedProbands[1])])
+    axs[0].boxplot(sceneGaze_MQ2)
+    descArray = ["Ga-Ad-R-MQ2", "Ga-Ad-L-MQ2"]
+    # (num, val, dfMQ2) = gf.setXTicks_param(sceneGaze_MQ2, descArray)
+    # axs[0].set_xticks(num, val)
 
 
-    axs[1].boxplot(sceneGaze_R_MQP, notch=False)
+    axs[1].boxplot(sceneGaze_MQP)
     axs[1].sharey(axs[0])
     # axs[1].set_xticks([1], boxplotCap(sceneGaze_R_MQP))
 

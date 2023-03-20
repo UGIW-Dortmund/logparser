@@ -5,6 +5,9 @@ import numpy as np
 import pandas as pd
 import statistics
 from statistics import mean
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 from pymongo import MongoClient
 
@@ -69,12 +72,12 @@ def runAnalyzeFirstDropdown(probands, sceneName, devices):
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
-                endAction = pd.to_datetime(endDate + ' ' + endAction)
-                startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    endAction = pd.to_datetime(endDate + ' ' + endAction)
+                    startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-                delta = endAction - startAction
-                # float(delta.seconds + '.' + delta.)
-                allData.append(delta.total_seconds())
+                    delta = endAction - startAction
+                    # float(delta.seconds + '.' + delta.)
+                    allData.append(delta.total_seconds())
 
                 x = None
                 y = None
@@ -134,12 +137,12 @@ def runAnalyzeDropdown(probands, sceneName, devices, dropdown):
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
-                endAction = pd.to_datetime(endDate + ' ' + endAction)
-                startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    endAction = pd.to_datetime(endDate + ' ' + endAction)
+                    startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-                delta = endAction - startAction
-                # float(delta.seconds + '.' + delta.)
-                allData.append(delta.total_seconds())
+                    delta = endAction - startAction
+                    # float(delta.seconds + '.' + delta.)
+                    allData.append(delta.total_seconds())
 
                 x = None
                 y = None
@@ -196,12 +199,12 @@ def runAnalyzeFirstSlider(probands, sceneName, devices):
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
-                endAction = pd.to_datetime(endDate + ' ' + endAction)
-                startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    endAction = pd.to_datetime(endDate + ' ' + endAction)
+                    startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-                delta = endAction - startAction
-                # float(delta.seconds + '.' + delta.)
-                allData.append(delta.total_seconds())
+                    delta = endAction - startAction
+                    # float(delta.seconds + '.' + delta.)
+                    allData.append(delta.total_seconds())
 
                 x = None
                 y = None
@@ -261,12 +264,12 @@ def runAnalyzeSlider(probands, sceneName, devices, slider):
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
-                endAction = pd.to_datetime(endDate + ' ' + endAction)
-                startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    endAction = pd.to_datetime(endDate + ' ' + endAction)
+                    startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-                delta = endAction - startAction
-                # float(delta.seconds + '.' + delta.)
-                allData.append(delta.total_seconds())
+                    delta = endAction - startAction
+                    # float(delta.seconds + '.' + delta.)
+                    allData.append(delta.total_seconds())
 
                 x = None
                 y = None
@@ -323,12 +326,12 @@ def runAnalyzeFirstToggle(probands, sceneName, devices):
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
-                endAction = pd.to_datetime(endDate + ' ' + endAction)
-                startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    endAction = pd.to_datetime(endDate + ' ' + endAction)
+                    startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-                delta = endAction - startAction
-                # float(delta.seconds + '.' + delta.)
-                allData.append(delta.total_seconds())
+                    delta = endAction - startAction
+                    # float(delta.seconds + '.' + delta.)
+                    allData.append(delta.total_seconds())
 
                 x = None
                 y = None
@@ -388,12 +391,12 @@ def runAnalyzeToggle(probands, sceneName, devices, toggle):
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
-                endAction = pd.to_datetime(endDate + ' ' + endAction)
-                startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    endAction = pd.to_datetime(endDate + ' ' + endAction)
+                    startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-                delta = endAction - startAction
-                # float(delta.seconds + '.' + delta.)
-                allData.append(delta.total_seconds())
+                    delta = endAction - startAction
+                    # float(delta.seconds + '.' + delta.)
+                    allData.append(delta.total_seconds())
 
                 x = None
                 y = None
@@ -450,12 +453,12 @@ def runAnalyzeFirstButton(probands, sceneName, devices):
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
-                endAction = pd.to_datetime(endDate + ' ' + endAction)
-                startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    endAction = pd.to_datetime(endDate + ' ' + endAction)
+                    startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-                delta = endAction - startAction
-                # float(delta.seconds + '.' + delta.)
-                allData.append(delta.total_seconds())
+                    delta = endAction - startAction
+                    # float(delta.seconds + '.' + delta.)
+                    allData.append(delta.total_seconds())
 
                 x = None
                 y = None
@@ -515,12 +518,12 @@ def runAnalyzeButton(probands, sceneName, devices, button):
                     endAction = y_list[0].get('time')
                     endDate = y_list[0].get('date')
 
-                endAction = pd.to_datetime(endDate + ' ' + endAction)
-                startAction = pd.to_datetime(startDate + ' ' + startAction)
+                    endAction = pd.to_datetime(endDate + ' ' + endAction)
+                    startAction = pd.to_datetime(startDate + ' ' + startAction)
 
-                delta = endAction - startAction
-                # float(delta.seconds + '.' + delta.)
-                allData.append(delta.total_seconds())
+                    delta = endAction - startAction
+                    # float(delta.seconds + '.' + delta.)
+                    allData.append(delta.total_seconds())
 
                 x = None
                 y = None
@@ -558,15 +561,15 @@ if __name__ == "__main__":
     #probands = col.distinct('prob')
     # probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14']
     # probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A18']
-    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
-                'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
+    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
+                'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
     #probands = ['T15']
 
 
     sceneName = 'ILM_Submit-Far_Left_Scene'
-    # devices = ['MQP', 'MQ2']
-    devices = ['MQP']
+    devices = ['MQP', 'MQ2']
+    # devices = ['MQ2']
 
     # Buttons
     sceneSubmitNearButton_Left = runAnalyzeFirstButton(probands, sceneName, devices)
@@ -755,13 +758,18 @@ if __name__ == "__main__":
 
     boxplotElementArray = [firstElementsArray, secondElementsArray]
 
+    gf.writeToDb('Sf-2-Ad', secondElementsArray)
+    gf.writeToDb('Sf-1-Ad', firstElementsArray)
+
+
+
 
 
 
     fig, axs = plt.subplots(1, 3, figsize=(10, 8))
 
 
-    fig.suptitle('Bearbeitungszeit aller Schaltflächen mit dem Submit Near Operator')
+    fig.suptitle('Android: Sf MQ2+MQP')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
 
     axs[0].boxplot(boxplotElementRightArray, notch=False)

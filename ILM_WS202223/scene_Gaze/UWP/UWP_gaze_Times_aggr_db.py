@@ -5,6 +5,11 @@ import numpy as np
 import pandas as pd
 import statistics
 from statistics import mean
+import seaborn as sns
+from pandas.plotting import table
+import sys
+sys.path.append('/ILM_WS202223')
+import generalfunctions as gf
 
 from pymongo import MongoClient
 
@@ -289,18 +294,39 @@ if __name__ == "__main__":
 
     box_sceneGaze_HL2 = [sceneGaze_HL2_first, sceneGaze_HL2_second]
 
+    Ga_1_Wi = [sceneGaze_HL2_first, sceneGaze_HPG2_first]
+    Ga_1_Wi = aggregateData(Ga_1_Wi)
+    writeToDb('Ga_1_Wi', Ga_1_Wi)
+
+    Ga_2_Wi = [sceneGaze_HL2_second, sceneGaze_HPG2_second]
+    Ga_2_Wi = aggregateData(Ga_2_Wi)
+    writeToDb('Ga_2_Wi', Ga_2_Wi)
+
+    Ga_Wi = [Ga_1_Wi, Ga_2_Wi]
+
 
     ### Graphic
-    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
+    fig, axs = plt.subplots(1, 3, figsize=(10, 8))
 
     fig.suptitle('Bearbeitungszeit mit dem Gaze-Operator')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0].violinplot(box_sceneGaze_HPG2)
-    axs[1].violinplot(box_sceneGaze_HL2)
-    axs[1].sharey(axs[0])
+    # axs[0].violinplot(box_sceneGaze_HPG2)
+    sns.violinplot(box_sceneGaze_HPG2, showmeans=True, color="skyblue", ax=axs[0])
+    sns.swarmplot(box_sceneGaze_HPG2, color="black", ax=axs[0])
 
-    axs[0].set(ylabel='Sekunden')
-    # axs[1].set(ylabel='Sekunden')
+    sns.violinplot(box_sceneGaze_HL2, showmeans=True, color="skyblue", ax=axs[1])
+    sns.swarmplot(box_sceneGaze_HL2, color="black", ax=axs[1])
+
+    sns.violinplot(Ga_Wi, showmeans=True, color="skyblue", ax=axs[2])
+    sns.swarmplot(Ga_Wi, color="black", ax=axs[2])
+
+
+    axs[1].sharey(axs[0])
+    axs[2].sharey(axs[0])
+
+    axs[0].set_ylabel('Sekunden', fontsize=12)
+    axs[1].set_ylabel('Sekunden', fontsize=12)
+    axs[2].set_ylabel('Sekunden', fontsize=12)
 
     xtick_HPG2 = []
 
@@ -310,18 +336,52 @@ if __name__ == "__main__":
         s = boxplotCap(elem2)
         xtick_HPG2.append(s)
 
-    descArrayXTicks = ["Erste S.", "Nachgelagerte S."]
+    descArrayXTicks = ["Ga-1-Wi-HL2", "Ga-2-Wi-HL2"]
+    (elemHL, xHL, dfHL2) = gf.setXTicks_param(box_sceneGaze_HL2, descArrayXTicks)
 
-    (elemHL, xHL) = setXTicks_param(box_sceneGaze_HL2, descArrayXTicks)
-    (elemHPG2, xHPG2) = setXTicks_param(box_sceneGaze_HPG2, descArrayXTicks)
+    descArrayXTicks = ["Ga-1-Wi-HPG2", "Ga-2-Wi-HPG2"]
+    (elemHPG2, xHPG2, dfHPG2) = gf.setXTicks_param(box_sceneGaze_HPG2, descArrayXTicks)
+
+    descArrayXTicks = ["Ga-1-Wi", "Ga-2-Wi"]
+    (elemAll, xAll, dfAll) = gf.setXTicks_param(Ga_Wi, descArrayXTicks)
 
 
 
-    axs[0].set_title('Gaze mit der MS HoloLens 2')
-    axs[0].set_xticks(elemHL, xHL)
+    axs[0].set_title('Gaze mit der HoloLens 2')
+    axs[0].set_xticks([])
+    axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    ttable = table(axs[0], dfHL2, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(10)
+    ttable.auto_set_font_size(False)
 
-    axs[1].set_title('Gaze mit der HP Reverb G2')
-    axs[1].set_xticks(elemHPG2, xHPG2)
+
+
+    axs[1].set_title('Gaze mit der Reverb G2')
+    axs[1].set_xticks([])
+    axs[1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    dfHPG2 = dfHPG2.reset_index(drop=True)
+    ttable = table(axs[1], dfHPG2, loc='bottom', colLoc='center', cellLoc='center', rowLabels=None, colLabels=None)
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(10)
+    # ttable.style.hide_index()
+    ttable.auto_set_font_size(False)
+
+    axs[2].set_title('Gaze mit HPG2 und HL2')
+    axs[2].set_xticks([])
+    axs[2].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    dfAll = dfAll.reset_index(drop=True)
+    ttable = table(axs[2], dfAll, loc='bottom', colLoc='center', cellLoc='center', rowLabels=None, colLabels=None)
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(10)
+    # ttable.style.hide_index()
+    ttable.auto_set_font_size(False)
 
     plt.show()
 

@@ -23,6 +23,24 @@ Add the following settings to the diagramms:
 - Grid on the line 
   - ``axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)``
 
+
+- Table with Values and Dataframe
+``
+from pandas.plotting import table
+ttable = table(axs[0], df_Right, loc='bottom', colLoc='center', cellLoc='center')
+for key, cell in ttable.get_celld().items():
+   cell.set_edgecolor('lightgrey')
+ttable.set_fontsize(10)
+ttable.auto_set_font_size(False)
+``
+
+
+SNS Swarm- and Violinplot
+``
+sns.violinplot(allBoxplot, showmeans=True, color="skyblue")
+sns.swarmplot(allBoxplot, color="black")
+``
+
 ## Scripts
 
 - `` generalfunctions ``: Script which inculdes all necesary functions which are shared all over other functions

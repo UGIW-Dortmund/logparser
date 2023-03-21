@@ -5,6 +5,9 @@ import numpy as np
 import pandas as pd
 import statistics
 from statistics import mean
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 from pymongo import MongoClient
 
@@ -138,9 +141,9 @@ if __name__ == "__main__":
     col = dbname["uwp"]
     tresor = dbname["tresor"]
 
-    probands = ['A01', 'A02', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
-                'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
+                'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
 
     # sceneGaze_HPG2 = runAnalyzeElementSteps(probands, sceneName, devices, hand)
@@ -154,6 +157,20 @@ if __name__ == "__main__":
 
     sceneGaze_HPG2_first = tresor.find_one({'name': 'Gaze_UWP_HPG2_first'})
     sceneGaze_HPG2_second = tresor.find_one({'name': 'Gaze_UWP_HPG2_second'})
+
+    Ga_Ad = tresor.find_one({'name': 'Ga-Ad'})
+    Ga_Ad = convertToFloat1D(Ga_Ad)
+
+    Ga_1_Wi_HPG2 = tresor.find_one({'name': 'Ga-1-Wi-HPG2'})
+    Ga_1_Wi_HPG2 = convertToFloat1D(Ga_1_Wi_HPG2)
+
+    Ga_2_Wi_HPG2 = tresor.find_one({'name': 'Ga-2-Wi-HPG2'})
+    Ga_2_Wi_HPG2 = convertToFloat1D(Ga_2_Wi_HPG2)
+
+    Ga_VR = [Ga_Ad, Ga_1_Wi_HPG2, Ga_2_Wi_HPG2]
+    Ga_VR = aggregateData(Ga_VR)
+
+
 
 
     sceneGaze_R_MQP = convertToFloat(sceneGaze_R_MQP)
@@ -195,7 +212,7 @@ if __name__ == "__main__":
     writeToDb("Gaze_UWP_second", operatorGaze_UWP_second)
 
 
-    operatorGaze = [operatorGaze_AD_second, operatorGaze_UWP_second]
+    operatorGaze = [operatorGaze_AD_second, operatorGaze_UWP_second, Ga_VR]
 
 
     print("Operator Gaze")
@@ -228,11 +245,11 @@ if __name__ == "__main__":
     # axs[1].set(ylabel='Sekunden')
 
 
-    descArrayXTicks = ["Android Plattform", "Windows Plattform"]
+    descArrayXTicks = ["Android Plattform", "Windows Plattform", "Ga-VR"]
 
-    (elemHL, xHL) = setXTicks_param(operatorGaze, descArrayXTicks)
+    (elemALL, xALL, dfALL) = gf.setXTicks_param(operatorGaze, descArrayXTicks)
 
     # axs[0].set_title('Gaze mit der MS HoloLens 2')
-    plt.xticks(elemHL, xHL)
+    plt.xticks(elemALL, xALL)
 
     plt.show()

@@ -250,16 +250,20 @@ if __name__ == "__main__":
     sceneGaze_MQP = [sceneGaze_R_MQP, sceneGaze_L_MQP]
 
     Ga_Ad_L = [sceneGaze_L_MQP, sceneGaze_L_MQ2]
-    # Ga_Ad_L = aggregateData(Ga_Ad_L)
+    Ga_Ad_L = aggregateData(Ga_Ad_L)
     gf.writeToDb('GA-Ad-L', Ga_Ad_L)
 
     Ga_Ad_R = [sceneGaze_R_MQP, sceneGaze_R_MQ2]
-    # Ga_Ad_R = aggregateData(Ga_Ad_R)
+    Ga_Ad_R = aggregateData(Ga_Ad_R)
     gf.writeToDb('Ga-Ad-R', Ga_Ad_R)
+
+
 
     Ga_Ad = [sceneGaze_R_MQP, sceneGaze_L_MQP, sceneGaze_L_MQ2, sceneGaze_R_MQ2]
     Ga_Ad = aggregateData(Ga_Ad)
     gf.writeToDb('Ga-Ad', Ga_Ad)
+
+    Ga_Ad_RL = [Ga_Ad_R, Ga_Ad_L, Ga_Ad]
 
 
     box_selectedProbands = [sceneGaze_R_MQP, sceneGaze_L_MQP]
@@ -267,11 +271,10 @@ if __name__ == "__main__":
 
     allTimes = sceneGaze_R_MQ2
 
-    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
+    fig, axs = plt.subplots(1, 3, figsize=(10, 8))
 
     fig.suptitle('Android: Bearbeitungszeit Gaze-Operator')
-    # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    # axs[0].boxplot(sceneGaze_MQ2)
+    axs[0].set_title('Gaze mit der Quest 2')
     descArray = ["Ga-Ad-R-MQ2", "Ga-Ad-L-MQ2"]
     (num, val, dfMQ2) = gf.setXTicks_param(sceneGaze_MQ2, descArray)
     sns.violinplot(sceneGaze_MQ2, showmeans=True, color="skyblue", ax=axs[0])
@@ -290,9 +293,10 @@ if __name__ == "__main__":
 
     axs[0].set_ylabel('Sekunden', fontsize=12)
     axs[1].set_ylabel('Sekunden', fontsize=12)
+    axs[2].set_ylabel('Sekunden', fontsize=12)
 
 
-    axs[0].set_title('Gaze mit der Quest 2')
+
     # axs[0].set_xticks(xtick_HL)
 
     sns.violinplot(sceneGaze_MQP, showmeans=True, color="skyblue", ax=axs[1])
@@ -311,6 +315,28 @@ if __name__ == "__main__":
     for key, cell in ttable.get_celld().items():
         cell.set_edgecolor('lightgrey')
         cell.set_height(0.05)
+
+
+
+    sns.violinplot(Ga_Ad_RL, showmeans=True, color="skyblue", ax=axs[2])
+    sns.swarmplot(Ga_Ad_RL, color="black", ax=axs[2])
+    # axs[1].boxplot(sceneGaze_MQP)
+    axs[2].sharey(axs[0])
+    axs[2].set_title('Gaze mit der Quest 2 und Pro')
+    axs[2].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    descArray = ["Ga-Ad-R", "Ga-Ad-L", "Ga-Ad"]
+    (num, val, dfMQ) = gf.setXTicks_param(Ga_Ad_RL, descArray)
+    dfMQ = dfMQ.reset_index(drop=True)
+    dfMQ.reset_index(drop=True)
+    axs[2].set_xticks([])
+    axs[2].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    ttable = table(axs[2], dfMQ, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+
+
+
 
 
     plt.show()

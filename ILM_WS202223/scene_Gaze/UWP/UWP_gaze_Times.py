@@ -9,7 +9,7 @@ from statistics import mean
 from pymongo import MongoClient
 import sys
 sys.path.append('/ILM_WS202223')
-import generalfunctions as gf
+
 
 
 ###

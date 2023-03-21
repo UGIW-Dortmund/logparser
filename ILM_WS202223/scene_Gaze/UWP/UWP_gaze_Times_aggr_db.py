@@ -8,7 +8,7 @@ from statistics import mean
 import seaborn as sns
 from pandas.plotting import table
 import sys
-sys.path.append('/ILM_WS202223')
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
 import generalfunctions as gf
 
 from pymongo import MongoClient
@@ -266,9 +266,9 @@ if __name__ == "__main__":
     print("second")
     print(sceneGaze_HPG2_second)
 
-    writeToDb("Gaze_UWP_HPG2_first", sceneGaze_HPG2_first)
+    writeToDb("Ga-1-Wi-HPG2", sceneGaze_HPG2_first)
 
-    writeToDb("Gaze_UWP_HPG2_second", sceneGaze_HPG2_second)
+    writeToDb("Ga-2-Wi-HPG2", sceneGaze_HPG2_second)
 
     box_sceneGaze_HPG2 = [sceneGaze_HPG2_first, sceneGaze_HPG2_second]
 
@@ -289,8 +289,8 @@ if __name__ == "__main__":
     sceneGaze_HL2_first = aggregateData(sceneGaze_HL2_first)
     sceneGaze_HL2_second = aggregateData(sceneGaze_HL2_second)
 
-    writeToDb("Gaze_UWP_HL2_first", sceneGaze_HL2_first)
-    writeToDb("Gaze_UWP_HL2_second", sceneGaze_HL2_second)
+    writeToDb("Ga-1-Wi-HL2", sceneGaze_HL2_first)
+    writeToDb("Ga-2-Wi-HL2", sceneGaze_HL2_second)
 
     box_sceneGaze_HL2 = [sceneGaze_HL2_first, sceneGaze_HL2_second]
 

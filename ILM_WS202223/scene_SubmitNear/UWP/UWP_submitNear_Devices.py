@@ -8,6 +8,7 @@ from statistics import mean
 import sys
 sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
 import generalfunctions as gf
+from pandas.plotting import table
 
 from pymongo import MongoClient
 
@@ -508,37 +509,68 @@ if __name__ == "__main__":
     axs[1, 1].boxplot(allTimesLeft_HL2, showmeans=True)
     axs[1, 1].sharey(axs[0, 0])
 
-    axs[0, 0].set(ylabel='Sekunden')
-    axs[0, 1].set(ylabel='Sekunden')
-    axs[1, 0].set(ylabel='Sekunden')
-    axs[1, 1].set(ylabel='Sekunden')
+    axs[0, 0].set_ylabel('Sekunden', fontsize=12)
+    axs[0, 1].set_ylabel('Sekunden', fontsize=12)
+    axs[1, 0].set_ylabel('Sekunden', fontsize=12)
+    axs[1, 1].set_ylabel('Sekunden', fontsize=12)
 
 
-    descArray = ["Button 1", "Checkbox 1", "Button 2", "Checkbox 2", "Button 3", "Checkbox 3"]
+    #descArray = ["Button 1", "Checkbox 1", "Button 2", "Checkbox 2", "Button 3", "Checkbox 3"]
+    descArray = ["B1", "C1", "B2", "C2", "B3", "C3"]
 
-    num, val = gf.setXTicks_param_plain(allTimesRight_HPG2, descArray)
+    num, val, df1 = gf.setXTicksMin(allTimesRight_HPG2, descArray)
     print("HPG2 Right")
     gf.reqLatexTableOutput(allTimesRight_HPG2, descArray)
     axs[0, 0].set_title('1. Rechte Hand - HPG2', fontsize=15)
-    axs[0, 0].set_xticks(num, val)
+    ttable = table(axs[0, 0], df1, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+    axs[0, 0].set_xticks([])
+    axs[0, 0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 
-    num, val = gf.setXTicks_param_plain(allTimesRight_HL2, descArray)
+    num, val, df2 = gf.setXTicksMin(allTimesRight_HL2, descArray)
     print("HL2 Right")
+    axs[1, 0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     gf.reqLatexTableOutput(allTimesRight_HL2, descArray)
+    ttable = table(axs[1, 0], df2, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
     axs[1, 0].set_title('1. Rechte Hand - HL2', fontsize=15)
-    axs[1, 0].set_xticks(num, val)
+    axs[1, 0].set_xticks([])
 
-    num, val = gf.setXTicks_param_plain(allTimesLeft_HL2, descArray)
+    axs[1, 1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    num, val, df3 = gf.setXTicksMin(allTimesLeft_HL2, descArray)
+    df3 = df3.reset_index(drop=True)
     print("HL2 Left")
     gf.reqLatexTableOutput(allTimesLeft_HL2, descArray)
     axs[1, 1].set_title('2. Linke Hand - HL2', fontsize=15)
-    axs[1, 1].set_xticks(num, val)
+    ttable = table(axs[1, 1], df3, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+    axs[1, 1].set_xticks([])
 
-    num, val = gf.setXTicks_param_plain(allTimesLeft_HPG2, descArray)
+    num, val, df4 = gf.setXTicksMin(allTimesLeft_HPG2, descArray)
+    df4 = df4.reset_index(drop=True)
+    axs[0, 1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     print("HPG2 Left")
     gf.reqLatexTableOutput(allTimesLeft_HPG2, descArray)
+    ttable = table(axs[0, 1], df4, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
     axs[0, 1].set_title('2. Linke Hand - HPG2', fontsize=15)
-    axs[0, 1].set_xticks(num, val)
+    axs[0, 1].set_xticks([])
 
     plt.show()
 

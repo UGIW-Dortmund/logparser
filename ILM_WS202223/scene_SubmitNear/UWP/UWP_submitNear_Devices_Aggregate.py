@@ -578,13 +578,10 @@ if __name__ == "__main__":
     axs[1, 1].set_ylabel('Sekunden', fontsize=12)
 
 
-
-
     descArray = ['Sn-1-Wi-R-HPG2', 'Sn-2-Wi-R-HPG2']
     num, val, df1 = gf.setXTicksMin(box_aggrRight_HPG2, descArray)
     axs[0, 0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     axs[0, 0].set_title('1. Rechte Hand - HPG2', fontsize=15)
-    axs[0, 0].set_xticks(num, val)
     print('1. Rechte Hand - HPG2')
     ttable = table(axs[0, 0], df1, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
@@ -592,6 +589,7 @@ if __name__ == "__main__":
         cell.set_height(0.05)
     ttable.set_fontsize(12)
     ttable.auto_set_font_size(False)
+    axs[0, 0].set_xticks([])
 
 
 

@@ -5,7 +5,12 @@ import numpy as np
 import pandas as pd
 import statistics
 from statistics import mean
-
+import seaborn as sns
+from pandas.plotting import table
+from pandas.plotting import table
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 from pymongo import MongoClient
 
@@ -171,11 +176,11 @@ if __name__ == "__main__":
 
     print(probands)
 
-    sceneName = 'ILM_Teleport_Scene_Right-Hand'
+    sceneName = 'ILM_Teleport_Scene_Left-Hand'
 
 
     devices = ['MQ2', 'MQP']
-    devices = ['MQP']
+    # devices = ['MQP']
 
     sceneTeleportRightMQ2_1 = runAnalyze(probands, sceneName, devices, '1')
     sceneTeleportLeftMQ2_2 = runAnalyze(probands, sceneName, devices, '2')
@@ -195,12 +200,6 @@ if __name__ == "__main__":
     ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey',
                    alpha=0.5)
 
-    ax1.set(
-        axisbelow=True,  # Hide the grid behind plot objects
-        title='Comparison of IID Bootstrap Resampling Across Five Distributions',
-        xlabel='',
-        ylabel='Sekunden',
-    )
 
     num_boxes = len(sceneTeleportRightMQ2_1)
     # medians = np.empty(num_boxes)
@@ -215,7 +214,7 @@ if __name__ == "__main__":
     i = 0
 
     # fig = plt.figure(figsize=(10, 7))
-    plt.title('Bearbeitungszeit der Teleport-Szene mit der rechten Hand -- MQP', fontsize=15)
+    plt.title('Android: Bearbeitungszeit der Teleport-Szene mit der linken Hand', fontsize=15)
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     plt.boxplot(allTimes, showmeans=True)
     plt.ylabel('Sekunden', fontsize=12)
@@ -223,8 +222,15 @@ if __name__ == "__main__":
 
 
     descArray = ["T-Stopp 1 zu 2", "T-Stopp 2 zu 3", "T-Stopp 3 zu 4", "T-Stopp 4 zu 5"]
-    num, val = setXTicks_param(allTimes, descArray)
+    num, val, df = gf.setXTicks_param(allTimes, descArray)
 
-    plt.xticks(num, val)
+    ttable = table(plt.gca(), df, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+
+    plt.xticks([])
 
     plt.show()

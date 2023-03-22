@@ -8,6 +8,9 @@ from statistics import mean
 import sys
 sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
 import generalfunctions as gf
+import seaborn as sns
+from pandas.plotting import table
+from pandas.plotting import table
 
 from pymongo import MongoClient
 
@@ -569,44 +572,74 @@ if __name__ == "__main__":
     axs[1, 1].violinplot(box_aggrLeft_HL2, showmedians=True)
     axs[1, 1].sharey(axs[0, 0])
 
-    axs[0, 0].set(ylabel='Sekunden')
-    axs[0, 1].set(ylabel='Sekunden')
-    axs[1, 0].set(ylabel='Sekunden')
-    axs[1, 1].set(ylabel='Sekunden')
+    axs[0, 0].set_ylabel('Sekunden', fontsize=12)
+    axs[0, 1].set_ylabel('Sekunden', fontsize=12)
+    axs[1, 0].set_ylabel('Sekunden', fontsize=12)
+    axs[1, 1].set_ylabel('Sekunden', fontsize=12)
+
 
 
 
     descArray = ['Sn-1-Wi-R-HPG2', 'Sn-2-Wi-R-HPG2']
-    num, val = gf.setXTicksMin(box_aggrRight_HPG2, descArray)
-    axs[0, 0].set_title('1. Rechte Hand - HPG2')
+    num, val, df1 = gf.setXTicksMin(box_aggrRight_HPG2, descArray)
+    axs[0, 0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    axs[0, 0].set_title('1. Rechte Hand - HPG2', fontsize=15)
     axs[0, 0].set_xticks(num, val)
     print('1. Rechte Hand - HPG2')
-    gf.reqLatexTableOutput(box_aggrRight_HPG2, descArray)
+    ttable = table(axs[0, 0], df1, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
 
 
 
     descArray = ['Sn-1-Wi-R-HL2', 'Sn-2-Wi-R-HL2']
-    num, val = gf.setXTicksMin(box_aggrRight_HL2, descArray)
-    axs[1, 0].set_title('1. Rechte Hand - HL2')
-    axs[1, 0].set_xticks(num, val)
+    num, val, df2 = gf.setXTicksMin(box_aggrRight_HL2, descArray)
+    axs[1, 0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    axs[1, 0].set_title('1. Rechte Hand - HL2', fontsize=15)
     print('1. Rechte Hand - HL2')
     gf.reqLatexTableOutput(box_aggrRight_HL2, descArray)
+    ttable = table(axs[1, 0], df2, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+    axs[1, 0].set_xticks([])
 
 
     descArray = ['Sn-1-Wi-L-HPG2', 'Sn-2-Wi-L-HPG2']
-    num, val = gf.setXTicksMin(box_aggrLeft_HL2, descArray)
-    axs[0, 1].set_title('2. Linke Hand - HPG2')
-    axs[0, 1].set_xticks(num, val)
+    num, val, df3 = gf.setXTicksMin(box_aggrLeft_HL2, descArray)
+    df3= df3.reset_index(drop=True)
+    axs[0, 1].set_title('2. Linke Hand - HPG2', fontsize=15)
+    axs[0, 1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     print('2. Linke Hand - HPG2')
     gf.reqLatexTableOutput(box_aggrLeft_HL2, descArray)
+    ttable = table(axs[0, 1], df3, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+    axs[0, 1].set_xticks([])
 
 
     descArray = ['Sn-1-Wi-L-HL2', 'Sn-2-Wi-L-HL2']
-    num, val = gf.setXTicksMin(box_aggrLeft_HPG2, descArray)
-    axs[1, 1].set_title('2. Linke Hand - HL2')
-    axs[1, 1].set_xticks(num, val)
+    num, val, df4 = gf.setXTicksMin(box_aggrLeft_HPG2, descArray)
+    df4 = df4.reset_index(drop=True)
+    axs[1, 1].set_title('2. Linke Hand - HL2', fontsize=15)
+    axs[1, 1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     print('2. Linke Hand - HL2')
     gf.reqLatexTableOutput(box_aggrLeft_HPG2, descArray)
+    ttable = table(axs[1, 1], df4, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+    axs[1, 1].set_xticks([])
 
     plt.show()
 

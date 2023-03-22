@@ -37,6 +37,7 @@ import generalfunctions as gf
 
 
 - Table with Values and Dataframe
+With subplots:
 ``
 from pandas.plotting import table
 ttable = table(axs[0], df_Right, loc='bottom', colLoc='center', cellLoc='center')
@@ -48,9 +49,10 @@ ttable.auto_set_font_size(False)
 ``
 
 
+Without any subplots:
 ``
 fig, axs = plt.subplots(1, 1, figsize=(10, 8))
-ttable = table(axs, df, loc='bottom', colLoc='center', cellLoc='center')
+ttable = table(plt.gca(), df, loc='bottom', colLoc='center', cellLoc='center')
 plt.xticks([])
 axs.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 plt.grid(axis='y', linestyle='-', which='major', color='lightgrey', alpha=0.5)

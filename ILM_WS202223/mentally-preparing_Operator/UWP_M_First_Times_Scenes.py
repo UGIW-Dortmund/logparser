@@ -8,6 +8,13 @@ from statistics import mean
 
 from pymongo import MongoClient
 
+import seaborn as sns
+from pandas.plotting import table
+from pandas.plotting import table
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
+
 
 ###
 ### For figuring out the operating times for teleporting
@@ -425,40 +432,56 @@ if __name__ == "__main__":
 
     col = dbname["uwp"]
 
-    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
-                'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
+                'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
     print(probands)
 
     devices = ['HL2']
     M_UWP_HL2_scenes = runAnalyzeElementSteps(probands, devices)
-    writeToDb('M_UWP_HL2_scenes', M_UWP_HL2_scenes)
+    writeToDb('M-AR', M_UWP_HL2_scenes)
 
     devices = ['HPG2']
     M_UWP_HPG2_scenes = runAnalyzeElementSteps(probands, devices)
-    writeToDb('M_UWP_HPG2_scenes', M_UWP_HPG2_scenes)
+    writeToDb('M-VR', M_UWP_HPG2_scenes)
 
     #sceneArray = [pointArray, gazeArray, grabRightArray, grabLeftArray,
     #              subFarRightArray, subFarLeftArray, subNearRightArray, subNearLeftArray]
 
-    descArray = ['Point', 'Gaze', 'GR Right', 'GR Left', 'SF Right', 'SF Left', 'SN Right', 'SN Left']
+    descArray = ['Point', 'Gaze', 'Gr Right', 'Gr Left', 'Sf Right', 'Sf Left', 'Sn Right', 'Sn Left']
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
-    axs[0].set_title('HL2')
+    axs[0].set_title('HoloLens 2', fontsize=15)
     axs[0].boxplot(M_UWP_HL2_scenes, showmeans=True)
-    num, val = setXTicks_param(M_UWP_HL2_scenes, descArray)
-    axs[0].set_xticks(num, val)
+    num, val, df1 = gf.setXTicks_param(M_UWP_HL2_scenes, descArray)
 
-    axs[1].set_title('HPG2')
+    ttable = table(axs[0], df1, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+    axs[0].set_xticks([])
+    axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+
+    axs[1].set_title('Reverb G2', fontsize=15)
     axs[1].boxplot(M_UWP_HPG2_scenes, showmeans=True)
     axs[1].sharey(axs[0])
-    num, val = setXTicks_param(M_UWP_HPG2_scenes, descArray)
-    axs[1].set_xticks(num, val)
+    num, val, df2 = gf.setXTicks_param(M_UWP_HPG2_scenes, descArray)
+    df2 = df2.reset_index(drop=True)
+    ttable = table(axs[1], df2, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+    axs[1].set_xticks([])
+    axs[1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 
-    axs[0].set(ylabel='Sekunden')
-    axs[1].set(ylabel='Sekunden')
+    axs[0].set_ylabel('Sekunden', fontsize=12)
+    axs[1].set_ylabel('Sekunden', fontsize=12)
 
     plt.show()
 

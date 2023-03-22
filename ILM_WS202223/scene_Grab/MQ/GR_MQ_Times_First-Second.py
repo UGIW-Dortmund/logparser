@@ -263,19 +263,19 @@ if __name__ == "__main__":
     # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
     descArray = ['Gr-Ad-1-R', 'Gr-Ad-2-R', 'Gr-Ad-1-L', 'Gr-Ad-2-L', 'Gr-Ad-1', 'Gr-Ad-2']
 
-    num, val, df = setXTicks_param(allBoxplot, descArray)
+    num, val, df = gf.setXTicks_param(allBoxplot, descArray)
 
     plt.title('Android: Bearbeitungszeit des Grab-Operators', fontsize=15)
     plt.boxplot(allBoxplot, showmeans=True)
     plt.grid(axis='y', linestyle='-', which='major', color='lightgrey', alpha=0.5)
-    ttable = table(plt.axis, df, loc='bottom', colLoc='center', cellLoc='center')
+    ttable = table(plt.gca(), df, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
         cell.set_edgecolor('lightgrey')
         cell.set_height(0.05)
     ttable.set_fontsize(12)
     ttable.auto_set_font_size(False)
 
-    plt.xticks(num, val, fontsize=12)
+    plt.xticks([])
     plt.ylabel('Sekunden', fontsize=12)
 
     plt.show()

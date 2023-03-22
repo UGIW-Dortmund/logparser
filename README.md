@@ -51,8 +51,9 @@ ttable.auto_set_font_size(False)
 ``
 fig, axs = plt.subplots(1, 1, figsize=(10, 8))
 ttable = table(axs, df, loc='bottom', colLoc='center', cellLoc='center')
-axs.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 plt.xticks([])
+axs.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+plt.grid(axis='y', linestyle='-', which='major', color='lightgrey', alpha=0.5)
 ``
 
 SNS Swarm- and Violinplot

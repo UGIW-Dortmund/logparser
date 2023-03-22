@@ -172,17 +172,17 @@ if __name__ == "__main__":
     snap_MQP_Left = runAnalyzeSnap(probands, sceneName, devices, searchTerm)
     x_snap_MQP_Left, y_snap_MQP_Left = getDataXY(snap_MQP_Left)
 
+
+    # fig, axs = plt.subplots(1, 1, figsize=(10, 8))
     X = np.arange(len(x_snap_MQ2_Right))
     width = 0.5
-    plt.ylabel("Anzahl Daumenstick-Bewegungen", fontsize=16)
-    plt.xlabel("Probanden ID", fontsize=16)
-
+    plt.ylabel("Anzahl Daumenstick-Bewegungen", fontsize=15)
+    plt.xlabel("Probanden ID", fontsize=15)
+    plt.title("Android: Verwendung der Daumensticks", fontsize=15)
 
 
     (e_X, x_X) = setXTicks_param(x_snap_MQP_Right, x_snap_MQP_Right)
     plt.xticks(e_X, x_X ,fontsize=12)
-
-
 
     print("e_X")
     print(e_X)
@@ -190,11 +190,12 @@ if __name__ == "__main__":
     print("x_X")
     print(x_X)
 
-    plt.bar(X, y_snap_MQ2_Right, width, label="Rechte Hand MQ2")
-    plt.bar(X, y_snap_MQ2_Left, width, label="Linke Hand MQ2")
-    plt.bar(X + width, y_snap_MQP_Right, width, label="Rechte Hand MQP")
-    plt.bar(X, y_snap_MQP_Left, width, label="Linke Hand MQP")
-    plt.legend()
+    plt.grid(axis='y', linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    plt.bar(X, y_snap_MQ2_Right, width, label="Ga-Ad-MQ2-R")
+    plt.bar(X, y_snap_MQ2_Left, width, label="Ga-Ad-MQ2-L")
+    plt.bar(X + width, y_snap_MQP_Right, width, label="Ga-Ad-MQP-R")
+    plt.bar(X, y_snap_MQP_Left, width, label="Ga-Ad-MQP-L")
+    plt.legend(prop={'size': 14})
 
     plt.show()
 

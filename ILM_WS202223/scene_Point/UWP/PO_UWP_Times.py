@@ -205,13 +205,13 @@ if __name__ == "__main__":
     sceneName = 'ILM_Point'
     devices = ['HL2']
     PO_UWP_HL2 = runAnalyzeCubes(probands, sceneName, devices, rrHL2)
-    writeToDb('PO_UWP_HL2', PO_UWP_HL2)
+    writeToDb('P-Wi-HL2', PO_UWP_HL2)
 
 
     devices = ['HPG2']
     PO_UWP_HPG2 = runAnalyzeCubes(probands, sceneName, devices, rrHPG2)
     print(PO_UWP_HPG2)
-    writeToDb('PO_UWP_HPG2', PO_UWP_HPG2)
+    writeToDb('P-Wi-HPG2', PO_UWP_HPG2)
 
 
 

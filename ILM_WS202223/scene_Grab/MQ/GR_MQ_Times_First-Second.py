@@ -8,6 +8,13 @@ from statistics import mean
 
 from pymongo import MongoClient
 
+import seaborn as sns
+from pandas.plotting import table
+from pandas.plotting import table
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
+
 
 ###
 ### For figuring out the operating times for teleporting
@@ -254,12 +261,19 @@ if __name__ == "__main__":
 
 
     # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
-    descArray = ['e. E. Rechts', 'n. E. Rechts', 'e. E. Links', 'n. E. Links', 'e. E..', 'n. E.']
+    descArray = ['Gr-Ad-1-R', 'Gr-Ad-2-R', 'Gr-Ad-1-L', 'Gr-Ad-2-L', 'Gr-Ad-1', 'Gr-Ad-2']
 
-    num, val = setXTicks_param(allBoxplot, descArray)
+    num, val, df = setXTicks_param(allBoxplot, descArray)
 
     plt.title('Android: Bearbeitungszeit des Grab-Operators', fontsize=15)
     plt.boxplot(allBoxplot, showmeans=True)
+    plt.grid(axis='y', linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    ttable = table(plt.axis, df, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
 
     plt.xticks(num, val, fontsize=12)
     plt.ylabel('Sekunden', fontsize=12)

@@ -242,7 +242,7 @@ if __name__ == "__main__":
 
     num, val = setXTicks_param(allBoxplot, descArray)
 
-    plt.title('Bearbeitungszeit des Grab-Operators MQ')
+    plt.title('Android: Bearbeitungszeit des Grab-Operators MQ', fontsize=15)
     plt.boxplot(allBoxplot, showmeans=True)
 
     plt.xticks(num, val)

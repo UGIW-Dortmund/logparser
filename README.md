@@ -5,24 +5,35 @@ This Parser is for proceeding the Log Files of the ILM project.
 ## Styling
 In order to read the text of the diagramms properly on DIN A4 pages. 
 Add the following settings to the diagramms: 
+
+``
+import seaborn as sns
+from pandas.plotting import table
+from pandas.plotting import table
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
+``
+
+ 
 - X-Ticks 
   - ``plt.xticks(num, val, fontsize=12)``
   - ``fig.suptitle('This is the figure title', fontsize=12)``
 
 
 - Diagramm Title 
-  - `` plt.title('XXX', fontsize=15)``
-  - 
+`` plt.title('XXX', fontsize=15)``
+
 
 - X- and Y-Label: 
-  - ``plt.ylabel('XXX', fontsize=12)``
-  - ``axs[0].set_xlabel('X-Koordinaten', fontsize=12)``
+``plt.ylabel('XXX', fontsize=12)``
+``axs[0].set_xlabel('X-Koordinaten', fontsize=12)``
 
 - X-Ticks
-  - ``axs[0].xaxis.set_tick_params(labelsize=12)``
+``axs[0].xaxis.set_tick_params(labelsize=12)``
 
 - Grid on the line 
-  - ``axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)``
+``axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)``
 
 
 - Table with Values and Dataframe
@@ -30,11 +41,19 @@ Add the following settings to the diagramms:
 from pandas.plotting import table
 ttable = table(axs[0], df_Right, loc='bottom', colLoc='center', cellLoc='center')
 for key, cell in ttable.get_celld().items():
-   cell.set_edgecolor('lightgrey')
-ttable.set_fontsize(10)
+    cell.set_edgecolor('lightgrey')
+    cell.set_height(0.05)
+ttable.set_fontsize(12)
 ttable.auto_set_font_size(False)
 ``
 
+
+``
+fig, axs = plt.subplots(1, 1, figsize=(10, 8))
+ttable = table(axs, df, loc='bottom', colLoc='center', cellLoc='center')
+axs.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+plt.xticks([])
+``
 
 SNS Swarm- and Violinplot
 ``

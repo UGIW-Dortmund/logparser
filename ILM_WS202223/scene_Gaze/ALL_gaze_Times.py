@@ -211,6 +211,10 @@ if __name__ == "__main__":
     writeToDb("Gaze_AD_second", operatorGaze_AD_second)
     writeToDb("Gaze_UWP_second", operatorGaze_UWP_second)
 
+    writeToDb("Ga-VR", Ga_VR)
+    writeToDb("Ga-AR-1", sceneGaze_HL2_first)
+    writeToDb("Ga-AR-2", sceneGaze_HL2_second)
+
 
     operatorGaze = [operatorGaze_AD_second, operatorGaze_UWP_second, Ga_VR]
 

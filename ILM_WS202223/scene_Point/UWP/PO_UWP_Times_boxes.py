@@ -7,6 +7,12 @@ import statistics
 from statistics import mean
 
 from pymongo import MongoClient
+import seaborn as sns
+from pandas.plotting import table
+from pandas.plotting import table
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 
 ###
@@ -140,7 +146,7 @@ def runAnalyzeCubes(probands, sceneName, device, refreshRate):
                             c5.append(delta)
 
 
-                    print('For Proband: ' + str(p) + '\t' + str(cube[0]) + '\t Time: ' + str(delta))
+                    print('For Proband: ' + str(p) + '\t' + str(cube[0]) + '\t D ' + str(d) + '\t Time: ' + str(delta))
 
     cubeValues = [c1, c2, c3, c4, c5]
 
@@ -238,21 +244,36 @@ if __name__ == "__main__":
 
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
-
-    axs[0].set_title('HL2')
+    plt.title('Windows: Bearbeitungszeit des Point-Operators', fontsize=15)
+    axs[0].set_title('HoloLens 2', fontsize=15)
     axs[0].boxplot(PO_UWP_HL2, showmeans=True)
-    num, val = setXTicks_param(PO_UWP_HL2, descArray)
-    axs[0].set_xticks(num, val)
+    num, val, df = gf.setXTicks_param(PO_UWP_HL2, descArray)
+    from pandas.plotting import table
+    ttable = table(axs[0], df, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    axs[0].set_xticks([])
+    axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
 
-    axs[1].set_title('HPG2')
+    axs[1].set_title('Reverb G2', fontsize=15)
     axs[1].boxplot(PO_UWP_HPG2, showmeans=True)
     axs[1].sharey(axs[0])
-    num, val = setXTicks_param(PO_UWP_HPG2, descArray)
-    axs[1].set_xticks(num, val)
+    num, val, df2 = gf.setXTicks_param(PO_UWP_HPG2, descArray)
+    df2 = df2.reset_index(drop=True)
+    # df.reset_index()
+    axs[1].set_xticks([])
+    axs[1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    ttable = table(axs[1], df2, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
 
-    axs[0].set(ylabel='Sekunden')
-    axs[1].set(ylabel='Sekunden')
+    axs[0].set_ylabel('Sekunden', fontsize=12)
+    axs[1].set_ylabel('Sekunden', fontsize=12)
 
     plt.show()
-
-    # Noch Auswirkung für die einzelnen Würfel machen!

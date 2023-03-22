@@ -5,8 +5,13 @@ import numpy as np
 import pandas as pd
 import statistics
 from statistics import mean
-
+from pandas.plotting import table
 from pymongo import MongoClient
+import seaborn as sns
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
+
 
 
 ###
@@ -190,9 +195,9 @@ if __name__ == "__main__":
 
     col = dbname["uwp"]
 
-    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
-                'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
+                'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
     # probands = ['A16']
 
@@ -229,21 +234,34 @@ if __name__ == "__main__":
 
     PO_MQ = [PO_MQ_Right, PO_MQ_Left]
     PO_MQ = aggregateData(PO_MQ)
-    writeToDb('PO_MQ', PO_MQ)
+    writeToDb('P-Ad', PO_MQ)
 
     allBoxplot = [PO_MQ_Right_MQ2, PO_MQ_Right_MQP, PO_MQ_Left_MQ2, PO_MQ_Left_MQP, PO_MQ_Right, PO_MQ_Left, PO_MQ]
 
 
     # descArray = ['Rechts HL2', 'Rechts HPG2', 'Links HL2', 'Links HPG2', 'Rechts', 'Links', 'Gesamt']
-    descArray = ['Rechts MQ2', 'Rechts MQP', 'Links MQ2', 'Links MQP', 'Rechts', 'Links', 'Gesamt']
+    descArray = ['P-Ad-MQ2-R', 'P-Ad-MQP-R', 'P-Ad-MQ2-L', 'P-Ad-MQP-L', 'P-Ad-R', 'P-Ad-L', 'P-Ad']
 
-    num, val = setXTicks_param(allBoxplot, descArray)
+    num, val, df = gf.setXTicks_param(allBoxplot, descArray)
 
-    plt.title('Bearbeitungszeit des Point-Operators MQ')
-    plt.boxplot(allBoxplot, showmeans=True)
+    fig, axs = plt.subplots(1, 1, figsize=(10, 8))
+    plt.title('Android: Bearbeitungszeit des Point-Operators', fontsize=15)
+    # plt.boxplot(allBoxplot, showmeans=True)
 
-    plt.xticks(num, val)
-    plt.ylabel('Sekunden')
+    sns.violinplot(allBoxplot, showmeans=True, color="skyblue")
+    sns.swarmplot(allBoxplot, color="black")
+
+    axs.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+
+    ttable = table(axs, df, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+
+    plt.xticks([])
+    plt.ylabel('Sekunden', fontsize=12)
 
     plt.show()
 

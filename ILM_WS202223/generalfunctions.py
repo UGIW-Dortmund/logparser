@@ -5,6 +5,10 @@ import numpy as np
 from pymongo import MongoClient
 
 
+probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+            'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
+            'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+
 ##### Database
 def get_database():
     # Provide the mongodb atlas url to connect python to mongodb using pymongo
@@ -39,10 +43,9 @@ def writeToDb(name, value):
 def getDb(queryParam):
     dbname = get_database()
     tresor = dbname["tresor"]
-    queryResult = tresor.find({'name': str(queryParam)})
+    queryResult = tresor.find_one({'name': str(queryParam)})
+    queryResult = convertToFloat1D(queryResult)
     return queryResult
-
-
 
 
 

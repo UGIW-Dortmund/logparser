@@ -158,10 +158,13 @@ if __name__ == "__main__":
     SF_AD_second = tresor.find_one({'name': 'Sf-2-Ad'})
     SF_AD_second = convertToFloat(SF_AD_second)
 
+    SF_AD_first = tresor.find_one({'name': 'Sf-1-Ad'})
+    SF_AD_first = convertToFloat(SF_AD_first)
+    writeToDb('Sf-1', SF_AD_first)
 
     SF_ALL = [SF_UWP_ALL, SF_AD_second]
     SF_ALL = aggregateData(SF_ALL)
-
+    writeToDb('Sf-2', SF_ALL)
 
 
 

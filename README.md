@@ -64,6 +64,12 @@ sns.violinplot(allBoxplot, showmeans=True, color="skyblue")
 sns.swarmplot(allBoxplot, color="black")
 ``
 
+Mit Subplots
+``
+sns.violinplot(box_sceneGaze_HL2, showmeans=True, color="skyblue", ax=axs[1])
+sns.swarmplot(box_sceneGaze_HL2, color="black", ax=axs[1])
+``
+
 ## Scripts
 
 - `` generalfunctions ``: Script which inculdes all necesary functions which are shared all over other functions

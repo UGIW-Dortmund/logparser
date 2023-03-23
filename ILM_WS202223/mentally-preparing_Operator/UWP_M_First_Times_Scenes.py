@@ -439,11 +439,15 @@ if __name__ == "__main__":
 
     devices = ['HL2']
     M_UWP_HL2_scenes = runAnalyzeElementSteps(probands, devices)
-    writeToDb('M-AR', M_UWP_HL2_scenes)
+
+    M_AR = aggregateData(M_UWP_HL2_scenes)
+    writeToDb('M-AR', M_AR)
 
     devices = ['HPG2']
     M_UWP_HPG2_scenes = runAnalyzeElementSteps(probands, devices)
-    writeToDb('M-VR', M_UWP_HPG2_scenes)
+
+    M_VR = aggregateData(M_UWP_HPG2_scenes)
+    writeToDb('M-VR', M_VR)
 
     #sceneArray = [pointArray, gazeArray, grabRightArray, grabLeftArray,
     #              subFarRightArray, subFarLeftArray, subNearRightArray, subNearLeftArray]

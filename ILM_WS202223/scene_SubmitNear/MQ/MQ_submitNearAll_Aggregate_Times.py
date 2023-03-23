@@ -10,6 +10,9 @@ import sys
 sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
 import generalfunctions as gf
 
+import seaborn as sns
+from pandas.plotting import table
+
 from pymongo import MongoClient
 
 
@@ -776,48 +779,50 @@ if __name__ == "__main__":
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
-    fig.suptitle('Bearbeitungszeit aller Schaltflächen mit dem Submit Near Operator')
+    fig.suptitle('Android: Submit Near Operator', fontsize=15)
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
 
-    axs[0].violinplot(boxplotElementRightArray, showmeans=True)
-    axs[1].violinplot(boxplotElementLeftArray, showmeans=True)
+    # axs[0].violinplot(boxplotElementRightArray, showmeans=True)
+    # axs[1].violinplot(boxplotElementLeftArray, showmeans=True)
 
-    # axs[2].violinplot(boxplotElementArray)
+
     axs[1].sharey(axs[0])
-    # axs[2].sharey(axs[0])
-
-
 
     axs[0].set_ylabel('Sekunden', fontsize=12)
     axs[1].set_ylabel('Sekunden', fontsize=12)
-    # axs[2].set(ylabel='Sekunden')
-
 
     descArray = ["Sn-1-Ad-R", "Sn-2-Ad-R"]
 
-    num, val = gf.setXTicks_param(boxplotElementRightArray, descArray)
+    num, val, df1 = gf.setXTicks_param(boxplotElementRightArray, descArray)
 
 
-    axs[0].set_title('1. Rechte Hand')
-    axs[0].set_xticks(num, val, fontsize=12)
+    axs[0].set_title('1. Rechte Hand', fontsize=15)
+    ttable = table(axs[0], df1, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+    axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    sns.violinplot(boxplotElementRightArray, showmeans=True, color="skyblue", ax=axs[0])
+    sns.swarmplot(boxplotElementRightArray, color="black", ax=axs[0])
+    axs[0].set_xticks([])
 
     descArray = ["Sn-1-Ad-L", "Sn-2-Ad-L"]
 
-    num, val = gf.setXTicks_param(boxplotElementLeftArray, descArray)
-
-    axs[1].set_title('2. Linke Hand')
-    axs[1].set_xticks(num, val, fontsize=12)
-
-    '''
-    axs[2].set_title('Beide Hände zusammengefasst')
-    axs[2].set_xticks([1, 2], [
-
-                                    "Erste S." + boxplotCap(boxplotElementArray[0]),
-                                    "Nachgelagerte S." + boxplotCap(boxplotElementArray[1])
-
-                                ])
-
-    '''
+    num, val, df2 = gf.setXTicks_param(boxplotElementLeftArray, descArray)
+    sns.violinplot(boxplotElementLeftArray, showmeans=True, color="skyblue", ax=axs[1])
+    sns.swarmplot(boxplotElementLeftArray, color="black", ax=axs[1])
+    df2 = df2.reset_index(drop=True)
+    axs[1].set_title('2. Linke Hand', fontsize=15)
+    ttable = table(axs[1], df2, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
+    axs[1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+    axs[1].set_xticks([])
 
     plt.show()
 

@@ -8,8 +8,8 @@ from statistics import mean
 import sys
 sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
 import generalfunctions as gf
+
 import seaborn as sns
-from pandas.plotting import table
 from pandas.plotting import table
 
 from pymongo import MongoClient
@@ -578,7 +578,7 @@ if __name__ == "__main__":
     axs[1, 1].set_ylabel('Sekunden', fontsize=12)
 
 
-    descArray = ['Sn-1-Wi-R-HPG2', 'Sn-2-Wi-R-HPG2']
+    descArray = ['Sn-1-Wi-HPG2-R', 'Sn-2-Wi-HPG2-R']
     num, val, df1 = gf.setXTicksMin(box_aggrRight_HPG2, descArray)
     axs[0, 0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     axs[0, 0].set_title('1. Rechte Hand - HPG2', fontsize=15)
@@ -593,7 +593,7 @@ if __name__ == "__main__":
 
 
 
-    descArray = ['Sn-1-Wi-R-HL2', 'Sn-2-Wi-R-HL2']
+    descArray = ['Sn-1-Wi-HL2-R', 'Sn-2-Wi-HL2-R']
     num, val, df2 = gf.setXTicksMin(box_aggrRight_HL2, descArray)
     axs[1, 0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     axs[1, 0].set_title('1. Rechte Hand - HL2', fontsize=15)
@@ -608,9 +608,9 @@ if __name__ == "__main__":
     axs[1, 0].set_xticks([])
 
 
-    descArray = ['Sn-1-Wi-L-HPG2', 'Sn-2-Wi-L-HPG2']
+    descArray = ['Sn-1-Wi-HPG2-L', 'Sn-2-Wi-HPG2-L']
     num, val, df3 = gf.setXTicksMin(box_aggrLeft_HL2, descArray)
-    df3= df3.reset_index(drop=True)
+    df3 = df3.reset_index(drop=True)
     axs[0, 1].set_title('2. Linke Hand - HPG2', fontsize=15)
     axs[0, 1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     print('2. Linke Hand - HPG2')
@@ -624,7 +624,7 @@ if __name__ == "__main__":
     axs[0, 1].set_xticks([])
 
 
-    descArray = ['Sn-1-Wi-L-HL2', 'Sn-2-Wi-L-HL2']
+    descArray = ['Sn-1-Wi-HL2-L', 'Sn-2-Wi-HL2-L']
     num, val, df4 = gf.setXTicksMin(box_aggrLeft_HPG2, descArray)
     df4 = df4.reset_index(drop=True)
     axs[1, 1].set_title('2. Linke Hand - HL2', fontsize=15)

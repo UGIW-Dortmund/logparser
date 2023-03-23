@@ -7,7 +7,9 @@ import statistics
 from statistics import mean
 
 from pymongo import MongoClient
-
+import sys
+sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+import generalfunctions as gf
 
 ###
 ### For figuring out the operating times for teleporting
@@ -157,6 +159,7 @@ if __name__ == "__main__":
     sceneName = 'ILM_Point'
     devices = ['HL2']
     PO_UWP_HL2 = tresor.find_one({'name': 'PO_UWP_HL2'})
+    PO_UWP_HL2 = convertToFloat(PO_UWP_HL2)
 
 
     PO_UWP_HPG2 = tresor.find_one({'name': 'PO_UWP_HPG2'})
@@ -164,6 +167,16 @@ if __name__ == "__main__":
 
     PO_MQ = tresor.find_one({'name': 'PO_MQ'})
     PO_MQ = convertToFloat(PO_MQ)
+
+
+    P_plain = []
+    P_AR = [P_plain, PO_UWP_HL2]
+    P_AR = aggregateData(P_AR)
+    gf.writeToDb('P-AR', P_AR)
+
+    P_VR = [PO_UWP_HPG2, PO_MQ]
+    P_VR = aggregateData(P_VR)
+    gf.writeToDb('P-VR', P_VR)
 
     PO_ALL = [PO_UWP_HPG2, PO_MQ]
     PO_ALL = aggregateData(PO_ALL)

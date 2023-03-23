@@ -153,26 +153,31 @@ if __name__ == "__main__":
 
 
     h_2 = axs[0].hist2d(all_x_values_right, all_y_values_right, bins=10, vmin=0, vmax=50, cmap=plt.cm.YlGnBu)
-    axs[0].set_title('1. Rechte Hand', size=18)
+    axs[0].set_title('1. Rechte Hand', size=22)
     print('X-Right' + str(all_x_values_right))
     print('Y-Right' + str(all_y_values_right))
 
     h_1 = axs[1].hist2d(all_x_values_left, all_y_values_left, bins=10, vmin=0, vmax=50, cmap=plt.cm.YlGnBu)
-    axs[1].set_title('2. Linke Hand', size=18)
+    axs[1].set_title('2. Linke Hand', size=22)
 
+    #for tick in axs.xaxis.get_major_ticks():
+    #    tick.label.set_fontsize(14)
+        #axs.tick_params(axis='both', which='minor', labelsize=12)
+    #axs[0].set_xticks(size=25)
+    #axs[1].set_xticks(size=25)
     axs[1].sharey(axs[0])
     axs[1].sharex(axs[0])
 
     axs[0].set_facecolor((1.0, 0.47, 0.42))
     axs[1].set_facecolor((1.0, 0.47, 0.42))
 
-    axs[0].set_xlabel('X-Koordinaten', fontsize=12)
-    axs[0].set_ylabel('Z-Koordinaten', fontsize=12)
-    axs[1].set_xlabel('X-Koordinaten', fontsize=12)
-    axs[1].set_ylabel('Z-Koordinaten', fontsize=12)
+    axs[0].set_xlabel('X-Koordinaten', fontsize=18)
+    axs[0].set_ylabel('Z-Koordinaten', fontsize=18)
+    axs[1].set_xlabel('X-Koordinaten', fontsize=18)
+    axs[1].set_ylabel('Z-Koordinaten', fontsize=18)
 
 
-    cb = plt.colorbar(h_1[3], ax=axs[0], label='Anzahl Teleport-Positionen')
+    # cb = plt.colorbar(h_1[3], ax=axs[0], label='Anzahl Teleport-Positionen')
 
     #cb = plt.colorbar(h_2[3], ax=axs[1], label='Anzahl der Teleport-Positionen')
     # cb.set_label(label='Anzahl der Teleport-Positionen', fontsize=12)

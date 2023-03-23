@@ -94,6 +94,9 @@ if __name__ == "__main__":
 
     SN_boxplot = [SN_first, SN_second]
 
+    gf.writeToDb('Sn-1', SN_first)
+    gf.writeToDb('Sn-2', SN_second)
+
     fig, axs = plt.subplots(1, 3, figsize=(10, 8))
 
 
@@ -111,17 +114,17 @@ if __name__ == "__main__":
     axs[0].set(ylabel='Sekunden')
 
     descArray = ["SN-1-Wi", "SN-2-Wi"]
-    num, val = gf.setXTicks_param(SN_UWP_boxplot, descArray)
+    num, val, df = gf.setXTicks_param(SN_UWP_boxplot, descArray)
     axs[0].set_title('Windows-Anwendungen')
     axs[0].set_xticks(num, val)
 
     descArray = ["SN-1-Ad", "SN-2-Ad"]
-    num, val = gf.setXTicks_param(SN_AD_boxplot, descArray)
+    num, val, df = gf.setXTicks_param(SN_AD_boxplot, descArray)
     axs[1].set_title('Android-Anwendungen')
     axs[1].set_xticks(num, val)
 
     descArray = ["SN-1", "SN-2"]
-    num, val = gf.setXTicks_param(SN_boxplot, descArray)
+    num, val, df = gf.setXTicks_param(SN_boxplot, descArray)
     axs[2].set_title('Zusammenfassung')
     axs[2].set_xticks(num, val)
 

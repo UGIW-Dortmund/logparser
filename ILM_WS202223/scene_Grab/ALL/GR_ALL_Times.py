@@ -223,9 +223,9 @@ if __name__ == "__main__":
     col = dbname["uwp"]
     tresor = dbname["tresor"]
 
-    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12',
-                'A13', 'A14', 'A15', 'A16', 'A17', 'A18',
-                'A19', 'A20', 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
+    probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+                'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
+                'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
 
 
@@ -234,6 +234,24 @@ if __name__ == "__main__":
 
     GR_MQ_second = tresor.find_one({'name': 'GR_MQ_second'})
     GR_MQ_second = convertToFloat(GR_MQ_second)
+
+    Gr_AR = tresor.find_one({'name': 'GR_UWP_HL2'})
+    Gr_AR = convertToFloat(Gr_AR)
+    writeToDb('Gr-AR', Gr_AR)
+
+    Gr_Ad_1 = tresor.find_one({'name': 'GR_MQ_first'})
+    Gr_Ad_1 = convertToFloat(Gr_Ad_1)
+    writeToDb('Gr-VR-1', Gr_Ad_1)
+
+    Gr_Ad_2 = tresor.find_one({'name': 'GR_MQ_second'})
+    Gr_Ad_2 = convertToFloat(Gr_Ad_2)
+    Gr_VR_2 = [Gr_Ad_2, GR_UWP_HPG2]
+    Gr_VR_2 = aggregateData(Gr_VR_2)
+    writeToDb('Gr-VR-2', Gr_VR_2)
+
+
+
+
 
     GR_VR_nE = [GR_UWP_HPG2, GR_MQ_second]
     GR_VR_nE = aggregateData(GR_VR_nE)

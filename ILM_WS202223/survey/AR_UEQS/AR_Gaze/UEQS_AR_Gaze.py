@@ -72,19 +72,34 @@ if __name__ == '__main__':
     # y_nums = [1, 2, 3, 4, 5, 6, 7, 8]
     y_nums = [8, 7, 6, 5, 4, 3, 2, 1]
 
+
+
     fig, ax1 = plt.subplots()
+    plt.yticks(y_nums, descrLeft)
+
+    plt.yticks(y_nums, descrLeft)
+    # ax1.set_xlim(ratingMin - 0.5, ratingMax + 0.5)
+    ax1.grid()
+    ax1.set(xlabel='Wertung')
+    ax1.set_box_aspect(2)
+    ax1.set_xlim([0, 5])
+    ax1.set_ylim([0.5, 8.5])
 
     ax2 = ax1.twinx()
-    ax2.sharey(ax1)
-    # ax2.set_ylim(ax1.get_ylim())
-    ax2.set_yticks(y_nums, descrRight)
+    # ax2.sharey(ax1)
+    ax2.set_ylim(ax1.get_ylim())
+    # ax1.set_ylim(ax2.get_ylim())
+
+    plt.yticks(y_nums, descrRight)
     #plt.yticks(y_nums, descrRight)
     ax2.set_box_aspect(2)
 
 
-    ax1.set_yticks(y_nums, descrLeft)
+
     plt.plot(x_vals, y_vals, '-o', color='green', label='AR Gaze')
-    #plt.grid()
+    plt.title('AR Gaze', fontsize=15)
+    plt.xlabel('Wertung', fontsize=12)
+    plt.legend()
     ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     ax1.xaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
 

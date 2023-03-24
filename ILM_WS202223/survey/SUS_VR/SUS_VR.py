@@ -14,7 +14,7 @@ import plot_likert
 if __name__ == '__main__':
     # fig, axs = plt.subplots(2, 2, figsize=(10, 8))
 
-    data = pd.read_csv("20230324_ILM_SUS_AR_7.csv", delimiter=';')
+    data = pd.read_csv("20230324_ILM_SUS_VR.csv", delimiter=';')
     scale = ['Nein', 'Eher nein', 'Ich weiß nicht', 'Eher ja', 'Ja']
 
     scaleWeight = [['Nein', 1],
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     plt.plot(x_vals_median, y_vals, '-o', color='blue', label='Median')
     plt.grid()
     plt.legend()
-    plt.title("AR SUS", fontsize=15)
+    plt.title("VR SUS", fontsize=15)
     plt.xticks([1, 2, 3, 4, 5], scale)
     plt.yticks([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], descr)
 

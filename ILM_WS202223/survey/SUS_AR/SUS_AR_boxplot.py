@@ -58,7 +58,7 @@ if __name__ == '__main__':
             elif l == scale[4]:
                 newrow.append(5)
 
-        i = i - 1
+
         x_vals.append(statistics.mean(newrow))
         x_vals_median.append(statistics.median(newrow))
         y_vals.append(i)
@@ -68,9 +68,10 @@ if __name__ == '__main__':
         newrow = list(newrow)
         # box = [i, newrow]
         boxplotVals.append(newrow)
+        i = i - 1
 
 
-    #print(df.iloc[:0])
+    print(boxplotVals)
 
     descr = df.iloc[:0]
     descr = list(descr)
@@ -78,13 +79,13 @@ if __name__ == '__main__':
     print(len(descr))
 
 
-    plt.plot(x_vals, y_vals, '-o', color='green', label='Mittelwert')
-    plt.plot(x_vals_median, y_vals, '-o', color='blue', label='Median')
+    #plt.plot(x_vals, y_vals, '-o', color='green')
+    #plt.plot(x_vals_median, y_vals, '-o', color='blue')
+    plt.boxplot(boxplotVals, vert=False, showmeans=True)
     plt.grid()
-    plt.legend()
     plt.title("AR SUS", fontsize=15)
     plt.xticks([1, 2, 3, 4, 5], scale)
-    plt.yticks([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], descr)
+    plt.yticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], descr)
 
     plt.show()
 

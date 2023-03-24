@@ -11,7 +11,7 @@ import numpy as np
 if __name__ == '__main__':
     fig, axs = plt.subplots(2, 2, figsize=(10, 8))
 
-    data = pd.read_csv("20230323_ILM_survey_demo.csv", delimiter=';')
+    data = pd.read_csv("20230324_ILM_survey.CSV", delimiter=';')
 
     cmap = plt.get_cmap("tab20c")
     outer_colors = cmap(np.arange(2))

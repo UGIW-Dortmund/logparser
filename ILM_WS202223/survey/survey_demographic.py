@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 if __name__ == '__main__':
     fig, axs = plt.subplots(2, 2, figsize=(10, 8))
 
-    data = pd.read_csv("20230323_ILM_survey_demo.csv", delimiter=';')
+    data = pd.read_csv("Demographic/20230323_ILM_survey_demo.csv", delimiter=';')
 
     data['gender'].value_counts().plot(kind='pie', ax=axs[0, 0],
                                        xlabel="nnn", title="Geschlecht",
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     data['gamingExperience'].value_counts().plot(kind='pie', ax=axs[1, 1],
                                        title="Erfahrung mit Controllern", ylabel="")
 
-    data = pd.read_csv("20230323_ILM_survey_demo.csv", delimiter=';')
+    data = pd.read_csv("Demographic/20230323_ILM_survey_demo.csv", delimiter=';')
 
     data['dominantHand'].value_counts().plot(kind='pie', ax=axs[0, 1],
                                              title="Dominante Hand", ylabel="")

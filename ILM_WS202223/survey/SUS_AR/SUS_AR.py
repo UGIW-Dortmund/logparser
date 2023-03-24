@@ -65,9 +65,6 @@ if __name__ == '__main__':
         print(f'Y: {str(i)} \t \t '
               f'Mi. = {str(round(statistics.mean(newrow), 2))} \t \t'
               f' Me. = {str(round(statistics.median(newrow), 2))}')
-        newrow = list(newrow)
-        # box = [i, newrow]
-        boxplotVals.append(newrow)
 
 
     #print(df.iloc[:0])

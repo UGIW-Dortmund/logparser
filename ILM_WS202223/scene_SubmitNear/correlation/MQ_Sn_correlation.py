@@ -580,6 +580,8 @@ if __name__ == "__main__":
                 'A19', 'A20', 'A21', 'A22', 'A23', 'A24,' 'A25', 'A26', 'A27', 'A28']
     #probands = ['T15']
 
+    probands = gf.probandsMale
+
 
     sceneName = 'ILM_Submit-Near_Left_Scene'
     devices = ['MQP', 'MQ2']
@@ -671,9 +673,12 @@ if __name__ == "__main__":
 
     Ad_Sn_1 = [firstElementsLeft, firstElementsRight]
     Ad_Sn_1 = gf.aggregateData(Ad_Sn_1)
+    gf.writeToDb('Sn-Ad-1-G-M', Ad_Sn_1)
+
 
     Ad_Sn_2 = [secondElementsLeft, secondElementsRight]
     Ad_Sn_2 = gf.aggregateData(Ad_Sn_2)
+    gf.writeToDb('Sn-Ad-2-G-M', Ad_Sn_2)
 
     Ad_Sn = [Ad_Sn_1, Ad_Sn_2]
 

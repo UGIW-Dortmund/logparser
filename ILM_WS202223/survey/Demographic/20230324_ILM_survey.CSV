@@ -1,29 +1,29 @@
-ID;Age;gender;dominantHand;immersiveExperience;gamingExperience
-A01;30-40;männlich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden
-A02;18-25;weiblich;rechts;keinerlei Erfahrung;Bis zu 10 Stunden
-A03;25-30;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden
-A05;25-30;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden
-A06;30-40;männlich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden
-A07;25-30;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden
-A08;18-25;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden
-A09;30-40;männlich;rechts;Mehr als 10 Stunden;Mehr als 10 Stunden
-A10;30-40;männlich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden
-A11;18-25;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden
-A12;30-40;männlich;rechts;Mehr als 10 Stunden;Mehr als 10 Stunden
-A13;30-40;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden
-A14;25-30;männlich;rechts;Mehr als 10 Stunden;Mehr als 10 Stunden
-A15;25-30;männlich;links;Bis zu 10 Stunden;Bis zu 10 Stunden
-A16;18-25;weiblich;rechts;keinerlei Erfahrung;Bis zu 10 Stunden
-A18;18-25;männlich;rechts;keinerlei Erfahrung;Mehr als 10 Stunden
-A04;18-25;weiblich;rechts;keinerlei Erfahrung;keinerlei Erfahrung
-A19;40-50;weiblich;rechts;keinerlei Erfahrung;keinerlei Erfahrung
-A20;40-50;männlich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden
-A21;18-25;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden
-A22;18-25;weiblich;rechts;keinerlei Erfahrung;Mehr als 10 Stunden
-A24;30-40;weiblich;rechts;keinerlei Erfahrung;keinerlei Erfahrung
-A26;30-40;weiblich;rechts;keinerlei Erfahrung;Bis zu 10 Stunden
-A25;40-50;männlich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden
-A28;30-40;männlich;links;Mehr als 10 Stunden;Mehr als 10 Stunden
-A27;30-40;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden
-A23;25-30;weiblich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden
-A17;40-50;männlich;rechts;keinerlei Erfahrung;Bis zu 10 Stunden
+ID;Age;gender;dominantHand;immersiveExperience;gamingExperience;;dominantHand
+A01;30-40;männlich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden;;rechts
+A02;18-25;weiblich;rechts;keinerlei Erfahrung;Bis zu 10 Stunden;;rechts
+A03;25-30;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden;;rechts
+A05;25-30;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden;;rechts
+A06;30-40;männlich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden;;rechts
+A07;25-30;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden;;rechts
+A08;18-25;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden;;rechts
+A09;30-40;männlich;rechts;Mehr als 10 Stunden;Mehr als 10 Stunden;;rechts
+A10;30-40;männlich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden;;rechts
+A11;18-25;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden;;rechts
+A12;30-40;männlich;rechts;Mehr als 10 Stunden;Mehr als 10 Stunden;;rechts
+A13;30-40;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden;;rechts
+A14;25-30;männlich;rechts;Mehr als 10 Stunden;Mehr als 10 Stunden;;rechts
+A15;25-30;männlich;links;Bis zu 10 Stunden;Bis zu 10 Stunden;;links
+A16;18-25;weiblich;rechts;keinerlei Erfahrung;Bis zu 10 Stunden;;rechts
+A18;18-25;männlich;rechts;keinerlei Erfahrung;Mehr als 10 Stunden;;rechts
+A04;18-25;weiblich;rechts;keinerlei Erfahrung;keinerlei Erfahrung;;rechts
+A19;40-50;weiblich;rechts;keinerlei Erfahrung;keinerlei Erfahrung;;rechts
+A20;40-50;männlich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden;;rechts
+A21;18-25;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden;;rechts
+A22;18-25;weiblich;rechts;keinerlei Erfahrung;Mehr als 10 Stunden;;rechts
+A24;30-40;weiblich;rechts;keinerlei Erfahrung;keinerlei Erfahrung;;rechts
+A26;30-40;weiblich;rechts;keinerlei Erfahrung;Bis zu 10 Stunden;;rechts
+A25;40-50;männlich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden;;rechts
+A28;30-40;männlich;links;Mehr als 10 Stunden;Mehr als 10 Stunden;;links
+A27;30-40;männlich;rechts;Bis zu 10 Stunden;Mehr als 10 Stunden;;
+A23;25-30;weiblich;rechts;Bis zu 10 Stunden;Bis zu 10 Stunden;;
+A17;40-50;männlich;rechts;keinerlei Erfahrung;Bis zu 10 Stunden;;

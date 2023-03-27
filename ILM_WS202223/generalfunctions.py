@@ -9,6 +9,11 @@ probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10'
             'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
             'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
+probandsFemale = ['A02', 'A16', 'A04', 'A19', 'A22', 'A24', 'A26', 'A23']
+
+probandsMale = ['A01', 'A03', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10', 'A11', 'A12', 'A13', 'A14',
+                'A15', 'A18', 'A20', 'A21', 'A25', 'A28', 'A27', 'A17']
+
 ##### Database
 def get_database():
     # Provide the mongodb atlas url to connect python to mongodb using pymongo

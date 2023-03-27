@@ -101,6 +101,7 @@ if __name__ == '__main__':
     #plt.yticks(y_nums, descrRight)
     ax2.set_box_aspect(2)
 
+    props = dict(boxstyle='round', facecolor='lightgray', alpha=1.0)
 
 
     plt.plot(xPoint, yPoint, '-o', color='green', label='Point')
@@ -109,11 +110,14 @@ if __name__ == '__main__':
     plt.plot(xSn, ySn, '-o', color='orange', label='Sn')
     plt.plot(xSf, ySf, '-o', color='brown', label='Sf')
     plt.plot(xTele, yTele, '-o', color='deepskyblue', label='Teleport')
-    plt.title('UEQS VR', fontsize=15)
+    plt.title('VR UEQS', fontsize=15)
     plt.xlabel('Wertung', fontsize=12)
     plt.legend()
     ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     ax1.xaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
+
+    ax1.text(0.1, 0.1, 'n = 25', transform=ax1.transAxes, fontsize=14,
+             verticalalignment='top', bbox=props)
 
     plt.show()
 

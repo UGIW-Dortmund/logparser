@@ -28,6 +28,8 @@ if __name__ == '__main__':
     df = data.iloc[:, 1:]
     # del df[df.columns[-1]]
 
+    print(df)
+
     x_vals = []
     y_vals = []
     x_vals_median = []
@@ -72,6 +74,9 @@ if __name__ == '__main__':
     descr = df.iloc[:0]
     descr = list(descr)
 
+    props = dict(boxstyle='round', facecolor='lightgray', alpha=1.0)
+    numberItems = len(df. index)
+
     print(len(descr))
 
 
@@ -80,6 +85,8 @@ if __name__ == '__main__':
     plt.grid()
     plt.legend()
     plt.title("AR SUS", fontsize=15)
+    plt.gca().text(0.1, 0.95, 'n = ' + str(numberItems), transform=plt.gca().transAxes, fontsize=14,
+             verticalalignment='top', bbox=props)
     plt.xticks([1, 2, 3, 4, 5], scale)
     plt.yticks([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], descr)
 

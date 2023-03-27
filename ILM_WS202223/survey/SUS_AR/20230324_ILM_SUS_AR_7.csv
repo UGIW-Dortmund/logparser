@@ -2,6 +2,7 @@
 A01;Ja;Eher ja;Eher nein;Ich weiß nicht;Eher nein;Eher nein;Ja;Eher ja;Eher ja;Eher ja
 A02;Eher ja;Eher nein;Eher ja;Ich weiß nicht;Eher ja;Eher nein;Eher ja;Eher nein;Eher ja;Eher nein
 A03;Ja;Eher ja;Eher nein;Eher nein;Ich weiß nicht;Eher ja;Ich weiß nicht;Eher ja;Eher ja;Eher nein
+A04;Eher nein;Nein;Eher nein;Eher ja;Eher ja;Eher ja;Eher ja;Nein;Eher ja;Ich weiß nicht
 A05;Eher ja;Nein;Eher ja;Eher nein;Eher ja;Eher nein;Eher ja;Eher nein;Ja;Eher nein
 A06;Eher ja;Nein;Eher ja;Eher nein;Eher ja;Ich weiß nicht;Eher ja;Eher nein;Eher ja;Eher nein
 A07;Ich weiß nicht;Nein;Eher ja;Nein;Eher ja;Nein;Ja;Eher nein;Eher ja;Eher nein
@@ -12,8 +13,3 @@ A11;Eher ja;Nein;Ja;Nein;Eher ja;Eher nein;Eher ja;Eher nein;Ja;Eher nein
 A12;Ich weiß nicht;Eher nein;Eher ja;Nein;Eher ja;Eher nein;Ich weiß nicht;Eher nein;Eher ja;Nein
 A13;Nein;Eher ja;Nein;Eher ja;Nein;Eher ja;Nein;Ja;Nein;Ja
 A14;Eher nein;Eher nein;Eher ja;Nein;Eher ja;Eher nein;Ja;Eher nein;Eher ja;Eher nein
-A15;Ja;Nein;Ja;Nein;Eher nein;Eher ja;Eher ja;Eher nein;Eher ja;Eher nein
-A04;Eher nein;Nein;Eher nein;Eher ja;Eher ja;Eher ja;Eher ja;Nein;Eher ja;Ich weiß nicht
-A20;;Eher nein;Eher ja;Ja;Eher ja;Nein;Ich weiß nicht;Eher nein;Ja;Eher nein
-A21;Eher ja;Nein;Ja;Nein;Eher ja;Nein;Eher ja;Eher nein;Ja;Nein
-A22;Ja;Nein;Ja;Nein;Ja;Ich weiß nicht;Ja;Nein;Ja;Nein

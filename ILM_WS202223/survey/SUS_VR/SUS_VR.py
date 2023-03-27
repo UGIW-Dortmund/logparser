@@ -75,6 +75,9 @@ if __name__ == '__main__':
     descr = df.iloc[:0]
     descr = list(descr)
 
+    props = dict(boxstyle='round', facecolor='lightgray', alpha=1.0)
+    numberItems = len(df.index)
+
     print(len(descr))
 
 
@@ -82,6 +85,8 @@ if __name__ == '__main__':
     plt.plot(x_vals_median, y_vals, '-o', color='blue', label='Median')
     plt.grid()
     plt.legend()
+    plt.gca().text(0.8, 0.075, 'n = ' + str(numberItems), transform=plt.gca().transAxes, fontsize=14,
+                   verticalalignment='top',  bbox=props)
     plt.title("VR SUS", fontsize=15)
     plt.xticks([1, 2, 3, 4, 5], scale)
     plt.yticks([9, 8, 7, 6, 5, 4, 3, 2, 1, 0], descr)

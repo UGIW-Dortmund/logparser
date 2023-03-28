@@ -41,7 +41,7 @@ if __name__ == "__main__":
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
-    fig.suptitle('Correlation: Submit Near Operator', fontsize=15)
+    fig.suptitle('Korrelation @ Sn: Geschlecht', fontsize=15)
 
 
     axs[1].sharey(axs[0])
@@ -82,6 +82,6 @@ if __name__ == "__main__":
     axs[1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     axs[1].set_xticks([])
 
-    # plt.show()
+    plt.show()
 
 

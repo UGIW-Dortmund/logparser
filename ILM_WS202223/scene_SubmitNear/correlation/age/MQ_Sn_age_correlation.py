@@ -56,10 +56,10 @@ if __name__ == "__main__":
     axs[2].set(ylabel='Sekunden')
     axs[3].set(ylabel='Sekunden')
 
-    fig.suptitle('Korrelation nach Altersgruppen', fontsize=16)
+    fig.suptitle('Korrelationsuntersuchung auf Altersgruppen', fontsize=16)
 
     axs[0].set_title('18 - 25 Jahre', fontsize=15)
-    num, val, df1 = gf.setXTicks_param(Ad_Sn_age_18_25, descArray)
+    num, val, df1 = gf.setXTicks_paramCorrelation(Ad_Sn_age_18_25, descArray, '7')
     ttable = table(axs[0], df1, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
         cell.set_edgecolor('lightgrey')
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     # descArray = ['Sn-Ad-1-age-25-30', 'Sn-Ad-2-age-25-30']
     # descArray = ["Sn-Ad-1-dH-L", "Sn-Ad-2-dH-L"]
     axs[1].set_title('25 - 30 Jahre', fontsize=15)
-    num, val, df2 = gf.setXTicks_param(Ad_Sn_age_25_30, descArray)
+    num, val, df2 = gf.setXTicks_paramCorrelation(Ad_Sn_age_25_30, descArray, '4')
     sns.violinplot(Ad_Sn_age_25_30, showmeans=True, color="skyblue", ax=axs[1])
     sns.swarmplot(Ad_Sn_age_25_30, color="black", ax=axs[1])
     df2 = df2.reset_index(drop=True)
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     # descArray = ['Sn-Ad-1-age-30-40', 'Sn-Ad-2-age-30-40']
     axs[2].set_title('30 - 40 Jahre', fontsize=15)
-    num, val, df3 = gf.setXTicks_param(Ad_Sn_age_30_40, descArray)
+    num, val, df3 = gf.setXTicks_paramCorrelation(Ad_Sn_age_30_40, descArray, '9')
     sns.violinplot(Ad_Sn_age_30_40, showmeans=True, color="skyblue", ax=axs[2])
     sns.swarmplot(Ad_Sn_age_30_40, color="black", ax=axs[2])
     df3 = df3.reset_index(drop=True)
@@ -107,7 +107,7 @@ if __name__ == "__main__":
 
     # descArray = ['Sn-Ad-1-age-30-40', 'Sn-Ad-2-age-30-40']
     axs[3].set_title('40 - 50 Jahre', fontsize=15)
-    num, val, df4 = gf.setXTicks_param(Ad_Sn_age_40_50, descArray)
+    num, val, df4 = gf.setXTicks_paramCorrelation(Ad_Sn_age_40_50, descArray, '4')
     sns.violinplot(Ad_Sn_age_40_50, showmeans=True, color="skyblue", ax=axs[3])
     sns.swarmplot(Ad_Sn_age_40_50, color="black", ax=axs[3])
     df4 = df4.reset_index(drop=True)

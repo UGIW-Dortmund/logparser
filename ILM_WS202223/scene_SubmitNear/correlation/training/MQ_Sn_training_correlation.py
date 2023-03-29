@@ -64,11 +64,18 @@ if __name__ == "__main__":
     Sn_Ad_Training_Second = [Sn_Ad_Sn1_training_Second, Sn_Ad_2_training_Second]
 
 
+    print(scipy.stats.ttest_ind(Sn_Ad_Sn1_training_First, Sn_Ad_Sn1_training_Second))
+
+    print(scipy.stats.ttest_ind(Sn_Ad_2_training_First, Sn_Ad_2_training_Second))
+
+
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
     descArray = ["Sn-1-Ad", "Sn-2-Ad"]
 
-    num, val, df1 = gf.setXTicks_param(Sn_Ad_Training_First, descArray)
+    fig.suptitle('Korrelationsuntersuchung bei Sn auf einen Trainigseffekt', fontsize=15)
+
+    num, val, df1 = gf.setXTicks_paramCorrelation(Sn_Ad_Training_First, descArray, '5')
 
     axs[0].set_title('Als Erstes - Ohne Trainingseffekt', fontsize=15)
     ttable = table(axs[0], df1, loc='bottom', colLoc='center', cellLoc='center')
@@ -85,7 +92,7 @@ if __name__ == "__main__":
 
     descArray = ["Sn-1-Ad", "Sn-2-Ad"]
 
-    num, val, df2 = gf.setXTicks_param(Sn_Ad_Training_Second, descArray)
+    num, val, df2 = gf.setXTicks_paramCorrelation(Sn_Ad_Training_Second, descArray, '5')
     sns.violinplot(Sn_Ad_Training_Second, showmeans=True, color="skyblue", ax=axs[1])
     sns.swarmplot(Sn_Ad_Training_Second, color="black", ax=axs[1])
     df2 = df2.reset_index(drop=True)

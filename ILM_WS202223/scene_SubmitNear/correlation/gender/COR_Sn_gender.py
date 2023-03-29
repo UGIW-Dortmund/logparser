@@ -41,7 +41,7 @@ if __name__ == "__main__":
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
-    fig.suptitle('Korrelation @ Sn: Geschlecht', fontsize=15)
+    fig.suptitle('Korrelationsuntersuchung bei Sn auf Geschlecht', fontsize=15)
 
 
     axs[1].sharey(axs[0])
@@ -51,10 +51,10 @@ if __name__ == "__main__":
 
     descArray = ["Sn-1-Ad", "Sn-2-Ad"]
 
-    num, val, df1 = gf.setXTicks_param(Ad_Sn_M, descArray)
+    num, val, df1 = gf.setXTicks_paramCorrelation(Ad_Sn_M, descArray, '16')
 
 
-    axs[0].set_title('Male', fontsize=15)
+    axs[0].set_title('Männlich', fontsize=15)
     ttable = table(axs[0], df1, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
         cell.set_edgecolor('lightgrey')
@@ -68,11 +68,11 @@ if __name__ == "__main__":
 
     descArray = ["Sn-1-Ad", "Sn-2-Ad"]
 
-    num, val, df2 = gf.setXTicks_param(Ad_Sn_F, descArray)
+    num, val, df2 = gf.setXTicks_paramCorrelation(Ad_Sn_F, descArray, '8')
     sns.violinplot(Ad_Sn_F, showmeans=True, color="skyblue", ax=axs[1])
     sns.swarmplot(Ad_Sn_F, color="black", ax=axs[1])
     df2 = df2.reset_index(drop=True)
-    axs[1].set_title('Female', fontsize=15)
+    axs[1].set_title('Weiblich', fontsize=15)
     ttable = table(axs[1], df2, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
         cell.set_edgecolor('lightgrey')

@@ -45,6 +45,16 @@ probandsQuestProSecond = ['A15', 'A21', 'A27']
 probandsQuest2Second = ['A16', 'A22']
 
 
+
+# AR und VR
+
+probandsHL2 = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
+            'A11', 'A12', 'A13', 'A14']
+
+probandsHPG2 = ['A07', 'A08', 'A13', 'A14', 'A17', 'A18', 'A19', 'A20',
+                'A23', 'A24', 'A25', 'A26', 'A28']
+
+
 ##### Database
 def get_database():
     # Provide the mongodb atlas url to connect python to mongodb using pymongo

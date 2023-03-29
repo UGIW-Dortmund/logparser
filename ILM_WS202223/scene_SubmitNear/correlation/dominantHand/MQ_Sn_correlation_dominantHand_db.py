@@ -34,15 +34,18 @@ if __name__ == "__main__":
     Sn_Ad_2_dH_L = gf.getDb('Sn-Ad-2-dH_L')
     Ad_Sn_dH_L = [Sn_Ad_1_dH_L, Sn_Ad_2_dH_L]
 
-    print(scipy.stats.ttest_ind(Sn_Ad_1_dH_R, Sn_Ad_1_dH_L, equal_var=False))
-    print(scipy.stats.ttest_ind(Sn_Ad_2_dH_R, Sn_Ad_2_dH_L, equal_var=False))
+    sn_1_t, sn_1_p = scipy.stats.ttest_ind(Sn_Ad_1_dH_R, Sn_Ad_1_dH_L, equal_var = False)
+    sn_2_t, sn_2_p = scipy.stats.ttest_ind(Sn_Ad_2_dH_R, Sn_Ad_2_dH_L, equal_var=False)
+    print(round(sn_1_p, 10))
+    print(round(sn_2_p, 10))
+    print(int(sn_2_p))
 
 
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
-    fig.suptitle('Correlation @ Sn: Dominant Hand', fontsize=15)
+    fig.suptitle('Korrelationsuntersuchung bei Sn: Dominante Hand', fontsize=15)
 
 
     axs[1].sharey(axs[0])
@@ -52,9 +55,7 @@ if __name__ == "__main__":
 
     descArray = ["Sn-Ad-1-dH-R", "Sn-Ad-2-dH-R"]
 
-    num, val, df1 = gf.setXTicks_param(Ad_Sn_dH_R, descArray)
-
-
+    num, val, df1 = gf.setXTicks_paramCorrelation(Ad_Sn_dH_R, descArray, '22')
     axs[0].set_title('Rechte Hand', fontsize=15)
     ttable = table(axs[0], df1, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
@@ -68,8 +69,7 @@ if __name__ == "__main__":
     axs[0].set_xticks([])
 
     descArray = ["Sn-Ad-1-dH-L", "Sn-Ad-2-dH-L"]
-
-    num, val, df2 = gf.setXTicks_param(Ad_Sn_dH_L, descArray)
+    num, val, df2 = gf.setXTicks_paramCorrelation(Ad_Sn_dH_L, descArray, '2')
     sns.violinplot(Ad_Sn_dH_L, showmeans=True, color="skyblue", ax=axs[1])
     sns.swarmplot(Ad_Sn_dH_L, color="black", ax=axs[1])
     df2 = df2.reset_index(drop=True)

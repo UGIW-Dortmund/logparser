@@ -35,6 +35,15 @@ probands30till40 = ['A01', 'A06', 'A09', 'A10', 'A12', 'A13', 'A24', 'A26', 'A28
 probands40till50 = ['A19', 'A20', 'A25', 'A17']
 
 
+# Trainingseffekt
+
+probandsQuest2First = ['A15', 'A21', 'A27']
+probandsQuestProFirst = ['A16', 'A22']
+
+
+probandsQuestProSecond = ['A15', 'A21', 'A27']
+probandsQuest2Second = ['A16', 'A22']
+
 
 ##### Database
 def get_database():
@@ -252,6 +261,34 @@ def setXTicks_param(valArray, descArray):
     return (elements, xtick, df)
 
 
+def setXTicks_paramCorrelation(valArray, descArray, noProb):
+    xtick = []
+    i = 0
+    df = pd.DataFrame()
+
+    # The descirption of fields
+    for elem in valArray:
+        s = boxplotCap(elem)
+
+        df_entry = dfEntryMaxCorrelation(descArray[i], elem, i, noProb)
+        df.insert(loc=(len(df.columns)), column=descArray[i], value=df_entry)
+
+        if descArray:
+            xtick.append(descArray[i] + s)
+        else:
+            xtick.append(s)
+        i = i + 1
+
+    lenVA = len(valArray)
+
+    # First Parameter the number of fields
+    elements = []
+    for elem in range(0, lenVA):
+        elements.append((elem + 1))
+
+    return (elements, xtick, df)
+
+
 def setXTicksMin(valArray, descArray):
     xtick = []
     i = 0
@@ -353,6 +390,42 @@ def dfEntryMax(nameElement, valArray, indexI):
     #           'mean': mean, 'stdev': stdev,
     #           'first_quartil': first_quartil, 'third_quartil': third_quartil}
     new_row = ({'n': nuTuple, 'Median': median, 'Mittelwert': mean,
+                'S. Abw.': stdev, 'u. Q.': first_quartil, 'o. Q.': third_quartil})
+
+    return new_row
+
+
+def dfEntryMaxCorrelation(nameElement, valArray, indexI, noProb):
+    nuTuple = len(valArray)
+    nuTuple = str(nuTuple)
+
+    median = round(statistics.median(valArray), 1)
+    # median = float(median)
+    median = str(median).replace('.', ',')
+    median = median + ' s'
+
+    mean = round(statistics.mean(valArray), 1)
+    mean = str(mean).replace('.', ',')
+    mean = mean + ' s'
+
+    stdev = round(statistics.stdev(valArray), 1)
+    stdev = str(stdev).replace('.', ',')
+    stdev = str(stdev) + ' s'
+
+    first_quartil = round(np.percentile(valArray, 25), 1)
+    first_quartil = str(first_quartil).replace('.', ',')
+    first_quartil = first_quartil + ' s'
+
+    third_quartil = round(np.percentile(valArray, 75), 1)
+    third_quartil = str(third_quartil).replace('.', ',')
+    third_quartil = str(third_quartil) + ' s'
+
+
+    new_row = pd.DataFrame()
+    #new_row = {'median': median,
+    #           'mean': mean, 'stdev': stdev,
+    #           'first_quartil': first_quartil, 'third_quartil': third_quartil}
+    new_row = ({'n': nuTuple, '$n_P$': noProb, 'Median': median, 'Mittelwert': mean,
                 'S. Abw.': stdev, 'u. Q.': first_quartil, 'o. Q.': third_quartil})
 
     return new_row

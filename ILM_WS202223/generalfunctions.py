@@ -243,6 +243,34 @@ def aggregateData(array):
     return data;
 
 
+
+def setXTicks_paramPing(valArray, descArray):
+    xtick = []
+    i = 0
+    df = pd.DataFrame()
+
+    # The descirption of fields
+    for elem in valArray:
+        s = boxplotCap(elem)
+
+        df_entry = dfEntryMaxPing(descArray[i], elem, i)
+        df.insert(loc=(len(df.columns)), column=descArray[i], value=df_entry)
+
+        if descArray:
+            xtick.append(descArray[i] + s)
+        else:
+            xtick.append(s)
+        i = i + 1
+
+    lenVA = len(valArray)
+
+    # First Parameter the number of fields
+    elements = []
+    for elem in range(0, lenVA):
+        elements.append((elem + 1))
+
+    return (elements, xtick, df)
+
 def setXTicks_param(valArray, descArray):
     xtick = []
     i = 0
@@ -404,6 +432,42 @@ def dfEntryMax(nameElement, valArray, indexI):
 
     return new_row
 
+
+
+def dfEntryMaxPing(nameElement, valArray, indexI):
+    nuTuple = len(valArray)
+    nuTuple = str(nuTuple)
+
+    median = int(statistics.median(valArray))
+    # median = float(median)
+    median = str(median).replace('.', ',')
+    median = median + ' ms'
+
+    mean = int(statistics.mean(valArray))
+    # mean = str(mean).replace('.', ',')
+    mean = str(mean) + ' ms'
+
+    stdev = int(statistics.stdev(valArray))
+    # stdev = str(stdev).replace('.', ',')
+    stdev = str(stdev) + ' ms'
+
+    first_quartil = int(np.percentile(valArray, 25))
+    # first_quartil = str(first_quartil).replace('.', ',')
+    first_quartil = str(first_quartil) + ' ms'
+
+    third_quartil = int(np.percentile(valArray, 75))
+    # third_quartil = str(third_quartil).replace('.', ',')
+    third_quartil = str(third_quartil) + ' ms'
+
+
+    new_row = pd.DataFrame()
+    #new_row = {'median': median,
+    #           'mean': mean, 'stdev': stdev,
+    #           'first_quartil': first_quartil, 'third_quartil': third_quartil}
+    new_row = ({'n': nuTuple, 'Median': median, 'Mittelwert': mean,
+                'S. Abw.': stdev, 'u. Q.': first_quartil, 'o. Q.': third_quartil})
+
+    return new_row
 
 def dfEntryMaxCorrelation(nameElement, valArray, indexI, noProb):
     nuTuple = len(valArray)

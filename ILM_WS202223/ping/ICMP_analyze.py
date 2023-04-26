@@ -37,6 +37,9 @@ if __name__ == '__main__':
         time = answer[40:42]
         time = float(time)
 
+        if time < 25 or time > 29:
+            print('DrP Time ' + str(time))
+
         pingListDresden.append(time)
 
 
@@ -45,6 +48,8 @@ if __name__ == '__main__':
         time = float(time)
         pintListRenningen.append(time)
 
+        if time < 11 or time > 15:
+            print('Re Time ' + str(time))
 
     pingList = [pingListDresden, pintListRenningen]
 
@@ -52,13 +57,16 @@ if __name__ == '__main__':
     plt.title('Ping-Antwortzeiten von den Studienstandorten', fontsize=15)
     num, val, df = gf.setXTicks_paramPing(pingList, descArray)
     plt.ylabel('Millisekunden', fontsize=12)
-    plt.boxplot(pingList)
+    plt.boxplot(pingList, showmeans=True)
     ttable = table(plt.gca(), df, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
         cell.set_edgecolor('lightgrey')
         cell.set_height(0.05)
     ttable.set_fontsize(12)
     ttable.auto_set_font_size(False)
+    plt.grid(axis='y', linestyle='-', which='major', color='lightgrey', alpha=0.5)
+
+
 
     plt.xticks([])
     plt.show()

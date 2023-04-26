@@ -32,8 +32,8 @@ if __name__ == '__main__':
     # Immersive Erfahrung
     df_Age = data['immersiveExperience'].value_counts()
     labels = df_Age.index
-    axs[0].set_title('Immersive Erfahrung', fontsize=15)
-    axs[0].pie(df_Age, labels=labels, colors=['plum', 'lightblue', 'limegreen'], autopct='%.0f%%')
+    axs[0].set_title('Immersive Erfahrung', fontsize=20)
+    axs[0].pie(df_Age, labels=labels, colors=['plum', 'lightblue', 'limegreen'], autopct='%.0f%%', textprops={'fontsize': 17})
     # axs[1, 0].set_xlabel("n = " + str(len(data.index)), fontsize=12)
     axs[0].text(0.95, 0.75, 'n = ' + str(numberItems), transform=axs[0].transAxes, fontsize=12,
                    verticalalignment='top', bbox=props)
@@ -41,8 +41,8 @@ if __name__ == '__main__':
     # Gaming Erfahrung
     df_Age = data['gamingExperience'].value_counts()
     labels = df_Age.index
-    axs[1].set_title('Erfahrung mit Controllern', fontsize=15)
-    axs[1].pie(df_Age, labels=labels, colors=['limegreen', 'plum', 'lightblue'], autopct='%.0f%%')
+    axs[1].set_title('Erfahrung mit Controllern', fontsize=20)
+    axs[1].pie(df_Age, labels=labels, colors=['limegreen', 'plum', 'lightblue'], autopct='%.0f%%', textprops={'fontsize': 17})
     # axs[1, 1].set_xlabel("n = " + str(len(data.index)), fontsize=12)
     axs[1].text(0.95, 0.75, 'n = ' + str(numberItems), transform=axs[1].transAxes, fontsize=12,
                    verticalalignment='top', bbox=props)

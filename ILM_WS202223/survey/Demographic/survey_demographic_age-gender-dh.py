@@ -31,9 +31,9 @@ if __name__ == '__main__':
     df_Gender = data['gender'].value_counts()
     labels = 'männlich', 'weiblich'
     axs[0].set_title('Geschlecht', fontsize=15)
-    axs[0].pie(df_Gender, labels=labels, colors=['teal', 'sandybrown'], autopct='%.0f%%')
+    axs[0].pie(df_Gender, labels=labels, colors=['#66CDAA', 'sandybrown'], autopct='%.0f%%', textprops={'fontsize': 14})
     # axs[0, 0].set_xlabel("n = " + str(len(data.index)), fontsize=12)
-    axs[0].text(0.95, 0.95, 'n = ' + str(numberItems), transform=axs[0].transAxes, fontsize=12,
+    axs[0].text(0.95, 0.95, 'n = ' + str(numberItems), transform=axs[0].transAxes, fontsize=15,
                    verticalalignment='top', bbox=props)
 
     # Age
@@ -41,9 +41,9 @@ if __name__ == '__main__':
     labels = df_Age.index
     #labels = '18 - 25 Jahre', '25 - 30 Jahre', '30 - 40 Jahre', '40 - 50 Jahre'
     axs[1].set_title('Alter (in Jahren)', fontsize=15)
-    axs[1].pie(df_Age, labels=labels, colors=inner_colors, autopct='%.0f%%')
+    axs[1].pie(df_Age, labels=labels, colors=inner_colors, autopct='%.0f%%', textprops={'fontsize': 14})
     # axs[0, 1].set_xlabel("n = " + str(len(data.index)), fontsize=12)
-    axs[1].text(0.95, 0.95, 'n = ' + str(numberItems), transform=axs[1].transAxes, fontsize=12,
+    axs[1].text(0.95, 0.95, 'n = ' + str(numberItems), transform=axs[1].transAxes, fontsize=15,
                    verticalalignment='top', bbox=props)
 
 
@@ -52,9 +52,9 @@ if __name__ == '__main__':
     df_dH = data['dominantHand'].value_counts()
     labels = df_dH.index
     axs[2].set_title('Dominante Hand', fontsize=15)
-    axs[2].pie(df_dH, labels=labels, colors=['cornflowerblue', 'forestgreen'], autopct='%.0f%%')
+    axs[2].pie(df_dH, labels=labels, colors=['cornflowerblue', 'forestgreen'], autopct='%.0f%%', textprops={'fontsize': 14})
     # axs[1, 0].set_xlabel("n = " + str(len(data.index)), fontsize=12)
-    axs[2].text(0.95, 0.95, 'n = ' + str(numberItems), transform=axs[2].transAxes, fontsize=12,
+    axs[2].text(0.95, 0.95, 'n = ' + str(numberItems), transform=axs[2].transAxes, fontsize=15,
                    verticalalignment='top', bbox=props)
 
 

@@ -38,6 +38,12 @@ if __name__ == "__main__":
     print(shapiro(Sn_Ad_1_G_M))
     print(shapiro(Sn_Ad_1_G_F))
 
+    print("Wilcox: Sn-1")
+    print(scipy.stats.mannwhitneyu(Sn_Ad_1_G_M, Sn_Ad_1_G_F))
+
+    print("Wilcox: Sn-2")
+    print(scipy.stats.mannwhitneyu(Sn_Ad_2_G_M, Sn_Ad_2_G_F))
+
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
 
@@ -82,6 +88,6 @@ if __name__ == "__main__":
     axs[1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
     axs[1].set_xticks([])
 
-    plt.show()
+    # plt.show()
 
 

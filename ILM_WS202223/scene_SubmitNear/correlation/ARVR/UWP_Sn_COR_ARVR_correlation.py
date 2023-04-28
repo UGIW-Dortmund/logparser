@@ -22,29 +22,45 @@ from pymongo import MongoClient
 
 if __name__ == "__main__":
 
-    # HPG2
+    ### HPG2
     UWP_Sn1_HPG2 = gf.getDb('Sn-Wi-1-HPG2')
     UWP_Sn2_HPG2 = gf.getDb('Sn-Wi-2-HPG2')
 
-    # HL2
+    UWP_Sn1_HPG2 = gf.getDb('Sn-Wi-1-Np-HPG2')
+    UWP_Sn2_HPG2 = gf.getDb('Sn-Wi-2-Np-HPG2')
+
+    ### HL2
     UWP_Sn1_HL2 = gf.getDb('Sn-Wi-1-HL2')
     UWP_Sn2_HL2 = gf.getDb('Sn-Wi-2-HL2')
+
+    UWP_Sn1_HL2 = gf.getDb('Sn-Wi-1-Np-HL2')
+    UWP_Sn2_HL2 = gf.getDb('Sn-Wi-2-Np-HL2')
 
     UWP_Sn_HL2 = [UWP_Sn1_HL2, UWP_Sn2_HL2]
     UWP_Sn_HPG2 = [UWP_Sn1_HPG2, UWP_Sn2_HPG2]
 
-
+    print("T-Test")
     print(scipy.stats.ttest_ind(UWP_Sn1_HPG2, UWP_Sn1_HL2, equal_var=False))
-
     print(scipy.stats.ttest_ind(UWP_Sn2_HPG2, UWP_Sn2_HL2, equal_var=False))
 
+    print("Wilcox")
+    print(scipy.stats.mannwhitneyu(UWP_Sn1_HPG2, UWP_Sn1_HL2))
+    print(scipy.stats.mannwhitneyu(UWP_Sn2_HPG2, UWP_Sn2_HL2))
 
+
+
+
+    plt.hist(UWP_Sn2_HPG2)
+
+    plt.show()
+
+    '''
+    
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
     axs[0].set_ylabel('Sekunden', fontsize=12)
     axs[1].set_ylabel('Sekunden', fontsize=12)
 
     descArray = ["Sn-1-Wi", "Sn-2-Wi"]
-
     fig.suptitle('Korrelationsuntersuchung zwischen AR und VR', fontsize=15)
 
     num, val, df1 = gf.setXTicks_paramCorrelation(UWP_Sn_HL2, descArray, '14')
@@ -82,6 +98,6 @@ if __name__ == "__main__":
     plt.show()
 
 
-
+    '''
 
 

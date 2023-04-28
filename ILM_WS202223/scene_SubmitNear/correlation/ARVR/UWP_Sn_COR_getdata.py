@@ -429,6 +429,8 @@ if __name__ == "__main__":
     # devices = ['HPG2', 'HL2']
     devices = ['HPG2']
 
+    # for p in probands:
+
     sceneSubmitNearButton_1_Right = runAnalyzeFirstButton(probands, sceneName, devices)
     sceneSubmitNearCheckbox_1_Right = runAnalyzeFirstCheckbox(probands, sceneName, devices)
     sceneSubmitNearButton_2_Right = runAnalyzeSecondButton(probands, sceneName, devices)

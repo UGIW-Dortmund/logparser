@@ -26,17 +26,29 @@ if __name__ == "__main__":
     Sn_Ad_Sn1_training_MQP_First = gf.getDb('Sn-Ad-1-Training-MQP-First')
     Sn_Ad_Sn2_training_MQP_First = gf.getDb('Sn-Ad-2-Training-MQP-First')
 
+    Sn_Ad_Sn1_training_MQP_First = gf.getDb('Sn-Ad-1_Np_Training_MQP_First')
+    Sn_Ad_Sn2_training_MQP_First = gf.getDb('Sn-Ad-2_Np_Training_MQP_First')
+
     # MQP Second
     Sn_Ad_Sn1_training_MQP_Second = gf.getDb('Sn-Ad-1-Training-MQP-Second')
     Sn_Ad_Sn2_training_MQP_Second = gf.getDb('Sn-Ad-2-Training-MQP-Second')
+
+    Sn_Ad_Sn1_training_MQP_Second = gf.getDb('Sn-Ad-1_Np_Training_MQP_Second')
+    Sn_Ad_Sn2_training_MQP_Second = gf.getDb('Sn-Ad-2_Np_Training_MQP_Second')
 
     # MQ2 First
     Sn_Ad_Sn1_training_MQ2_First = gf.getDb('Sn-Ad-1-Training-MQ2-First')
     Sn_Ad_Sn2_training_MQ2_First = gf.getDb('Sn-Ad-2-Training-MQ2-First')
 
+    Sn_Ad_Sn1_training_MQ2_First = gf.getDb('Sn-Ad-1_Np_Training_MQ2_First')
+    Sn_Ad_Sn2_training_MQ2_First = gf.getDb('Sn-Ad-2_Np_Training_MQ2_First')
+
     # MQ2 Second
     Sn_Ad_Sn1_training_MQ2_Second = gf.getDb('Sn-Ad-1-Training-MQ2-Second')
     Sn_Ad_Sn2_training_MQ2_Second = gf.getDb('Sn-Ad-2-Training-MQ2-Second')
+
+    Sn_Ad_Sn1_training_MQ2_Second = gf.getDb('Sn-Ad-1_Np_Training_MQ2_Second')
+    Sn_Ad_Sn2_training_MQ2_Second = gf.getDb('Sn-Ad-2_Np_Training_MQ2_Second')
 
 
 
@@ -63,11 +75,13 @@ if __name__ == "__main__":
     # Macht der Proband MIT Trainingseffekt - als Zweites
     Sn_Ad_Training_Second = [Sn_Ad_Sn1_training_Second, Sn_Ad_2_training_Second]
 
-
+    print("T-Test")
     print(scipy.stats.ttest_ind(Sn_Ad_Sn1_training_First, Sn_Ad_Sn1_training_Second))
-
     print(scipy.stats.ttest_ind(Sn_Ad_2_training_First, Sn_Ad_2_training_Second))
 
+    print("Man Whitney U")
+    print(scipy.stats.mannwhitneyu(Sn_Ad_Sn1_training_First, Sn_Ad_Sn1_training_Second))
+    print(scipy.stats.mannwhitneyu(Sn_Ad_2_training_First, Sn_Ad_2_training_Second))
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 

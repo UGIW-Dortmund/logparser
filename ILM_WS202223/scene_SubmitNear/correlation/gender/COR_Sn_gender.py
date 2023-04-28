@@ -23,10 +23,14 @@ if __name__ == "__main__":
 
     Sn_Ad_1_G_M = gf.getDb('Sn-Ad-1-G-M')
     Sn_Ad_2_G_M = gf.getDb('Sn-Ad-2-G-M')
+    Sn_Ad_1_G_M = gf.getDb('Sn-Ad-1-Gender-Male_aggr')
+    Sn_Ad_2_G_M = gf.getDb('Sn-Ad-2-Gender-Male_aggr')
     Ad_Sn_M = [Sn_Ad_1_G_M, Sn_Ad_2_G_M]
 
     Sn_Ad_1_G_F = gf.getDb('Sn-Ad-1-G-F')
     Sn_Ad_2_G_F = gf.getDb('Sn-Ad-2-G-F')
+    Sn_Ad_1_G_F = gf.getDb('Sn-Ad-1-Gender-Female_aggr')
+    Sn_Ad_2_G_F = gf.getDb('Sn-Ad-2-Gender-Female_aggr')
     Ad_Sn_F = [Sn_Ad_1_G_F, Sn_Ad_2_G_F]
 
     Sn_Ad_1_T, Sn_Ad_1_P = scipy.stats.ttest_ind(Sn_Ad_1_G_M, Sn_Ad_1_G_F)
@@ -35,8 +39,8 @@ if __name__ == "__main__":
     Sn_Ad_2_T, Sn_Ad_2_P = scipy.stats.ttest_ind(Sn_Ad_2_G_M, Sn_Ad_2_G_F)
     print(f'Sn-Ad-2 \t \t  {str(Sn_Ad_2_T)} \t \t {str(Sn_Ad_2_P)}')
 
-    print(shapiro(Sn_Ad_1_G_M))
-    print(shapiro(Sn_Ad_1_G_F))
+    # print(shapiro(Sn_Ad_1_G_M))
+    # print(shapiro(Sn_Ad_1_G_F))
 
     print("Wilcox: Sn-1")
     print(scipy.stats.mannwhitneyu(Sn_Ad_1_G_M, Sn_Ad_1_G_F))
@@ -44,8 +48,12 @@ if __name__ == "__main__":
     print("Wilcox: Sn-2")
     print(scipy.stats.mannwhitneyu(Sn_Ad_2_G_M, Sn_Ad_2_G_F))
 
-    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
+    print(Sn_Ad_1_G_F)
+    plt.hist(Sn_Ad_1_G_F)
+    plt.show()
 
+    '''
+    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
 
     fig.suptitle('Korrelationsuntersuchung bei Sn auf Geschlecht', fontsize=15)
 
@@ -89,5 +97,6 @@ if __name__ == "__main__":
     axs[1].set_xticks([])
 
     # plt.show()
+    '''
 
 

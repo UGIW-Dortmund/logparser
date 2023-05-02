@@ -568,7 +568,7 @@ if __name__ == "__main__":
     # Get the database
     dbname = get_database()
 
-    col = dbname["test"]
+    col = dbname["uwp"]
 
 
 

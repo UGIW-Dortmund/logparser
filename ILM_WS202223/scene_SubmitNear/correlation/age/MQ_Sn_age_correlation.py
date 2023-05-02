@@ -23,25 +23,41 @@ from pymongo import MongoClient
 if __name__ == "__main__":
 
     # Age: 18-25
-    Sn_Ad_1_age_18_25 = gf.getDb('Sn-Ad-1-age-18-25')
-    Sn_Ad_2_age_18_25 = gf.getDb('Sn-Ad-2-age-18-25')
+    #Sn_Ad_1_age_18_25 = gf.getDb('Sn-Ad-1-age-18-25')
+    #Sn_Ad_2_age_18_25 = gf.getDb('Sn-Ad-2-age-18-25')
+
+    Sn_Ad_1_age_18_25 = gf.getDb('Sn-Ad-1-age-18-25-np')
+    Sn_Ad_2_age_18_25 = gf.getDb('Sn-Ad-2-age-18-25-np')
     Ad_Sn_age_18_25 = [Sn_Ad_1_age_18_25, Sn_Ad_2_age_18_25]
 
     # Age: 25-30
-    Sn_Ad_1_age_25_30 = gf.getDb('Sn-Ad-1-age-25-30')
-    Sn_Ad_2_age_25_30 = gf.getDb('Sn-Ad-2-age-25-30')
+    #Sn_Ad_1_age_25_30 = gf.getDb('Sn-Ad-1-age-25-30')
+    #Sn_Ad_2_age_25_30 = gf.getDb('Sn-Ad-2-age-25-30')
+
+    Sn_Ad_1_age_25_30 = gf.getDb('Sn-Ad-1-age-25-30-np')
+    Sn_Ad_2_age_25_30 = gf.getDb('Sn-Ad-2-age-25-30-np')
+
     Ad_Sn_age_25_30 = [Sn_Ad_1_age_25_30, Sn_Ad_2_age_25_30]
 
     # Age: 30-40
-    Sn_Ad_1_age_30_40 = gf.getDb('Sn-Ad-1-age-30-40')
-    Sn_Ad_2_age_30_40 = gf.getDb('Sn-Ad-2-age-30-40')
+    #Sn_Ad_1_age_30_40 = gf.getDb('Sn-Ad-1-age-30-40')
+    #Sn_Ad_2_age_30_40 = gf.getDb('Sn-Ad-2-age-30-40')
+
+    Sn_Ad_1_age_30_40 = gf.getDb('Sn-Ad-1-age-30-40-np')
+    Sn_Ad_2_age_30_40 = gf.getDb('Sn-Ad-2-age-30-40-np')
+
     Ad_Sn_age_30_40 = [Sn_Ad_1_age_30_40, Sn_Ad_2_age_30_40]
 
-
     # Age: 40-50
-    Sn_Ad_1_age_40_50 = gf.getDb('Sn-Ad-1-age-40-50')
-    Sn_Ad_2_age_40_50 = gf.getDb('Sn-Ad-2-age-40-50')
+    # Sn_Ad_1_age_40_50 = gf.getDb('Sn-Ad-1-age-40-50')
+    # Sn_Ad_2_age_40_50 = gf.getDb('Sn-Ad-2-age-40-50')
+
+    Sn_Ad_1_age_40_50 = gf.getDb('Sn-Ad-1-age-40-50-np')
+    Sn_Ad_2_age_40_50 = gf.getDb('Sn-Ad-2-age-40-50-np')
+
     Ad_Sn_age_40_50 = [Sn_Ad_1_age_40_50, Sn_Ad_2_age_40_50]
+
+
 
     print(stats.f_oneway(Sn_Ad_1_age_18_25, Sn_Ad_1_age_25_30, Sn_Ad_1_age_30_40, Sn_Ad_1_age_40_50))
     print(stats.f_oneway(Sn_Ad_2_age_18_25, Sn_Ad_2_age_25_30, Sn_Ad_2_age_30_40, Sn_Ad_2_age_40_50))

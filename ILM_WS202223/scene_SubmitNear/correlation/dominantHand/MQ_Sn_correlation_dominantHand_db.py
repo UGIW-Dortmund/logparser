@@ -28,8 +28,8 @@ if __name__ == "__main__":
     Sn_Ad_1_dH_R = gf.getDb('Sn-Ad-1-dH_R')
     Sn_Ad_2_dH_R = gf.getDb('Sn-Ad-2-dH_R')
 
-    Sn_Ad_1_dH_R = gf.getDb('Sn-Ad-1-DH-R')
-    Sn_Ad_2_dH_R = gf.getDb('Sn-Ad-2-DH-R')
+    #Sn_Ad_1_dH_R = gf.getDb('Sn-Ad-1-DH-R')
+    #Sn_Ad_2_dH_R = gf.getDb('Sn-Ad-2-DH-R')
 
     Ad_Sn_dH_R = [Sn_Ad_1_dH_R, Sn_Ad_2_dH_R]
 
@@ -37,8 +37,8 @@ if __name__ == "__main__":
     Sn_Ad_1_dH_L = gf.getDb('Sn-Ad-1-dH_L')
     Sn_Ad_2_dH_L = gf.getDb('Sn-Ad-2-dH_L')
 
-    Sn_Ad_1_dH_L = gf.getDb('Sn-Ad-1-DH-L')
-    Sn_Ad_2_dH_L = gf.getDb('Sn-Ad-2-DH-L')
+    #Sn_Ad_1_dH_L = gf.getDb('Sn-Ad-1-DH-L')
+    #Sn_Ad_2_dH_L = gf.getDb('Sn-Ad-2-DH-L')
 
     Ad_Sn_dH_L = [Sn_Ad_1_dH_L, Sn_Ad_2_dH_L]
 

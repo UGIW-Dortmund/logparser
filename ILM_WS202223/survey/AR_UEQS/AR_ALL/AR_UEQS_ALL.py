@@ -102,12 +102,12 @@ if __name__ == '__main__':
 
 
 
-    plt.plot(xPoint, yPoint, '-o', color='green', label='Point')
-    plt.plot(xGaze, yGaze, '-o', color='blue', label='Gaze')
-    plt.plot(xGrab, yGrab, '-o', color='fuchsia', label='Grab')
+    #plt.plot(xPoint, yPoint, '-o', color='green', label='Point')
+    # plt.plot(xGaze, yGaze, '-o', color='blue', label='Gaze')
+    #plt.plot(xGrab, yGrab, '-o', color='fuchsia', label='Grab')
     plt.plot(xSn, ySn, '-o', color='orange', label='Sn')
     plt.plot(xSf, ySf, '-o', color='brown', label='Sf')
-    plt.title('AR UEQS', fontsize=15)
+    plt.title('AR UEQ-S', fontsize=15)
     plt.xlabel('Wertung', fontsize=12)
     plt.legend()
     ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)

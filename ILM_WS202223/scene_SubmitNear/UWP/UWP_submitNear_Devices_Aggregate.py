@@ -10,6 +10,8 @@ sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS20
 import generalfunctions as gf
 
 import seaborn as sns
+
+import seaborn as sns
 from pandas.plotting import table
 
 from pymongo import MongoClient
@@ -562,14 +564,14 @@ if __name__ == "__main__":
 
     fig.suptitle('Bearbeitungszeit der Buttons')
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
-    axs[0, 0].violinplot(box_aggrRight_HPG2, showmedians=True)
-    axs[0, 1].violinplot(box_aggrLeft_HPG2, showmedians=True)
+    axs[0, 0].boxplot(box_aggrRight_HPG2, showmeans=True)
+    axs[0, 1].boxplot(box_aggrLeft_HPG2, showmeans=True)
     axs[0, 1].sharey(axs[0, 0])
 
-    axs[1, 0].violinplot(box_aggrRight_HL2, showmedians=True)
+    axs[1, 0].boxplot(box_aggrRight_HL2, showmeans=True)
     axs[1, 0].sharey(axs[0, 0])
 
-    axs[1, 1].violinplot(box_aggrLeft_HL2, showmedians=True)
+    axs[1, 1].boxplot(box_aggrLeft_HL2, showmeans=True)
     axs[1, 1].sharey(axs[0, 0])
 
     axs[0, 0].set_ylabel('Sekunden', fontsize=12)

@@ -12,6 +12,7 @@ import generalfunctions as gf
 
 import scipy
 from scipy import stats
+import matplotlib.pyplot as plt
 
 import seaborn as sns
 from pandas.plotting import table
@@ -19,84 +20,49 @@ from pandas.plotting import table
 from pymongo import MongoClient
 
 
-
-
 if __name__ == "__main__":
     # Get the database
 
 
-    Sn_Ad_1_dH_R = gf.getDb('Sn-Ad-1-dH_R')
-    Sn_Ad_2_dH_R = gf.getDb('Sn-Ad-2-dH_R')
+    SF_UWP_R_HPG2 = gf.getDb('SF_UWP_R_HPG2')
+    SF_UWP_L_HPG2 = gf.getDb('SF_UWP_L_HPG2')
 
-    #Sn_Ad_1_dH_R = gf.getDb('Sn-Ad-1-DH-R')
-    #Sn_Ad_2_dH_R = gf.getDb('Sn-Ad-2-DH-R')
+    SF_UWP_R_HL2 = gf.getDb('SF_UWP_R_HL2')
+    SF_UWP_L_HL2 = gf.getDb('SF_UWP_L_HL2')
 
-    Ad_Sn_dH_R = [Sn_Ad_1_dH_R, Sn_Ad_2_dH_R]
+    SF_UWP_L = [SF_UWP_L_HPG2, SF_UWP_L_HL2]
+    SF_UWP_L = gf.aggregateData(SF_UWP_L)
+    SF_UWP_R = [SF_UWP_R_HPG2, SF_UWP_R_HL2]
+    SF_UWP_R = gf.aggregateData(SF_UWP_R)
 
+    print(SF_UWP_R)
+    print(SF_UWP_L)
+    descArray = ['Rechts', 'Links']
+    data = [SF_UWP_R, SF_UWP_L]
 
-    Sn_Ad_1_dH_L = gf.getDb('Sn-Ad-1-dH_L')
-    Sn_Ad_2_dH_L = gf.getDb('Sn-Ad-2-dH_L')
+    print(scipy.stats.ttest_ind(SF_UWP_R_HL2, SF_UWP_L_HL2, equal_var = False))
+    print(scipy.stats.ttest_ind(SF_UWP_R_HPG2, SF_UWP_L_HPG2, equal_var=False))
+    print(scipy.stats.ttest_ind(SF_UWP_R, SF_UWP_L, equal_var=False))
 
-    #Sn_Ad_1_dH_L = gf.getDb('Sn-Ad-1-DH-L')
-    #Sn_Ad_2_dH_L = gf.getDb('Sn-Ad-2-DH-L')
+    (num, val, df) = gf.setXTicks_param(data, descArray)
 
-    Ad_Sn_dH_L = [Sn_Ad_1_dH_L, Sn_Ad_2_dH_L]
-
-    print(Sn_Ad_1_dH_L)
-
-    print(scipy.stats.ttest_ind(Sn_Ad_1_dH_R, Sn_Ad_1_dH_L, equal_var = False))
-    print(scipy.stats.ttest_ind(Sn_Ad_2_dH_R, Sn_Ad_2_dH_L, equal_var=False))
-
-    print(scipy.stats.mannwhitneyu(Sn_Ad_1_dH_R, Sn_Ad_1_dH_L))
-    print(scipy.stats.mannwhitneyu(Sn_Ad_2_dH_R, Sn_Ad_2_dH_L))
-
-    #print(round(sn_1_p, 10))
-    #print(round(sn_2_p, 10))
-    # print(int(sn_2_p))
-
-
-
-    fig, axs = plt.subplots(1, 2, figsize=(10, 8))
-
-
-    fig.suptitle('Korrelationsuntersuchung bei Sn: Dominante Hand', fontsize=15)
-
-
-    axs[1].sharey(axs[0])
-
-    axs[0].set_ylabel('Sekunden', fontsize=12)
-    axs[1].set_ylabel('Sekunden', fontsize=12)
-
-    descArray = ["Sn-Ad-1-dH-R", "Sn-Ad-2-dH-R"]
-
-    num, val, df1 = gf.setXTicks_paramCorrelation(Ad_Sn_dH_R, descArray, '22')
-    axs[0].set_title('Rechte Hand', fontsize=15)
-    ttable = table(axs[0], df1, loc='bottom', colLoc='center', cellLoc='center')
+    ttable = table(plt.gca(), df, loc='bottom', colLoc='center', cellLoc='center')
     for key, cell in ttable.get_celld().items():
         cell.set_edgecolor('lightgrey')
-        cell.set_height(0.05)
-    ttable.set_fontsize(12)
+    ttable.set_fontsize(10)
     ttable.auto_set_font_size(False)
-    axs[0].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
-    sns.violinplot(Ad_Sn_dH_R, showmeans=True, color="skyblue", ax=axs[0])
-    sns.swarmplot(Ad_Sn_dH_R, color="black", ax=axs[0])
-    axs[0].set_xticks([])
+    plt.grid(axis='y', linestyle='-', which='major', color='lightgrey', alpha=0.5)
 
-    descArray = ["Sn-Ad-1-dH-L", "Sn-Ad-2-dH-L"]
-    num, val, df2 = gf.setXTicks_paramCorrelation(Ad_Sn_dH_L, descArray, '2')
-    sns.violinplot(Ad_Sn_dH_L, showmeans=True, color="skyblue", ax=axs[1])
-    sns.swarmplot(Ad_Sn_dH_L, color="black", ax=axs[1])
-    df2 = df2.reset_index(drop=True)
-    axs[1].set_title('Linke Hand', fontsize=15)
-    ttable = table(axs[1], df2, loc='bottom', colLoc='center', cellLoc='center')
-    for key, cell in ttable.get_celld().items():
-        cell.set_edgecolor('lightgrey')
-        cell.set_height(0.05)
-    ttable.set_fontsize(12)
-    ttable.auto_set_font_size(False)
-    axs[1].yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)
-    axs[1].set_xticks([])
+    # plt.xticks(num, val)
+    plt.ylabel('Sekunden')
+
+
+
+    plt.boxplot(data)
+
 
     plt.show()
+
+
 
 

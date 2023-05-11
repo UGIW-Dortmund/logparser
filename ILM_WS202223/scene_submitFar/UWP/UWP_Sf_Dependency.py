@@ -57,6 +57,8 @@ if __name__ == "__main__":
 
     Ad_Sn_age_40_50 = [Sn_Ad_1_age_40_50, Sn_Ad_2_age_40_50]
 
+    #print(scipy.stats.ttest_ind(Sn_Ad_1_dH_R, Sn_Ad_1_dH_L, equal_var=False))
+    #print(scipy.stats.ttest_ind(Sn_Ad_2_dH_R, Sn_Ad_2_dH_L, equal_var=False))
 
 
     print(stats.f_oneway(Sn_Ad_1_age_18_25, Sn_Ad_1_age_25_30, Sn_Ad_1_age_30_40, Sn_Ad_1_age_40_50))

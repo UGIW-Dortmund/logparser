@@ -258,12 +258,16 @@ if __name__ == "__main__":
     probands = ['A01', 'A02', 'A03', 'A04', 'A05', 'A06', 'A07', 'A08', 'A09', 'A10',
                 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
                 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
-    print(probands)
+    # print(probands)
 
     sceneName = 'ILM_Submit-Far_Left'
     devices = ['HPG2']
     # SF_UWP_Left_HPG2 = tresor.find({'name': 'SF_UWP_R_HPG2'})
     SF_UWP_Left_HPG2 = gf.getDb('SF_UWP_L_HPG2')
+
+    print('Values')
+    print(SF_UWP_Left_HPG2)
+
     SF_UWP_Left_HPG2 = gf.convertToFloat1D(SF_UWP_Left_HPG2[0])
     SF_UWP_Left_HPG2 = checkOutlier(SF_UWP_Left_HPG2)
     print(SF_UWP_Left_HPG2[0])

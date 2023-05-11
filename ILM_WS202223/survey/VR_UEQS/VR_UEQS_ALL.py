@@ -104,13 +104,13 @@ if __name__ == '__main__':
     props = dict(boxstyle='round', facecolor='lightgray', alpha=1.0)
 
 
-    plt.plot(xPoint, yPoint, '-o', color='green', label='Point')
-    plt.plot(xGaze, yGaze, '-o', color='blue', label='Gaze')
-    plt.plot(xGrab, yGrab, '-o', color='fuchsia', label='Grab')
+    # plt.plot(xPoint, yPoint, '-o', color='green', label='Point')
+    #plt.plot(xGaze, yGaze, '-o', color='blue', label='Gaze')
+    # plt.plot(xGrab, yGrab, '-o', color='fuchsia', label='Grab')
     plt.plot(xSn, ySn, '-o', color='orange', label='Sn')
     plt.plot(xSf, ySf, '-o', color='brown', label='Sf')
-    plt.plot(xTele, yTele, '-o', color='deepskyblue', label='Teleport')
-    plt.title('VR UEQS', fontsize=15)
+    # plt.plot(xTele, yTele, '-o', color='deepskyblue', label='Teleport')
+    plt.title('VR UEQ-S', fontsize=15)
     plt.xlabel('Wertung', fontsize=12)
     plt.legend()
     ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)

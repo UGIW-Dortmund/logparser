@@ -9,7 +9,7 @@ import seaborn as sns
 from pandas.plotting import table
 from pandas.plotting import table
 import sys
-sys.path.append('C:/Users/Benedikt/Documents/dev/MA_LogParser/logparser/ILM_WS202223')
+sys.path.append('/Users/benediktkurz/git/logparser/ILM_WS202223')
 import generalfunctions as gf
 
 from pymongo import MongoClient
@@ -174,11 +174,11 @@ if __name__ == "__main__":
                 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20',
                 'A21', 'A22', 'A23', 'A24', 'A25', 'A26', 'A27', 'A28']
 
-    probands = ['A24']
+    # probands = ['A24']
 
     print(probands)
 
-    sceneName = 'ILM_Teleport_Scene_Right-Hand'
+    sceneName = 'ILM_Teleport_Scene_Left-Hand'
 
 
     devices = ['MQ2', 'MQP']
@@ -217,24 +217,24 @@ if __name__ == "__main__":
 
     # fig = plt.figure(figsize=(10, 7))
     #plt.title('Android: Bearbeitungszeit der Teleport-Szene mit der linken Hand', fontsize=15)
-    plt.title('Christian', fontsize=15)
+    plt.title('Teleport linke Hand', fontsize=15)
     # ax = fig.add_axes(['Rechte Hand', 'Linke Hand'])
     plt.boxplot(allTimes, showmeans=True)
     plt.ylabel('Sekunden', fontsize=12)
-    plt.ylim(0.0, 25.0)
+    plt.ylim(0.0, 50.0)
     # plt.xticks([1, 2, 3, 4], [f'T-Stop 1 zu 2 \n n = {len(allTimes[0])}' , f'T-Stop 2 zu 3 \n n = {len(allTimes[1])}', f'T-Stop 3 zu 4 \n n = {len(allTimes[2])}', f'T-Stop 4 zu 5 \n n = {len(allTimes[3])}'])
 
 
     descArray = ["T-Stopp 1 zu 2", "T-Stopp 2 zu 3", "T-Stopp 3 zu 4", "T-Stopp 4 zu 5"]
-    #num, val, df = gf.setXTicks_param(allTimes, descArray)
+    num, val, df = gf.setXTicks_param(allTimes, descArray)
 
-    #ttable = table(plt.gca(), df, loc='bottom', colLoc='center', cellLoc='center')
-    #for key, cell in ttable.get_celld().items():
-    #    cell.set_edgecolor('lightgrey')
-    #    cell.set_height(0.05)
-    #ttable.set_fontsize(12)
-    #ttable.auto_set_font_size(False)
+    ttable = table(plt.gca(), df, loc='bottom', colLoc='center', cellLoc='center')
+    for key, cell in ttable.get_celld().items():
+        cell.set_edgecolor('lightgrey')
+        cell.set_height(0.05)
+    ttable.set_fontsize(12)
+    ttable.auto_set_font_size(False)
 
-    plt.xticks([1, 2, 3, 4], descArray)
+    plt.xticks([1, 2, 3, 4], ['', '', '', ''])
 
     plt.show()
